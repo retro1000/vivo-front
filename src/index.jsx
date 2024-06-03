@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import {SnackbarProvider} from "notistack";
-import useDynamicMaxSnack from './hooks/useDynamicMaxSnack'; 
+// import useDynamicMaxSnack from './hooks/useDynamicMaxSnack'; 
 
 import * as serviceWorker from "./serviceWorker";
 import App from "./app/App";
@@ -15,7 +15,7 @@ const root = createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <SnackbarProvider maxSnack={4}>
+    <SnackbarProvider maxSnack={10}>
       <App />
     </SnackbarProvider>
   </BrowserRouter>
