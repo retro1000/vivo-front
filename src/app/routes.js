@@ -8,6 +8,7 @@ import Loadable from "./components/Loadable";
 import MatxLayout from "./components/MatxLayout/MatxLayout";
 
 import sessionRoutes from "./views/sessions/session-routes";
+import productRoutes from "./views/product/product-routes";
 import materialRoutes from "app/views/material-kit/MaterialRoutes";
 
 // E-CHART PAGE
@@ -28,6 +29,7 @@ const routes = [
     ),
     children: [
       ...materialRoutes,
+      ...productRoutes,
       // dashboard route
       {
         path: "/dashboard/default",

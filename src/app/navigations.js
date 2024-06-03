@@ -1,5 +1,15 @@
 export const navigations = [
   { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
+  { 
+    name: "Products", 
+    icon: "shopping_basket",
+    children: [
+      { name: "Product list", icon: "web_asset", path: "/product/list" },
+      { name: "Create new product", icon: "mode_edit", path: "/product/create" },
+    ] 
+  },
+
+
   { label: "PAGES", type: "label" },
   {
     name: "Session/Auth",

@@ -17,7 +17,7 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
-  marginBottom: "16px"
+  marginBottom: "16px",
 }));
 
 const SimpleForm = () => {
