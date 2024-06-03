@@ -582,7 +582,7 @@ function UpsertProduct() {
 
     const [productTitle, setProductTitle] = useState('')
 
-    const [productSubTitle, setSubProductTitle] = useState('')
+    const [productSubTitle, setProductSubTitle] = useState('')
 
     const [productDescription, setProductDescription] = useState('')
 
@@ -642,7 +642,7 @@ function UpsertProduct() {
                 </TextField>
                 <TextField
                   value={productSubTitle}
-                  onChange={(e) => setSubProductTitle(e.target.value)}
+                  onChange={(e) => setProductSubTitle(e.target.value)}
                   label='Product sub title'
                   placeholder='Enter product sub title'
                 >
