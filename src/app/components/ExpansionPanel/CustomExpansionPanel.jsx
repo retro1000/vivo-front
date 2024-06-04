@@ -39,7 +39,7 @@ return (
         {
           (props.list && props.list.length > 0) ? (
             props.list.map((item, index) => (
-                <Accordion sx={{width: '60%', maxWidth: '700px', minWidth: '380px'}} expanded={item.expanded}>
+                <Accordion sx={{width: '60%', maxWidth: '700px', minWidth: '380px'}} >
                     <AccordionSummary
                       id={`panel${index+1}a-header`}
                       expandIcon={<ExpandMoreIcon />}

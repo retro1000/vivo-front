@@ -590,6 +590,8 @@ function UpsertProduct() {
 
     const [variationIds, setVariationIds] = useState([])
 
+    const [productErrors, setProductErrors] = useState({})
+
     const { triggerNotifications } = useNotistack()
     const { FileToBase64 } = useBase64()
 
@@ -622,6 +624,41 @@ function UpsertProduct() {
       getCategories()
 
     }, [])
+
+    const upsertProduct = async () => {
+
+      const formData = new FormData()
+      formData.append('productImage', productImage)
+      productImages.forEach(image => formData.append('otherImages', image))
+      formData.append('data', JSON.stringify({
+        productTitle: productTitle,
+        productSubTitle: productSubTitle,
+        productShortDescription: productShortDescription,
+        productDescription: productDescription,
+        categories: selectedCategories,
+        variations: variationIds
+      }))
+
+      const messages = []
+      productImage!=='' && await axios.post(`${backendApi}/product/create`, formData)
+        .then((res) => {
+          if(res.status===201) messages.push({text: res.data, variant: 'success'})
+        })
+        .catch((err) => {
+          if(err.response.status===500) messages.push({text: err.response.data, variant: 'error'})
+          if(err.response.status===400){
+            const errors = err.response.data;
+            Object.keys(errors).forEach(key => {
+              const newError = {...productErrors}
+              if(key!=='productImage' && key!=='productImages') newError.key = errors[key]
+              messages.push({text: errors[key], variant: 'error'})
+            })
+          }
+        })
+        .finally(() => {
+          if(messages.length>0) triggerNotifications(messages, 50)
+        })
+    }
 
     return (
         <Container>
@@ -752,21 +789,29 @@ function UpsertProduct() {
               </MultiFileUpload>
             </Stack>
           </SimpleCard>
-
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Attributes" {...a11yProps(0)} />
-                    <Tab label="Variations" {...a11yProps(1)} />
-                    <Tab label="Linked Products" {...a11yProps(2)} />
-                </Tabs>
-            </Box>
-            <CustomTabPanelAttributes triggerNotifications={triggerNotifications} updateVariableAttributeList={updateVariableAttributeList} setUpdateVariableAttributeList={setUpdateVariableAttributeList} variables={variables} setVariables={setVariables} variations={variations} setVariations={setVariations} setAttributeIdentifier={setAttributeIdentifier} attributeIdentifier={attributeIdentifier} setVariableAttributeList={setVariableAttributeList} value={value} index={0} attributes={attributes} variableAttributeList={variableAttributeList} selectedAttributes={selectedAttributes} setSelectedAttributes={setSelectedAttributes}>
-            </CustomTabPanelAttributes>
-            <CustomTabPanelVariations triggerNotifications={triggerNotifications} FileToBase64={FileToBase64} variationIds={variationIds} setVariationIds={setVariationIds} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} updateVariableAttributeList={updateVariableAttributeList} attributes={attributes} variables={variables} setVariables={setVariables} variationIdentifier={variationIdentifier} setVariationIdentifier={setVariationIdentifier} variableAttributeList={variableAttributeList} variations={variations} setVariations={setVariations} value={value} index={1}>
-            </CustomTabPanelVariations>
-            <CustomTabPanelLinkedProducts value={value} index={2}>
-                Item Three
-            </CustomTabPanelLinkedProducts>
+          <SimpleCard sx={{width: '100%', height: 'max-content'}} title={"Product data"}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                      <Tab label="Attributes" {...a11yProps(0)} />
+                      <Tab label="Variations" {...a11yProps(1)} />
+                      <Tab label="Linked Products" {...a11yProps(2)} />
+                  </Tabs>
+              </Box>
+              <Grid sx={{maxHeight: '600px', overflowY: 'scroll', marginTop: '1em'}}>
+                <CustomTabPanelAttributes triggerNotifications={triggerNotifications} updateVariableAttributeList={updateVariableAttributeList} setUpdateVariableAttributeList={setUpdateVariableAttributeList} variables={variables} setVariables={setVariables} variations={variations} setVariations={setVariations} setAttributeIdentifier={setAttributeIdentifier} attributeIdentifier={attributeIdentifier} setVariableAttributeList={setVariableAttributeList} value={value} index={0} attributes={attributes} variableAttributeList={variableAttributeList} selectedAttributes={selectedAttributes} setSelectedAttributes={setSelectedAttributes}>
+                </CustomTabPanelAttributes>
+                <CustomTabPanelVariations triggerNotifications={triggerNotifications} FileToBase64={FileToBase64} variationIds={variationIds} setVariationIds={setVariationIds} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} updateVariableAttributeList={updateVariableAttributeList} attributes={attributes} variables={variables} setVariables={setVariables} variationIdentifier={variationIdentifier} setVariationIdentifier={setVariationIdentifier} variableAttributeList={variableAttributeList} variations={variations} setVariations={setVariations} value={value} index={1}>
+                </CustomTabPanelVariations>
+                <CustomTabPanelLinkedProducts value={value} index={2}>
+                    Item Three
+                </CustomTabPanelLinkedProducts>
+            </Grid>
+          </SimpleCard>
+          <Grid sx={{display: 'flex', gap: '0.5em', justifyContent: 'flex-end', flexWrap: 'wrap', width: '100%', top: '5em'}}>
+            <Button color="primary" variant="outlined">Cancel</Button>
+            <Button color="primary" variant="outlined">Preview</Button>
+            <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} disabled={updateVariableAttributeList.length === 0} onClick={upsertProduct}>Publish</Button>
+          </Grid>
         </Stack>
         </Container>
     );
