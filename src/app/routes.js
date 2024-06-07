@@ -23,7 +23,7 @@ const routes = [
   },
   {
     element: (
-      <AuthGuard>
+      <AuthGuard auth={authRoles.user}>
         <MatxLayout />
       </AuthGuard>
     ),
@@ -33,8 +33,10 @@ const routes = [
       // dashboard route
       {
         path: "/dashboard/default",
-        element: <Analytics />,
-        auth: authRoles.admin
+        element: 
+          <AuthGuard auth={authRoles.manager}>
+            <Analytics />
+          </AuthGuard>     
       },
       // e-chart route
       {

@@ -11,6 +11,7 @@ import { ReactQuillEditior, FileUpload, MultiFileUpload, FormDialog, Breadcrumb,
 
 import { useNotistack } from 'app/hooks/useNotistack';
 import { useBase64 } from 'app/hooks/useBase64';
+import { useAxios } from 'app/hooks/useAxios';
 
 import { backendApi } from 'config';
 
@@ -62,7 +63,7 @@ function CustomTabPanelVariations(props) {
       {key:"orderType", id:"backendOrderType", type:"radio", label:"Backend order type", value: "ALLOWED_ALL", options:[{value:'ALLOWED_ALL', label:"Allowed"}, {value:'ALLOWED_ADMIN', label:"Admin only"}, {value:'NOT_ALLOWED', label:"Not allowed"}]},
     ];
 
-    const { FileToBase64, variationIds, setVariationIds, triggerNotifications, updateVariations, setUpdateVariations, updateVariableAttributeList, attributes, variables, setVariables, variationIdentifier, setVariationIdentifier, variableAttributeList, value, index, variations, setVariations} = props;
+    const { api, FileToBase64, variationIds, setVariationIds, triggerNotifications, updateVariations, setUpdateVariations, updateVariableAttributeList, attributes, variables, setVariables, variationIdentifier, setVariationIdentifier, variableAttributeList, value, index, variations, setVariations} = props;
 
     const generateVariations = (list) => {
       const generate = (lists) => {
@@ -211,7 +212,7 @@ function CustomTabPanelVariations(props) {
       if(updateVariations.length!==0){
         const requests = [
           {
-            url: `${backendApi}/product/variation/create`,
+            url: '/product/variation/create',
             method: 'post',
             data: {variations: await convertVariations(updateVariations, 'create', ['state', 'expanded', 'checked', 'variationId'])},
             handler: response => {
@@ -236,7 +237,7 @@ function CustomTabPanelVariations(props) {
                   }
           },
           {
-            url: `${backendApi}/product/variation/update`,
+            url: '/product/variation/update',
             method: 'post',
             data: {variations: await convertVariations(updateVariations, 'update', ['state', 'expanded', 'checked'])},
             handler: response => {
@@ -262,7 +263,7 @@ function CustomTabPanelVariations(props) {
         try{
           const axiosRequests = requests.map(request=>{
             if(request.data!==undefined && request.data.variations.length>0){
-              return axios({
+              return api({
                 method: request.method,
                 url: request.url,
                 data: request.data
@@ -392,7 +393,7 @@ function CustomTabPanelVariations(props) {
       }
     });
 
-    const { triggerNotifications, updateVariableAttributeList, setUpdateVariableAttributeList, variables, setVariables, setAttributeIdentifier, attributeIdentifier, value, index, variableAttributeList, attributes, selectedAttributes, setSelectedAttributes, setVariableAttributeList } = props;
+    const { api, triggerNotifications, updateVariableAttributeList, setUpdateVariableAttributeList, variables, setVariables, setAttributeIdentifier, attributeIdentifier, value, index, variableAttributeList, attributes, selectedAttributes, setSelectedAttributes, setVariableAttributeList } = props;
   
     const editVariableAttributeList = (index, val, key) => {
       setVariableAttributeList(prevList => {
@@ -427,7 +428,7 @@ function CustomTabPanelVariations(props) {
       let attribute = variables.length!==0 ? variables.find(itm=>itm.attributeId===selectedAttributes.value) : undefined
 
       if(!attribute){
-        axios.get(`${backendApi}/product/attribute/get/${selectedAttributes.value}`)
+        api.get(`/product/attribute/get/${selectedAttributes.value}`)
           .then((res) => {
             if(res.status===200){
               const newList = [...variables]
@@ -594,6 +595,7 @@ function UpsertProduct() {
 
     const { triggerNotifications } = useNotistack()
     const { FileToBase64 } = useBase64()
+    const { api } = useAxios()
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -601,7 +603,7 @@ function UpsertProduct() {
 
     useEffect(() => {
       const getAttributes = async () => {
-        await axios.get(`${backendApi}/product/attribute/view`)
+        await api.get('/product/attribute/view')
           .then((res) => {
             if(res.status===200) setAttributes(res.data.map(itm=>({label: itm.attributeName, value: itm.attributeId})))
           })
@@ -611,7 +613,7 @@ function UpsertProduct() {
       }
 
       const getCategories = async () => {
-        await axios.get(`${backendApi}/category/view`)
+        await api.get('/category/view')
           .then((res) => {
             if(res.status===200) setCategories(res.data.map(itm=>({id: itm.categoryId, value: itm.categoryName, subCategories: itm.subCategories.map(val=>({id: val.subCategoryId, value: val.subCategoryName}))})))
           })
@@ -638,9 +640,13 @@ function UpsertProduct() {
         categories: selectedCategories,
         variations: variationIds
       }))
-
+      
       const messages = []
-      productImage!=='' && await axios.post(`${backendApi}/product/create`, formData)
+      productImage!=='' && await axios.api('product/create', formData, {
+        headers:{
+          'Content-Type': 'multipart/form-data'
+        }
+      })
         .then((res) => {
           if(res.status===201) messages.push({text: res.data, variant: 'success'})
         })
@@ -798,9 +804,9 @@ function UpsertProduct() {
                   </Tabs>
               </Box>
               <Grid sx={{maxHeight: '600px', overflowY: 'scroll', marginTop: '1em'}}>
-                <CustomTabPanelAttributes triggerNotifications={triggerNotifications} updateVariableAttributeList={updateVariableAttributeList} setUpdateVariableAttributeList={setUpdateVariableAttributeList} variables={variables} setVariables={setVariables} variations={variations} setVariations={setVariations} setAttributeIdentifier={setAttributeIdentifier} attributeIdentifier={attributeIdentifier} setVariableAttributeList={setVariableAttributeList} value={value} index={0} attributes={attributes} variableAttributeList={variableAttributeList} selectedAttributes={selectedAttributes} setSelectedAttributes={setSelectedAttributes}>
+                <CustomTabPanelAttributes api={api} triggerNotifications={triggerNotifications} updateVariableAttributeList={updateVariableAttributeList} setUpdateVariableAttributeList={setUpdateVariableAttributeList} variables={variables} setVariables={setVariables} variations={variations} setVariations={setVariations} setAttributeIdentifier={setAttributeIdentifier} attributeIdentifier={attributeIdentifier} setVariableAttributeList={setVariableAttributeList} value={value} index={0} attributes={attributes} variableAttributeList={variableAttributeList} selectedAttributes={selectedAttributes} setSelectedAttributes={setSelectedAttributes}>
                 </CustomTabPanelAttributes>
-                <CustomTabPanelVariations triggerNotifications={triggerNotifications} FileToBase64={FileToBase64} variationIds={variationIds} setVariationIds={setVariationIds} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} updateVariableAttributeList={updateVariableAttributeList} attributes={attributes} variables={variables} setVariables={setVariables} variationIdentifier={variationIdentifier} setVariationIdentifier={setVariationIdentifier} variableAttributeList={variableAttributeList} variations={variations} setVariations={setVariations} value={value} index={1}>
+                <CustomTabPanelVariations api={api} triggerNotifications={triggerNotifications} FileToBase64={FileToBase64} variationIds={variationIds} setVariationIds={setVariationIds} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} updateVariableAttributeList={updateVariableAttributeList} attributes={attributes} variables={variables} setVariables={setVariables} variationIdentifier={variationIdentifier} setVariationIdentifier={setVariationIdentifier} variableAttributeList={variableAttributeList} variations={variations} setVariations={setVariations} value={value} index={1}>
                 </CustomTabPanelVariations>
                 <CustomTabPanelLinkedProducts value={value} index={2}>
                     Item Three

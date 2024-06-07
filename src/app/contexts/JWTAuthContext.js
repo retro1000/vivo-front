@@ -1,35 +1,37 @@
 import { createContext, useEffect, useReducer } from "react";
 import axios from "axios";
+
+import { useAxios } from "app/hooks/useAxios";
+
 // CUSTOM COMPONENT
 import { MatxLoading } from "app/components";
+import { backendApi } from "config";
 
 const initialState = {
   user: null,
   isInitialized: false,
-  isAuthenticated: false
+  isAuthenticated: false,
+  token: null,
+  role: null, // Add role to initial state
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "INIT": {
-      const { isAuthenticated, user } = action.payload;
-      return { ...state, isAuthenticated, isInitialized: true, user };
+      const { isAuthenticated, user, token, role } = action.payload;
+      return { ...state, isAuthenticated, isInitialized: true, user, token, role };
     }
-
     case "LOGIN": {
-      return { ...state, isAuthenticated: true, user: action.payload.user };
+      const { user, token, role } = action.payload;
+      return { ...state, isAuthenticated: true, user, token, role };
     }
-
     case "LOGOUT": {
-      return { ...state, isAuthenticated: false, user: null };
+      return { ...state, isAuthenticated: false, user: null, token: null, role: null };
     }
-
     case "REGISTER": {
-      const { user } = action.payload;
-
-      return { ...state, isAuthenticated: true, user };
+      const { user, token, role } = action.payload;
+      return { ...state, isAuthenticated: true, user, token, role };
     }
-
     default:
       return state;
   }
@@ -46,33 +48,56 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // const login = async (username, password, rememberMe) => {
+  //   const response = await axios.post("/api/auth/login", { username:username, password:password, rememberMe:rememberMe });
+  //   const { user, token, role } = response.data;
+
+  //   localStorage.setItem('token', token)
+
+  //   dispatch({ type: "LOGIN", payload: { user, token, role } });
+  // };
+
   const login = async (email, password) => {
     const response = await axios.post("/api/auth/login", { email, password });
-    const { user } = response.data;
+    const { user, token, role } = response.data;
 
-    dispatch({ type: "LOGIN", payload: { user } });
+    localStorage.setItem('token', token)
+
+    dispatch({ type: "LOGIN", payload: { user, token, role } });
   };
+
 
   const register = async (email, username, password) => {
     const response = await axios.post("/api/auth/register", { email, username, password });
-    const { user } = response.data;
+    const { user, token } = response.data;
+
+    localStorage.setItem('jwt_token', token);
 
     dispatch({ type: "REGISTER", payload: { user } });
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
     dispatch({ type: "LOGOUT" });
   };
 
   useEffect(() => {
     (async () => {
-      try {
-        const { data } = await axios.get("/api/auth/profile");
-        dispatch({ type: "INIT", payload: { isAuthenticated: true, user: data.user } });
-      } catch (err) {
-        console.error(err);
-        dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null } });
-      }
+        const token = localStorage.getItem('token');
+        if(token){
+          await axios.get(`${backendApi}/api/auth/profile`, {headers: {'Authorization':`Bearer ${token}`}})
+            .then((res) => {
+              if(res.status===200){
+                const { user, role } = res.data
+                dispatch({ type: "INIT", payload: { isAuthenticated: true, user: user, role: role, token: token } });
+              }
+            })
+            .catch((err) => {
+              dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: null, token: null } });
+            });
+        }else{
+          dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, token: null, role: null } });
+        }
     })();
   }, []);
 
