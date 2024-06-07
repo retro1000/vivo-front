@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 const SearchableSelectMultiple = ({ label, options, selectedValues, setSelectedValues, multiple, sx, CustomTextField }) => {
     return (
     <Autocomplete
+    size='small'
       sx={sx}
       options={options}
       multiple={multiple}

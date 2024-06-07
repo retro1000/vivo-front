@@ -78,6 +78,7 @@ return (
                           (
                             <Grid sx={{display: 'flex', direction: 'column', gap: '2%'}} container spacing={1} alignItems="flex-start" justifyContent={"space-between"}>
                                   <TextField
+                                    size='small'
                                     sx={{width: '23%'}}
                                     fullWidth
                                     label="Attribute Name"
@@ -103,6 +104,7 @@ return (
                                     // helperText={errors.attributeName}
                                   />
                                   <TextField
+                                    size='small'
                                     fullWidth
                                     sx={{width: '75%'}}
                                     label="Attribute Variables"

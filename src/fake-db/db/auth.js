@@ -6,7 +6,7 @@ import Mock from "../mock";
 const userList = [
   {
     id: 1,
-    role: "SA",
+    role: "ADMIN",
     name: "Jason Alexander",
     username: "jason_alexander",
     email: "jason@ui-lib.com",
@@ -27,7 +27,7 @@ Mock.onPost("/api/auth/login").reply(async (config) => {
 
     if (!user) return [400, { message: "Invalid email or password" }];
 
-    const payload = { user: userList[0] };
+    const payload = { user: userList[0], token: 'token', role: userList[0].role };
     return [200, payload];
   } catch (err) {
     console.error(err);
