@@ -80,6 +80,7 @@ function CustomVariationExpansionPanel(props) {
                                         <FormControl sx={{width: '30%', maxWidth: '180px', minWidth: '110px'}}>
                                             <InputLabel id={`variation-select-${index}-${varIndex}`}>{props.variables.find(itm => itm.attributeId===variable.attributeId).attributeName}</InputLabel>
                                             <Select
+                                                size='small'
                                                 key={varIndex}
                                                 labelId={`variation-select-${index}-${varIndex}`}
                                                 value={variable.attributeVariableId}

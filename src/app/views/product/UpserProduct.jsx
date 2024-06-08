@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from 'axios'
 
 import { Checkbox, MenuItem, InputLabel, Select, FormControl, Stack, Box, styled, Tabs, Tab, Typography, TextField, Button, Grid, IconButton, Icon } from "@mui/material";
+import { LoadingButton } from '@mui/lab';
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 import { ReactQuillEditior, FileUpload, MultiFileUpload, FormDialog, Breadcrumb, SimpleCard, CustomExpansionPanel, SearchableSelectMultiple, CustomVariationExpansionPanel } from "app/components";
@@ -52,6 +53,7 @@ function CustomTabPanelVariations(props) {
     const [bulkOption, setBulkOption] = useState('');
     const [bulkOptionFormOn, setBulkOptionFormOn] = useState(false);
     const [variationErrors, setVariationErrors] = useState({})
+    const [loading, setLoading] = useState(false);
     
     const fields = [
       {key:"varImage", id:"variationImage", type:"file", value: ""},
@@ -261,6 +263,7 @@ function CustomTabPanelVariations(props) {
         const messages = []
 
         try{
+          setLoading(true)
           const axiosRequests = requests.map(request=>{
             if(request.data!==undefined && request.data.variations.length>0){
               return api({
@@ -279,6 +282,7 @@ function CustomTabPanelVariations(props) {
         }catch(error){
 
         }finally{
+          setLoading(false)
           if(messages.length!==0) triggerNotifications(messages, 50)
         }        
       }
@@ -312,6 +316,7 @@ function CustomTabPanelVariations(props) {
                         <FormControl sx={{width: '220px'}} disabled={variations.filter(val=>val.checked).length===0}>
                           <InputLabel id="bulk-options">Bulk options</InputLabel>
                             <Select
+                              // size='small'
                               labelId='bulk-options'
                               value={bulkOption}
                               label='bulk-options'
@@ -353,7 +358,19 @@ function CustomTabPanelVariations(props) {
                         }}
                       />
                       <CustomVariationExpansionPanel variationErrors={variationErrors} variableAttributeList={variableAttributeList} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} attributes={attributes} variables={variables} list={variations} setVariations={setVariations} isDeleteOn={true}></CustomVariationExpansionPanel>
-                      <Button sx={{width: '160px'}} variant="contained" color="primary" disabled={updateVariations.length === 0} startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} onClick={upsertVariations}>Save variations</Button>
+                      {/* <Button sx={{width: '160px'}} variant="contained" color="primary" disabled={updateVariations.length === 0} startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} onClick={upsertVariations}>Save variations</Button> */}
+                      <LoadingButton
+                        sx={{width: '160px'}}
+                        loading={loading}
+                        loadingPosition="start"
+                        startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>}
+                        variant="contained"
+                        color="primary"
+                        disabled={updateVariations.length === 0}
+                        onClick={upsertVariations}
+                      >
+                        Save variations
+                      </LoadingButton>
                     </React.Fragment>
                   ) :
                   (
@@ -394,7 +411,8 @@ function CustomTabPanelVariations(props) {
     });
 
     const { api, triggerNotifications, updateVariableAttributeList, setUpdateVariableAttributeList, variables, setVariables, setAttributeIdentifier, attributeIdentifier, value, index, variableAttributeList, attributes, selectedAttributes, setSelectedAttributes, setVariableAttributeList } = props;
-  
+    const [loading, setLoading] = useState(false)
+
     const editVariableAttributeList = (index, val, key) => {
       setVariableAttributeList(prevList => {
         const newList = [...prevList]; 
@@ -528,7 +546,19 @@ function CustomTabPanelVariations(props) {
                 </Grid>
               </Stack>
               <CustomExpansionPanel updateVariableAttributeList={updateVariableAttributeList} setUpdateVariableAttributeList={setUpdateVariableAttributeList} removeFromVariableAttributeList={removeFromVariableAttributeList} variables={variables} editVariableAttributeList={editVariableAttributeList} list={variableAttributeList} isDeleteOn = {true}></CustomExpansionPanel>
-              <Button sx={{width: '160px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} disabled={updateVariableAttributeList.length === 0} onClick={upsertAttributes}>Save attributes</Button>
+              {/* <Button sx={{width: '160px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} disabled={updateVariableAttributeList.length === 0} onClick={upsertAttributes}>Save attributes</Button> */}
+              <LoadingButton
+                  sx={{width: '160px'}}
+                  loading={loading}
+                  loadingPosition="start"
+                  startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>}
+                  variant="contained"
+                  color="primary"
+                  disabled={updateVariableAttributeList.length === 0}
+                  onClick={upsertAttributes}
+                >
+                  Save attributes
+              </LoadingButton>
             </Stack>
           </Box>
         )}
