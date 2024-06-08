@@ -3,10 +3,10 @@ import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-const SearchableSelectMultiple = ({ label, options, selectedValues, setSelectedValues, multiple, sx, CustomTextField }) => {
+const SearchableSelectMultiple = ({ size, label, options, selectedValues, setSelectedValues, multiple, sx, CustomTextField }) => {
     return (
     <Autocomplete
-    size='small'
+      size={size}
       sx={sx}
       options={options}
       multiple={multiple}
