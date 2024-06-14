@@ -20,20 +20,6 @@ const AccordionRoot = styled("div")(({ theme }) => ({
 
 function CustomExpansionPanel(props) {
 
-  const compareArrays = (arr1, arr2) => {
-    if (arr1.length !== arr2.length) {
-        return true;
-    }
-
-    arr1.forEach(ar1 => {
-      arr2.forEach(ar2 => {
-        if (ar1.value !== ar2.variableId || ar1.label !== ar2.variableName) return true;
-      })
-    })
-
-    return false;
-}
-console.log(props.variables, props.list)
 return (
     <AccordionRoot>
         {

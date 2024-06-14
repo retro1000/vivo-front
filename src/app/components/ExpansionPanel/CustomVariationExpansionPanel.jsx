@@ -9,7 +9,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 
 import { FileUpload, NumberFormatField } from '..';
-import { identity } from 'lodash';
 
 
 const AccordionRoot = styled("div")(({ theme }) => ({
@@ -21,7 +20,6 @@ const AccordionRoot = styled("div")(({ theme }) => ({
 }));
 
 function CustomVariationExpansionPanel(props) {
-
     const selectAll = () => {
         const newList = [...props.list]
         newList.forEach(itm=>{itm.checked=true})
@@ -32,22 +30,6 @@ function CustomVariationExpansionPanel(props) {
         const newList = [...props.list]
         newList.forEach(itm=>{itm.checked=false})
         props.setVariations(newList)
-    }
-
-    const requiredFields = ['variationImage', 'unitCost', 'unitPrice', 'backendOrderType', 'variationAttributes'];
-    const nonRequiredFields = ['availableStockAmont', 'discount', 'pendingStockAmont'];
-
-
-    const checkFields = (field, current) => {
-        return requiredFields.filter(itm=>itm!==field)?.reduce((acc, cur)=>{
-            return (cur==='variationAttributes' ? current[cur].length!==0 && current[cur].filter(itm=>itm.attributeVariableId===undefined).length===0 : cur==='variationImage' || cur==='backendOrderType'?current[cur]!==undefined && current[cur]!=='':current[cur]!==undefined && current[cur]!=='' && parseFloat(current[cur])>0) && acc
-        }, true)
-    }
-
-    const checkNonRequiredFields = (field, current) => {
-        return nonRequiredFields.filter(itm=>itm!==field)?.reduce((acc, cur)=>{
-            return (current.val===undefined || current.val==='' || ((/^.*\..*$/).test(current[cur])?parseFloat(current[cur]):parseInt(current[cur]))>=0) && acc
-        }, true)
     }
 
     return (
@@ -88,13 +70,13 @@ function CustomVariationExpansionPanel(props) {
                                                 defaultValue={variable.attributeVariableId}
                                                 onChange={(event)=>{
                                                     const current = props.list[index]
-                                                    if(checkFields('variationAttributes', current) && checkNonRequiredFields('', current)){
+                                                    if(props.checkFields('variationAttributes', current) && props.checkNonRequiredFields('', current)){
                                                         const updatedList = [...props.updateVariations]
-                                                        if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                        if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                             current.variationAttributes[varIndex].attributeVariableId = event.target.value
                                                             updatedList.push(current)
                                                         }else{
-                                                            updatedList.find(itm=>itm.identifier===current.identifier).variationAttributes[varIndex].attributeVariableId = event.target.value
+                                                            updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).variationAttributes[varIndex].attributeVariableId = event.target.value
                                                         }
                                                         props.setUpdateVariations(updatedList)
                                                     }
@@ -139,13 +121,13 @@ function CustomVariationExpansionPanel(props) {
                                         setFile={(val)=>{
                                             const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if((val==='' || val===undefined) && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((val!=='') && checkFields('variationImage', current) && checkNonRequiredFields('', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if((val==='' || val===undefined) && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((val!=='') && props.checkFields('variationImage', current) && props.checkNonRequiredFields('', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.variationImage = val
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, variationImage: val})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, variationImage: val})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).variationImage = val
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).variationImage = val
                                                     }
                                                 }
                                                 props.setUpdateVariations(updatedList)
@@ -169,18 +151,18 @@ function CustomVariationExpansionPanel(props) {
                                             decimalScale={3}
                                             fixedDecimalScale={false}
                                             value={item.unitCost}
-                                            error={props.variationErrors[item.identifier]?.unitCost!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.unitCost}
+                                            error={props.variationErrors[item.variationIdentifier]?.unitCost!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.unitCost}
                                             onChange={(event) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if((parseFloat(event.target.value)<=0 || event.target.value==='' || event.target.value===undefined) && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((parseFloat(event.target.value)>0 && event.target.value!=='') && event.target.value!==current.unitCost && checkFields('unitCost', current) && checkNonRequiredFields('', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if((parseFloat(event.target.value)<=0 || event.target.value==='' || event.target.value===undefined) && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((parseFloat(event.target.value)>0 && event.target.value!=='') && event.target.value!==current.unitCost && props.checkFields('unitCost', current) && props.checkNonRequiredFields('', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.unitCost = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, unitCost: event.target.value})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, unitCost: event.target.value})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).unitCost = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).unitCost = event.target.value
                                                     }
                                                 }                               
                                                 props.setUpdateVariations(updatedList)                 
@@ -202,19 +184,19 @@ function CustomVariationExpansionPanel(props) {
                                             decimalScale={2}
                                             fixedDecimalScale={false}
                                             value={item.unitPrice}
-                                            error={props.variationErrors[item.identifier]?.unitPrice!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.unitPrice}
+                                            error={props.variationErrors[item.variationIdentifier]?.unitPrice!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.unitPrice}
                                             onChange={(event) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
                                                 // let errorList = [...props.variationErrors]
-                                                if((parseFloat(event.target.value)<=0 || event.target.value==='' || event.target.value===undefined) && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((parseFloat(event.target.value)>0 && event.target.value!=='') && checkFields('unitPrice', current) && event.target.value!==current.unitPrice && checkNonRequiredFields('', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if((parseFloat(event.target.value)<=0 || event.target.value==='' || event.target.value===undefined) && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((parseFloat(event.target.value)>0 && event.target.value!=='') && props.checkFields('unitPrice', current) && event.target.value!==current.unitPrice && props.checkNonRequiredFields('', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.unitPrice = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, unitPrice: event.target.value})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, unitPrice: event.target.value})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).unitPrice = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).unitPrice = event.target.value
                                                     }
                                                 }
                                                 props.setUpdateVariations(updatedList)
@@ -236,18 +218,18 @@ function CustomVariationExpansionPanel(props) {
                                             decimalScale={2}
                                             fixedDecimalScale={false}
                                             value={item.discount}
-                                            error={props.variationErrors[item.identifier]?.discount!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.discount}
+                                            error={props.variationErrors[item.variationIdentifier]?.discount!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.discount}
                                             onChange={(event) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if(parseFloat(event.target.value)<0 && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((parseFloat(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.discount && checkFields('', current) && checkNonRequiredFields('discount', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if(parseFloat(event.target.value)<0 && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((parseFloat(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.discount && props.checkFields('', current) && props.checkNonRequiredFields('discount', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.discount = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, discount: event.target.value})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, discount: event.target.value})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).discount = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).discount = event.target.value
                                                     }
                                                 }                                           
                                                 props.setUpdateVariations(updatedList)     
@@ -262,18 +244,18 @@ function CustomVariationExpansionPanel(props) {
                                             label="Available stock amount"
                                             type="number"
                                             value={item.availableStockAmount}
-                                            error={props.variationErrors[item.identifier]?.availableStockAmount!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.availableStockAmount}
+                                            error={props.variationErrors[item.variationIdentifier]?.availableStockAmount!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.availableStockAmount}
                                             onChange={(event) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if(parseInt(event.target.value)<0 && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((parseInt(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.availableStockAmount && checkFields('', current) && checkNonRequiredFields('availableStockAmount', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if(parseInt(event.target.value)<0 && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((parseInt(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.availableStockAmount && props.checkFields('', current) && props.checkNonRequiredFields('availableStockAmount', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.availableStockAmount = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, availableStockAmount: event.target.value})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, availableStockAmount: event.target.value})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).availableStockAmount = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).availableStockAmount = event.target.value
                                                     }
                                                 }                             
                                                 props.setUpdateVariations(updatedList)                   
@@ -289,18 +271,18 @@ function CustomVariationExpansionPanel(props) {
                                             label="Pending stock amount"
                                             type="number"
                                             value={item.pendingStockAmount}
-                                            error={props.variationErrors[item.identifier]?.pendingStockAmount!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.pendingStockAmount}
+                                            error={props.variationErrors[item.variationIdentifier]?.pendingStockAmount!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.pendingStockAmount}
                                             onChange={(event) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if(parseInt(event.target.value)<0 && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((parseInt(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.pendingStockAmount && checkFields('', current) && checkNonRequiredFields('pendingStockAmount', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if(parseInt(event.target.value)<0 && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((parseInt(event.target.value)>=0 && event.target.value!=='') && event.target.value!==current.pendingStockAmount && props.checkFields('', current) && props.checkNonRequiredFields('pendingStockAmount', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.pendingStockAmount = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, pendingStockAmount: event.target.value})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, pendingStockAmount: event.target.value})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).pendingStockAmount = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).pendingStockAmount = event.target.value
                                                     }
                                                 }                                  
                                                 props.setUpdateVariations(updatedList)              
@@ -319,18 +301,18 @@ function CustomVariationExpansionPanel(props) {
                                             name="radio-buttons-group"
                                             row
                                             value={item.backendOrderType}
-                                            error={props.variationErrors[item.identifier]?.backendOrderType!==undefined}
-                                            helperText={props.variationErrors[item.identifier]?.backendOrderType}
+                                            error={props.variationErrors[item.variationIdentifier]?.backendOrderType!==undefined}
+                                            helperText={props.variationErrors[item.variationIdentifier]?.backendOrderType}
                                             onChange={(event, val) => {
                                                 const current = props.list[index]
                                                 let updatedList = [...props.updateVariations]
-                                                if((event.target.value==='' && event.target.value===undefined) && updatedList.filter(itm=>itm.identifier===current.identifier).length!==0) updatedList = updatedList.filter(itm=>itm.identifier!==current.identifier)
-                                                if((event.target.value!=='') && val!==current.backendOrderType && checkFields('backendOrderType', current) && checkNonRequiredFields('', current)){
-                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.identifier===current.identifier).length===0){
+                                                if((event.target.value==='' && event.target.value===undefined) && updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==current.variationIdentifier)
+                                                if((event.target.value!=='') && val!==current.backendOrderType && props.checkFields('backendOrderType', current) && props.checkNonRequiredFields('', current)){
+                                                    if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===current.variationIdentifier).length===0){
                                                         current.backendOrderType = event.target.value
-                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, identifier: current.identifier, state: current.state, attributeVariables: current.attributeVariables, backendOrderType: val})
+                                                        current.state==='create'?updatedList.push(current):updatedList.push({attributeId: current.attributeId, variationIdentifier: current.variationIdentifier, state: current.state, attributeVariables: current.attributeVariables, backendOrderType: val})
                                                     }else{
-                                                        updatedList.find(itm=>itm.identifier===current.identifier).backendOrderType = event.target.value
+                                                        updatedList.find(itm=>itm.variationIdentifier===current.variationIdentifier).backendOrderType = event.target.value
                                                     }
                                                 }
                                                 props.setUpdateVariations(updatedList)

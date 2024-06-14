@@ -3,7 +3,7 @@ import { IconButton , Icon, Typography, Avatar, Box } from '@mui/material';
 
 import { useNotistack } from "../../hooks/useNotistack";
 
-const FileUpload = ({ required, acceptedTypes, sx, file, setFile, id, close, multiple, handleMultipleFileChange, height, width }) => {
+const FileUpload = ({ error, helperText, required, acceptedTypes, sx, file, setFile, id, close, multiple, handleMultipleFileChange, height, width }) => {
 
   const { triggerNotifications } = useNotistack();
 
@@ -30,7 +30,8 @@ const FileUpload = ({ required, acceptedTypes, sx, file, setFile, id, close, mul
   };
 
   return (
-    <Box sx={sx} display="flex" alignItems="center" flexDirection="row" border={file?'none':'1px solid rgba(47, 49, 45, 0.64)'} borderRadius={'11px'}>
+    <React.Fragment>
+      <Box sx={sx} display="flex" alignItems="center" flexDirection="row" border={file?'none':'1px solid rgba(47, 49, 45, 0.64)'} borderRadius={'11px'}>
         {close && file && (
               <IconButton sx={{zIndex: '1', position: 'relative'}} oxnClick={(event)=>{event.preventDefault(); event.stopPropagation(); handleRemoveImage()}} area-label="remove"><Icon sx={{fontSize: '20px'}}>cancel</Icon></IconButton >
             )}
@@ -63,6 +64,20 @@ const FileUpload = ({ required, acceptedTypes, sx, file, setFile, id, close, mul
               />
         </label>
     </Box>
+    {
+      error && <Typography 
+                  sx={
+                    {color: '#FF3D57', 
+                    fontSize: '0.75rem',
+                    textAlign: 'left',
+                    marginRight: '14px',
+                    marginBottom: '0',
+                    marginLeft: '14px'
+                    }
+                  }
+                >{helperText}</Typography>
+    }
+  </React.Fragment>
   );
 };
 

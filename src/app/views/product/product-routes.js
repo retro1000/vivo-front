@@ -6,6 +6,7 @@ import AuthGuard from "app/auth/AuthGuard";
 
 const UpserProduct = Loadable(lazy(() => import("./UpserProduct")));
 const ProductList = Loadable(lazy(() => import("./ProductList")));
+const ProductView = Loadable(lazy(() => import("./ProducView")));
 
 
 // const Auth0Login = Loadable(lazy(() => import("./login/Auth0Login")));
@@ -24,6 +25,13 @@ const productRoutes = [
       <AuthGuard auth={authRoles.manager}>
         <UpserProduct />
       </AuthGuard>
+  },
+  { 
+    path: "/product/view/:id",
+    element: 
+      // <AuthGuard auth={authRoles.manager}>
+        <ProductView />
+      // </AuthGuard>
   }
 ];
 

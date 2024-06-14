@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
-import { Checkbox, MenuItem, InputLabel, Select, FormControl, Stack, Box, styled, Tabs, Tab, Typography, TextField, Button, Grid, IconButton, Icon } from "@mui/material";
+
+import { CircularProgress, Checkbox, MenuItem, InputLabel, Select, FormControl, Stack, Box, styled, Tabs, Tab, Typography, TextField, Button, Grid, IconButton, Icon } from "@mui/material";
 import { LoadingButton } from '@mui/lab';
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
@@ -54,6 +55,7 @@ function CustomTabPanelVariations(props) {
     const [bulkOptionFormOn, setBulkOptionFormOn] = useState(false);
     const [variationErrors, setVariationErrors] = useState({})
     const [loading, setLoading] = useState(false);
+    const [changedIdentifier, setChangedIdentifier] = useState([])
     
     const fields = [
       {key:"varImage", id:"variationImage", type:"file", value: ""},
@@ -66,6 +68,21 @@ function CustomTabPanelVariations(props) {
     ];
 
     const { api, FileToBase64, variationIds, setVariationIds, triggerNotifications, updateVariations, setUpdateVariations, updateVariableAttributeList, attributes, variables, setVariables, variationIdentifier, setVariationIdentifier, variableAttributeList, value, index, variations, setVariations} = props;
+
+    const requiredFields = ['variationImage', 'unitCost', 'unitPrice', 'backendOrderType', 'variationAttributes'];
+    const nonRequiredFields = ['availableStockAmont', 'discount', 'pendingStockAmont'];
+
+    const checkFields = (field, current) => {
+      return requiredFields.filter(itm=>itm!==field)?.reduce((acc, cur)=>{
+          return (cur==='variationAttributes' ? current[cur].length!==0 && current[cur].filter(itm=>itm.attributeVariableId===undefined).length===0 : cur==='variationImage' || cur==='backendOrderType'?current[cur]!==undefined && current[cur]!=='':current[cur]!==undefined && current[cur]!=='' && parseFloat(current[cur])>0) && acc
+      }, true)
+  }
+
+  const checkNonRequiredFields = (field, current) => {
+      return nonRequiredFields.filter(itm=>itm!==field)?.reduce((acc, cur)=>{
+          return (current.val===undefined || current.val==='' || ((/^.*\..*$/).test(current[cur])?parseFloat(current[cur]):parseInt(current[cur]))>=0) && acc
+      }, true)
+  }
 
     const generateVariations = (list) => {
       const generate = (lists) => {
@@ -221,7 +238,7 @@ function CustomTabPanelVariations(props) {
                       if(response.status===201){
                         handleSuccessfull(response.data.result, messages)
                         const newList = [...variationIds]
-                        response.result.forEach(itm=>newList.push(itm.variationId))
+                        response.data.result.forEach(itm=>newList.push(itm.variationId))
                         setVariationIds(newList)
                       }
                     },
@@ -233,6 +250,9 @@ function CustomTabPanelVariations(props) {
                           }
                           if(typeof error.response.data==='object' && error.response.data.result){
                             handleSuccessfull(error.response.data.result, messages)
+                            const newList = [...variationIds]
+                            error.response.data.result.forEach(itm=>newList.push(itm.variationId))
+                            setVariationIds(newList)
                           }
                       }
                       if(error.response.status===500) messages.push({text:'Error occured during creating variations.', variant: 'error'})
@@ -287,6 +307,30 @@ function CustomTabPanelVariations(props) {
         }        
       }
     }
+
+    useEffect(() => {
+      if(changedIdentifier.length>0){
+        let updatedList = [...props.updateVariations]
+        variations.filter(lst=>changedIdentifier.includes(lst.variationIdentifier))?.forEach(lst => {
+          if(checkFields('', lst) && checkNonRequiredFields('', lst)){
+
+            const updatedFields = bulkOption==='all' ? fields.map(field=>field.id) : fields.filter(itm=>itm.key===bulkOption).map(field=>field.id)
+
+            if(updatedList.length===0 || updatedList.filter(itm=>itm.variationIdentifier===lst.variationIdentifier).length===0){
+                lst.state==='create'?updatedList.push(lst):updatedList.push({attributeId: lst.attributeId, variationIdentifier: lst.variationIdentifier, state: lst.state, attributeVariables: lst.attributeVariables, ...updatedFields.reduce((acc, key)=>(acc[key]=lst[key]), {})})
+            }else{
+                const listItm = updatedList.find(itm=>itm.variationIdentifier===lst.variationIdentifier)
+                updatedFields.forEach(field=>{
+                  listItm[field] = lst[field]
+                })
+            }
+          }else if(updatedList.filter(itm=>itm.variationIdentifier===lst.variationIdentifier).length!==0) updatedList = updatedList.filter(itm=>itm.variationIdentifier!==lst.variationIdentifier)
+        })                              
+        props.setUpdateVariations(updatedList)
+        setBulkOption('')
+        setChangedIdentifier([])
+      }
+  }, [changedIdentifier])
     
     return (
       <div
@@ -347,17 +391,19 @@ function CustomTabPanelVariations(props) {
                         setOpen={setBulkOptionFormOn}
                         setVariations={(val) => {
                           const newList = [...variations]
+                          const newChangedIdentifier = []
                           newList.filter(lst=>lst.checked)?.forEach(lst=>{
                             for(let key in val){
                               lst[key] = val[key]
                             }
+                            newChangedIdentifier.push(lst.variationIdentifier)
                           });
 
                           setVariations(newList);
-                          setBulkOption('')
+                          setChangedIdentifier(newChangedIdentifier)
                         }}
                       />
-                      <CustomVariationExpansionPanel variationErrors={variationErrors} variableAttributeList={variableAttributeList} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} attributes={attributes} variables={variables} list={variations} setVariations={setVariations} isDeleteOn={true}></CustomVariationExpansionPanel>
+                      <CustomVariationExpansionPanel checkNonRequiredFields={checkNonRequiredFields} checkFields={checkFields} setChangedIdentifier={setChangedIdentifier} variationErrors={variationErrors} variableAttributeList={variableAttributeList} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} attributes={attributes} variables={variables} list={variations} setVariations={setVariations} isDeleteOn={true}></CustomVariationExpansionPanel>
                       {/* <Button sx={{width: '160px'}} variant="contained" color="primary" disabled={updateVariations.length === 0} startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} onClick={upsertVariations}>Save variations</Button> */}
                       <LoadingButton
                         sx={{width: '160px'}}
@@ -412,6 +458,7 @@ function CustomTabPanelVariations(props) {
 
     const { api, triggerNotifications, updateVariableAttributeList, setUpdateVariableAttributeList, variables, setVariables, setAttributeIdentifier, attributeIdentifier, value, index, variableAttributeList, attributes, selectedAttributes, setSelectedAttributes, setVariableAttributeList } = props;
     const [loading, setLoading] = useState(false)
+    const [addAttributeLoading, setAddAttributeLoading] = useState(false)
 
     const editVariableAttributeList = (index, val, key) => {
       setVariableAttributeList(prevList => {
@@ -433,7 +480,7 @@ function CustomTabPanelVariations(props) {
         setVariableAttributeList(newList);
     }
 
-    const addExistingAttribute = () => {
+    const addExistingAttribute = async () => {
       const addAttributeVariable = (attribute) => {
         if(attribute){
           const list = [...variableAttributeList]
@@ -446,7 +493,8 @@ function CustomTabPanelVariations(props) {
       let attribute = variables.length!==0 ? variables.find(itm=>itm.attributeId===selectedAttributes.value) : undefined
 
       if(!attribute){
-        api.get(`/product/attribute/get/${selectedAttributes.value}`)
+        setAddAttributeLoading(true)
+        await api.get(`/product/attribute/get/${selectedAttributes.value}`)
           .then((res) => {
             if(res.status===200){
               const newList = [...variables]
@@ -459,12 +507,15 @@ function CustomTabPanelVariations(props) {
           .catch((err) => {
             if(err.response.status===500) triggerNotifications([{text: 'Internal server error. Please try again!!!', variant:'error'}])
           })
+          .finally(() => {
+            setAddAttributeLoading(false)
+          })
       }else{
         addAttributeVariable(attribute)
       }
     }
 
-    const upsertAttributes = () => {
+    const upsertAttributes = async() => {
       const handleSuccessfull = (results, messages) => {
         const newList = [...variableAttributeList];
         const newVar = [...variables]
@@ -491,9 +542,10 @@ function CustomTabPanelVariations(props) {
         const newList = updateVariableAttributeList
             .filter(itm=>itm.state==='create')
             ?.map(itm=>({attribute: itm.attributeName, identifier: itm.identifier, variables: itm.attributeVariables}));
-
+        
+        setLoading(true)    
         const messages = []
-        newList.length!==0 && axios.post(`${backendApi}/product/attribute/create`, newList)
+        newList.length!==0 && await api.post('/product/attribute/create', newList)
           .then((res) => {
             if(res.status===201){
               handleSuccessfull(res.data.result, messages)
@@ -516,6 +568,7 @@ function CustomTabPanelVariations(props) {
           })
           .finally(() => {
             if(messages.length!==0) triggerNotifications(messages, 50)
+            setLoading(false)    
           })
       }
     }
@@ -539,9 +592,20 @@ function CustomTabPanelVariations(props) {
                 <Typography>Create new attribute with variables for the product or find existing attribute and customize existing variables in it for the product.</Typography>
                 <Grid sx={{display: 'flex', alignContent: 'center', alignItems: 'center', gap: '0.7em'}}>
                   <SearchableSelectMultiple label={"Attributes"} multiple={false} options={getOptions()} setSelectedValues={setSelectedAttributes} selectedValues={selectedAttributes} sx={{width: '20%', maxWidth: '200px', minWidth: '150px'}}></SearchableSelectMultiple>
-                  <IconButton className="button" color="primary" aria-label="Add existing attribute" disabled={selectedAttributes===null || selectedAttributes.length===0} onClick={addExistingAttribute}>
+                  {/* <IconButton className="button" color="primary" aria-label="Add existing attribute" disabled={selectedAttributes===null || selectedAttributes.length===0} onClick={addExistingAttribute}>
                     <Icon>add_box</Icon>
-                  </IconButton>
+                  </IconButton> */}
+                  <LoadingButton
+                    loading={addAttributeLoading}
+                    loadingPosition="start"
+                    variant="outlined"
+                    color="primary"
+                    startIcon={addAttributeLoading ? <CircularProgress size={20} /> : null}
+                    disabled={selectedAttributes===null || selectedAttributes.length===0}
+                    onClick={addExistingAttribute}
+                  >
+                    Add attribute
+                  </LoadingButton>
                   <Button variant="contained" color="primary" onClick={addNewVariableAttribute}>Create new attribute</Button>
                 </Grid>
               </Stack>
@@ -581,7 +645,7 @@ function CustomTabPanelVariations(props) {
     },
   }));
 
-function UpsertProduct() {
+function UpsertProduct({ update, id }) {
 
     const [value, setValue] = useState(0);
 
@@ -623,9 +687,15 @@ function UpsertProduct() {
 
     const [productErrors, setProductErrors] = useState({})
 
+    const [updatedProductDetails, setUpdatedProductDetails] = useState({})
+
+    const [loading, setLoading] = useState(false)
+
     const { triggerNotifications } = useNotistack()
     const { FileToBase64 } = useBase64()
     const { api } = useAxios()
+
+    const navigate = useNavigate()
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -652,33 +722,65 @@ function UpsertProduct() {
           })
       }
 
+      const getProductData = async () => {
+        await api.get(`/product/update/${id}`)
+          .then((res) => {
+            if(res.status===200){
+
+            }
+          })
+          .catch((err) => {
+
+          })
+      }
+
       getAttributes()
       getCategories()
+      update && id && getProductData()
 
     }, [])
 
     const upsertProduct = async () => {
+      const errors = []
+      nameValidation(10, 50, productTitle, 'productTitle', 'Product title', true)
+      nameValidation(10, 50, productSubTitle, 'productSubTitle', 'Product sub title', false)
+      
+      if(Object.keys(productErrors).length!==0){
+        Object.keys(productErrors).forEach(key=>{errors.push({text: productErrors[key], variant: 'error'})})
+      }
+      if(selectedCategories.length===0){
+        errors.push({text: 'No categories are selected.', variant: 'error'})
+      }
+      if(!update && variationIds.length===0){
+        errors.push({text: 'No variations are selected.', variant: 'error'})
+      }
+      if(errors.length>0){
+        triggerNotifications(errors, 50)
+        return
+      }
 
+      setLoading(true)
       const formData = new FormData()
       formData.append('productImage', productImage)
       productImages.forEach(image => formData.append('otherImages', image))
-      formData.append('data', JSON.stringify({
-        productTitle: productTitle,
-        productSubTitle: productSubTitle,
-        productShortDescription: productShortDescription,
-        productDescription: productDescription,
+      formData.append('data', new Blob([JSON.stringify({
+        ...updatedProductDetails,
         categories: selectedCategories,
         variations: variationIds
-      }))
+      })], {type: 'application/json'}))
       
       const messages = []
-      productImage!=='' && await axios.api('product/create', formData, {
+      let id = undefined
+      productImage!=='' && await api.post(`product/${update?`update/${id}`:'create'}`, formData, {
         headers:{
           'Content-Type': 'multipart/form-data'
         }
       })
         .then((res) => {
-          if(res.status===201) messages.push({text: res.data, variant: 'success'})
+          if(res.status===201){
+            messages.push({text: res.data.message, variant: 'success'})
+            id = res.data.id
+          }
         })
         .catch((err) => {
           if(err.response.status===500) messages.push({text: err.response.data, variant: 'error'})
@@ -686,20 +788,39 @@ function UpsertProduct() {
             const errors = err.response.data;
             Object.keys(errors).forEach(key => {
               const newError = {...productErrors}
-              if(key!=='productImage' && key!=='productImages') newError.key = errors[key]
+              if(key!=='productImage' && key!=='productImages' && key!=='categories') newError.key = errors[key]
               messages.push({text: errors[key], variant: 'error'})
             })
           }
         })
         .finally(() => {
+          setLoading(false)
           if(messages.length>0) triggerNotifications(messages, 50)
+          if(id) navigate(`/product/view/${id}`)        
         })
+    }
+
+    const nameValidation = (min, max, val, field, fieldLabel, required=false) => {
+      const newObj = {...productErrors}
+      if(required && (val==='' || val===undefined)){
+        newObj[field] = `${fieldLabel} cannot be empty.`
+        setProductErrors(newObj)
+        return false
+      }
+      if(val!=='' && val!==undefined && (val.length<min || val.length>max)){
+        newObj[field] = `${fieldLabel} must be in between ${min} and ${max} characters.`
+        setProductErrors(newObj)
+        return false
+      }
+      delete newObj[field]
+      setProductErrors(newObj)
+      return true
     }
 
     return (
         <Container>
         <Box className="breadcrumb">
-            <Breadcrumb routeSegments={[{ name: "Product", path: "/Product/list" }, { name: "Create" }]} />
+            <Breadcrumb routeSegments={[{ name: "Product", path: "/Product/list" }, { name: `${update?'Update':'Create'}` }]} />
         </Box>
 
         <Stack spacing={3}>
@@ -708,25 +829,49 @@ function UpsertProduct() {
               <Stack flexWrap={'wrap'} spacing={3}>
                 <TextField
                   value={productTitle}
-                  onChange={(e) => setProductTitle(e.target.value)}
+                  onChange={(e) => {
+                    const newObj = {...updatedProductDetails}
+                    if(nameValidation(10, 50, e.target.value, 'productTitle', 'Product title', true)) newObj.productTitle = e.target.value
+                    else delete newObj.productTitle
+                    setUpdatedProductDetails(newObj)
+                    setProductTitle(e.target.value)
+                  }}
                   label='Product title'
                   placeholder='Enter product title'
+                  error={productErrors.productTitle!==undefined}
+                  helperText={productErrors.productTitle}
                 >
                 </TextField>
                 <TextField
                   value={productSubTitle}
-                  onChange={(e) => setProductSubTitle(e.target.value)}
+                  onChange={(e) => {
+                    const newObj = {...updatedProductDetails}
+                    if(nameValidation(10, 50, e.target.value, 'productSubTitle', 'Product sub title')) newObj.productSubTitle = e.target.value
+                    else delete newObj.productSubTitle
+                    setUpdatedProductDetails(newObj)
+                    setProductSubTitle(e.target.value)
+                  }}
                   label='Product sub title'
                   placeholder='Enter product sub title'
+                  error={productErrors.productSubTitle!==undefined}
+                  helperText={productErrors.productSubTitle}
                 >
                 </TextField>
                 <TextField
                   value={productShortDescription}
-                  onChange={(e) => setProductShortDescription(e.target.value)}
+                  onChange={(e) => {
+                    const newObj = {...updatedProductDetails}
+                    if(nameValidation(10, 50, e.target.value, 'productShortDescription', 'Product short description')) newObj.productShortDescription = e.target.value
+                    else delete newObj.productShortDescription
+                    setUpdatedProductDetails(newObj)
+                    setProductShortDescription(e.target.value)
+                  }}
                   label='Product short description'
                   placeholder='Enter product short description'
                   multiline
                   rows={5}
+                  error={productErrors.productShortDescription!==undefined}
+                  helperText={productErrors.productShortDescription}
                 >
                 </TextField>
               </Stack>
@@ -788,9 +933,17 @@ function UpsertProduct() {
               <Stack flexWrap={'wrap'} spacing={3}>
               <ReactQuillEditior
                   editorHtml={productDescription}
-                  setEditorHtml={setProductDescription}
+                  setEditorHtml={(val)=>{
+                    const newObj = {...updatedProductDetails}
+                    if(nameValidation(10, 50, val, 'productDescription', 'Product description', true)) newObj.productDescription = val
+                    else delete newObj.productDescription
+                    setUpdatedProductDetails(newObj)
+                    setProductDescription(val)
+                  }}
                   label='Product description'
                   placeholder='Enter product description'
+                  error={productErrors.productDescription!==undefined}
+                  helperText={productErrors.productDescription}
                 >
                 </ReactQuillEditior>
               </Stack>
@@ -799,7 +952,7 @@ function UpsertProduct() {
           <SimpleCard sx={{width: '75%'}} title="Product images">
             <Stack gap={'0.8em'}>
               <Typography>Product image</Typography>
-              <FileUpload 
+              <FileUpload
                 required={true}
                 sx={{width: 250}}
                 height={250}
@@ -808,6 +961,8 @@ function UpsertProduct() {
                 setFile={(val) => {
                   setProductImage(val)
                 }}
+                error={productErrors.productImage!==undefined}
+                helperText={productErrors.productImage}
                 id={'product-image-input'}
               />
               <Typography sx={{marginTop: '2.2em'}}>Image gallery</Typography>
@@ -846,7 +1001,7 @@ function UpsertProduct() {
           <Grid sx={{display: 'flex', gap: '0.5em', justifyContent: 'flex-end', flexWrap: 'wrap', width: '100%', top: '5em'}}>
             <Button color="primary" variant="outlined">Cancel</Button>
             <Button color="primary" variant="outlined">Preview</Button>
-            <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} disabled={updateVariableAttributeList.length === 0} onClick={upsertProduct}>Publish</Button>
+            <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} onClick={upsertProduct} disabled={!loading}>Publish</Button>
           </Grid>
         </Stack>
         </Container>

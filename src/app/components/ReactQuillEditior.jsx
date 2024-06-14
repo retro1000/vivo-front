@@ -2,7 +2,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Grid } from '@mui/material';
 
-const ReactQuillEditior = ({editorHtml, setEditorHtml, placeholder, label}) => {
+const ReactQuillEditior = ({editorHtml, setEditorHtml, placeholder, label, error, helperText}) => {
 
   const handleChange = (html) => {
     setEditorHtml(html);
