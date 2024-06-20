@@ -95,6 +95,7 @@ export const AuthProvider = ({ children }) => {
             });
         }else{
           dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: null } });
+          localStorage.removeItem('token')
         }
     })();
   }, []);
