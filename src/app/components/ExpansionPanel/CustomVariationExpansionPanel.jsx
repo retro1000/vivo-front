@@ -33,6 +33,7 @@ function CustomVariationExpansionPanel(props) {
     }
 
     return (
+
     <React.Fragment sx={{marginTop: '0.8em'}}>
         {
             (props.list && props.list.length > 0) ? 

@@ -9,7 +9,7 @@ const initialState = {
   user: null,
   isInitialized: false,
   isAuthenticated: false,
-  role: null, // Add role to initial state
+  role: "GUEST", // Add role to initial state
 };
 
 const reducer = (state, action) => {
@@ -23,7 +23,7 @@ const reducer = (state, action) => {
       return { ...state, isAuthenticated: true, user, role };
     }
     case "LOGOUT": {
-      return { ...state, isAuthenticated: false, user: null, role: null };
+      return { ...state, isAuthenticated: false, user: null, role: "GUEST" };
     }
     case "REGISTER": {
       const { user, role } = action.payload;
@@ -91,10 +91,10 @@ export const AuthProvider = ({ children }) => {
               }
             })
             .catch((err) => {
-              dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: null } });
+              dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: "GUEST" } });
             });
         }else{
-          dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: null } });
+          dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null, role: "GUEST" } });
           localStorage.removeItem('token')
         }
     })();

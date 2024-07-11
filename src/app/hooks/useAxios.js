@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 const useAxios = () => {
 
     const api = axios.create({baseURL: backendApi})
+    const apiNonAuth = axios.create({baseURL: backendApi})
 
     api.interceptors.request.use(
         config => {
@@ -45,7 +46,7 @@ const useAxios = () => {
       // };
 
       // return {api, login, logout, getCurrentUser}
-      return {api}
+      return {api, apiNonAuth}
 
 }
 

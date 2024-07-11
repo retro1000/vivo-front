@@ -13,7 +13,8 @@ import { MatxSuspense } from "app/components";
 import { SecondarySidebar } from "app/components/SecondarySidebar";
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 
-import { sidenavCompactWidth, sideNavWidth } from "app/utils/constant";
+import { fullWidth, sidenavCompactWidth, sideNavWidth } from "app/utils/constant";
+import useAuth from "app/hooks/useAuth";
 
 // STYLED COMPONENTS
 const Layout1Root = styled(Box)(({ theme }) => ({
@@ -53,6 +54,7 @@ const LayoutContainer = styled(Box)(({ width, open }) => ({
 
 const Layout1 = () => {
   const { settings, updateSettings } = useSettings();
+  const { user, role } = useAuth();
   const { layout1Settings, secondarySidebar } = settings;
   const topbarTheme = settings.themes[layout1Settings.topbar.theme];
   const {
@@ -72,7 +74,7 @@ const Layout1 = () => {
     }
   };
 
-  const sidenavWidth = getSidenavWidth();
+  const sidenavWidth = (!user || role==="USER") ? fullWidth : getSidenavWidth();
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -93,7 +95,7 @@ const Layout1 = () => {
     <Layout1Root className={layoutClasses}>
       {showSidenav && sidenavMode !== "close" && (
         <SidenavTheme>
-          <Layout1Sidenav />
+          {user && role!=="USER" && <Layout1Sidenav />}
         </SidenavTheme>
       )}
 

@@ -72,7 +72,7 @@ export default function JwtLogin() {
     setLoading(true);
     try {
       await login(values.username, values.password);
-      navigate("/");
+      navigate("/dashboard/default");
     } catch (e) {
       setLoading(false);
     }

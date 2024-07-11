@@ -14,8 +14,6 @@ import { useNotistack } from 'app/hooks/useNotistack';
 import { useBase64 } from 'app/hooks/useBase64';
 import { useAxios } from 'app/hooks/useAxios';
 
-import { backendApi } from 'config';
-
 // STYLED COMPONENTS
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -228,11 +226,12 @@ function CustomTabPanelVariations(props) {
       };
 
       if(updateVariations.length!==0){
+        setLoading(true)
         const requests = [
           {
             url: '/product/variation/create',
             method: 'post',
-            data: {variations: await convertVariations(updateVariations, 'create', ['state', 'expanded', 'checked', 'variationId'])},
+            data: {variationUpsertDtos: await convertVariations(updateVariations, 'create', ['state', 'expanded', 'checked', 'variationId'])},
             handler: response => {
                       if(response.status===201){
                         handleSuccessfull(response.data.result, messages)
@@ -260,7 +259,7 @@ function CustomTabPanelVariations(props) {
           {
             url: '/product/variation/update',
             method: 'post',
-            data: {variations: await convertVariations(updateVariations, 'update', ['state', 'expanded', 'checked'])},
+            data: {variationForm: {variationUpsertDtos: await convertVariations(updateVariations, 'update', ['state', 'expanded', 'checked'])}},
             handler: response => {
                     if(response.status===200) handleSuccessfull(response.data.result, messages)
                   },
@@ -282,9 +281,8 @@ function CustomTabPanelVariations(props) {
         const messages = []
 
         try{
-          setLoading(true)
           const axiosRequests = requests.map(request=>{
-            if(request.data!==undefined && request.data.variations.length>0){
+            if(request.data!==undefined && request.data.variationUpsertDtos.length>0){
               return api({
                 method: request.method,
                 url: request.url,
@@ -404,7 +402,7 @@ function CustomTabPanelVariations(props) {
                       />
                       <CustomVariationExpansionPanel checkNonRequiredFields={checkNonRequiredFields} checkFields={checkFields} setChangedIdentifier={setChangedIdentifier} variationErrors={variationErrors} variableAttributeList={variableAttributeList} updateVariations={updateVariations} setUpdateVariations={setUpdateVariations} attributes={attributes} variables={variables} list={variations} setVariations={setVariations} isDeleteOn={true}></CustomVariationExpansionPanel>                      {/* <Button sx={{width: '160px'}} variant="contained" color="primary" disabled={updateVariations.length === 0} startIcon={<Icon sx={{fontSize: '0.75em'}}>save</Icon>} onClick={upsertVariations}>Save variations</Button> */}
                       { 
-                        updateVariations.length===0 ? 
+                        updateVariations.length!==0 ? 
                           <LoadingButton
                             sx={{width: '160px'}}
                             loading={loading}
@@ -774,7 +772,7 @@ function UpsertProduct({ update, id }) {
       })], {type: 'application/json'}))      
       const messages = []
       let id = undefined
-      productImage!=='' && await api.post(`product/${update?`update/${id}`:'create'}`, formData, {
+      productImage!=='' && await api.post(`/product/${update?`update/${id}`:'create'}`, formData, {
         headers:{
           'Content-Type': 'multipart/form-data'
         }
@@ -819,7 +817,7 @@ function UpsertProduct({ update, id }) {
       setProductErrors(newObj)
       return true
     }
-
+console.log(variationIds)
     return (
         <Container>
         <Box className="breadcrumb">
@@ -887,11 +885,11 @@ function UpsertProduct({ update, id }) {
                       <React.Fragment>
                         <Grid sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}} gap={'0.2em'}>
                             <SmallCheckbox 
-                              checked={selectedCategories.filter(cat=>cat.id===category.id).length!==0}
+                              checked={selectedCategories.filter(cat=>cat.categoryId===category.id).length!==0}
                               onClick={(event)=>{
                                 let newList = [...selectedCategories]
-                                if(newList.length===0 || newList.filter(cat=>cat.id===category.id).length===0) newList.push({id:category.id, subCategories:[]});
-                                else newList = newList.filter(cat=>cat.id!==category.id)
+                                if(newList.length===0 || newList.filter(cat=>cat.categoryId===category.id).length===0) newList.push({categoryId:category.id, subCategories:[]});
+                                else newList = newList.filter(cat=>cat.categoryId!==category.id)
                                 setSelectedCategories(newList);
                               }}
                               >
@@ -904,14 +902,14 @@ function UpsertProduct({ update, id }) {
                               <Grid key={subCategory.id} sx={{marginLeft: '0.8em', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}} gap={'0.2em'}>
                                 <SmallCheckbox 
                                   size={'small'} 
-                                  checked={selectedCategories.some(cat => cat.id === category.id && cat.subCategories.some(subCat => subCat.id === subCategory.id))}
+                                  checked={selectedCategories.some(cat => cat.categoryId === category.id && cat.subCategories.some(subCat => subCat.subCategoryId === subCategory.id))}
                                   onClick={(event) => {
                                     const newList = [...selectedCategories];
-                                    const categoryIndex = newList.findIndex(cat => cat.id === category.id);
-                                    if (categoryIndex === -1)  newList.push({ id: category.id, subCategories: [{ id: subCategory.id }] });
+                                    const categoryIndex = newList.findIndex(cat => cat.categoryId === category.id);
+                                    if (categoryIndex === -1)  newList.push({ categoryId: category.id, subCategories: [{ subCategoryId: subCategory.id }] });
                                     else {
-                                      const subCategoryIndex = newList[categoryIndex].subCategories.findIndex(subCat => subCat.id === subCategory.id);
-                                      if (subCategoryIndex === -1) newList[categoryIndex].subCategories.push({ id: subCategory.id });
+                                      const subCategoryIndex = newList[categoryIndex].subCategories.findIndex(subCat => subCat.subCategoryId === subCategory.id);
+                                      if (subCategoryIndex === -1) newList[categoryIndex].subCategories.push({ subCategoryId: subCategory.id });
                                       else {
                                         newList[categoryIndex].subCategories.splice(subCategoryIndex, 1);
                                         if(newList[categoryIndex].subCategories.length===0) newList.splice(categoryIndex, 1);
@@ -1004,7 +1002,7 @@ function UpsertProduct({ update, id }) {
           <Grid sx={{display: 'flex', gap: '0.5em', justifyContent: 'flex-end', flexWrap: 'wrap', width: '100%', top: '5em'}}>
             <Button color="primary" variant="outlined">Cancel</Button>
             <Button color="primary" variant="outlined">Preview</Button>
-            <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} onClick={upsertProduct} disabled={!loading}>Publish</Button>
+            <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} onClick={upsertProduct} disabled={loading || updatedProductDetails===null || Object.keys(updatedProductDetails).length===0 || selectedCategories.length===0 || selectedCategories===undefined || variationIds===undefined || variationIds.length===0}>Publish</Button>
             {/* <Button sx={{width: '100px'}} variant="contained" color="primary" startIcon={<Icon sx={{fontSize: '0.75em'}}>publish</Icon>} disabled={updateVariableAttributeList.length === 0} onClick={upsertProduct}>Publish</Button> */}
           </Grid>
         </Stack>

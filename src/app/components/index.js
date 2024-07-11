@@ -24,4 +24,8 @@ export { default as MuiTable } from "./DataTable/MuiTable";
 export { default as FormDialog } from "./Dialog/FormDialog";
 export { default as NumberFormatField } from "./InputField/NumberFormatField";
 export { default as ReactQuillEditior } from "./ReactQuillEditior";
-
+export { default as SwiperSlider1 } from "./SwiperSlider/SwiperSlider1";
+export { default as SwiperSliderThumbLoop } from "./SwiperSlider/SwiperSliderThumbLoop";
+export { default as ReviewStatsCard } from "./Review/ReviewStatsCard";
+export { default as QuantitySelector } from "./QuantitySelector";
+export { default as HomeBaner } from "./baner/HomeBaner";

@@ -34,6 +34,7 @@ import {
   StarOutline,
   PowerSettingsNew
 } from "@mui/icons-material";
+import React from "react";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -91,7 +92,7 @@ const IconBox = styled("div")(({ theme }) => ({
 const Layout1Topbar = () => {
   const theme = useTheme();
   const { settings, updateSettings } = useSettings();
-  const { logout, user } = useAuth();
+  const { logout, user, role } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const updateSidebarMode = (sidebarSettings) => {
@@ -113,43 +114,54 @@ const Layout1Topbar = () => {
     <TopbarRoot>
       <TopbarContainer>
         <Box display="flex">
-          <StyledIconButton onClick={handleSidebarToggle}>
-            <Menu />
-          </StyledIconButton>
+          {
+            !user || role==='USER' ?
+              '' :
+              <React.Fragment>
+                <StyledIconButton onClick={handleSidebarToggle}>
+                  <Menu />
+                </StyledIconButton>
 
-          <IconBox>
-            <StyledIconButton>
-              <MailOutline />
-            </StyledIconButton>
+                <IconBox>
+                  <StyledIconButton>
+                    <MailOutline />
+                  </StyledIconButton>
 
-            <StyledIconButton>
-              <WebAsset />
-            </StyledIconButton>
+                  <StyledIconButton>
+                    <WebAsset />
+                  </StyledIconButton>
 
-            <StyledIconButton>
-              <StarOutline />
-            </StyledIconButton>
-          </IconBox>
-        </Box>
+                  <StyledIconButton>
+                    <StarOutline />
+                  </StyledIconButton>
+                </IconBox>
+              </React.Fragment>
+          }
+          </Box>
 
         <Box display="flex" alignItems="center">
           <MatxSearchBox />
+          {
+            !user ?
+              '' :
+              <React.Fragment>
+                <NotificationProvider>
+                  <NotificationBar />
+                </NotificationProvider>
 
-          <NotificationProvider>
-            <NotificationBar />
-          </NotificationProvider>
-
-          <ShoppingCart />
+                <ShoppingCart />
+              </React.Fragment>
+          }
 
           <MatxMenu
             menuButton={
               <UserMenu>
                 <Hidden xsDown>
                   <Span>
-                    Hi <strong>{user.username}</strong>
+                    Hi <strong>{user?user.username:''}</strong>
                   </Span>
                 </Hidden>
-                <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
+                <Avatar src={user?user.avatar:''} sx={{ cursor: "pointer" }} />
               </UserMenu>
             }>
             <StyledItem>
