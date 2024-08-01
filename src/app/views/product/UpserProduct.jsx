@@ -165,7 +165,7 @@ function CustomTabPanelVariations(props) {
     }
 
     const upsertVariations = async () => {
-      const handleSuccessfull = (results, messages) => {
+      const handleSuccessfull = async(results, messages) => {
         const newList = [...variations];
 
         results.forEach(result=>{
@@ -180,7 +180,7 @@ function CustomTabPanelVariations(props) {
         setUpdateVariations([])
       }
 
-      const handleErrors = (errors, messages) => {
+      const handleErrors = async(errors, messages) => {
         const newObj = {...variationErrors}
 
         Object.keys(errors).forEach(key=>{
@@ -232,22 +232,22 @@ function CustomTabPanelVariations(props) {
             url: '/product/variation/create',
             method: 'post',
             data: {variationUpsertDtos: await convertVariations(updateVariations, 'create', ['state', 'expanded', 'checked', 'variationId'])},
-            handler: response => {
+            handler: async response => {
                       if(response.status===201){
-                        handleSuccessfull(response.data.result, messages)
+                        await handleSuccessfull(response.data.result, messages)
                         const newList = [...variationIds]
                         response.data.result.forEach(itm=>newList.push(itm.variationId))
                         setVariationIds(newList)
                       }
                     },
-            error: error => {
+            error: async error => {
                       if(error.response.status===400 || error.response.status===409){
                           if(typeof error.response.data==='string') messages.push({text: error.response.data, variant: 'error'})
                           if(typeof error.response.data==='object' && error.response.data.errors){
-                            handleErrors(error.response.data.errors, messages)
+                            await handleErrors(error.response.data.errors, messages)
                           }
                           if(typeof error.response.data==='object' && error.response.data.result){
-                            handleSuccessfull(error.response.data.result, messages)
+                            await handleSuccessfull(error.response.data.result, messages)
                             const newList = [...variationIds]
                             error.response.data.result.forEach(itm=>newList.push(itm.variationId))
                             setVariationIds(newList)
@@ -259,18 +259,18 @@ function CustomTabPanelVariations(props) {
           {
             url: '/product/variation/update',
             method: 'post',
-            data: {variationForm: {variationUpsertDtos: await convertVariations(updateVariations, 'update', ['state', 'expanded', 'checked'])}},
-            handler: response => {
-                    if(response.status===200) handleSuccessfull(response.data.result, messages)
+            data: {variationUpsertDtos: await convertVariations(updateVariations, 'update', ['state', 'expanded', 'checked'])},
+            handler: async response => {
+                    if(response.status===200) await handleSuccessfull(response.data.result, messages)
                   },
-            error: error => {
+            error: async error => {
                     if(error.response.status===400 || error.response.status===409){
                       if(typeof error.response.data==='string') messages.push({text: error.response.data, variant: 'error'})
                       if(typeof error.response.data==='object' && error.response.data.errors){
-                        handleErrors(error.response.data.errors, messages)
+                        await handleErrors(error.response.data.errors, messages)
                       }
                       if(typeof error.response.data==='object' && error.response.data.result){
-                        handleSuccessfull(error.response.data.result, messages)
+                        await handleSuccessfull(error.response.data.result, messages)
                       }
                     }
                     if(error.response.status===500) messages.push({text:'Error occured during updating variations.', variant: 'error'})
@@ -281,7 +281,7 @@ function CustomTabPanelVariations(props) {
         const messages = []
 
         try{
-          const axiosRequests = requests.map(request=>{
+          await Promise.all(requests.map(async request=>{
             if(request.data!==undefined && request.data.variationUpsertDtos.length>0){
               return api({
                 method: request.method,
@@ -293,12 +293,12 @@ function CustomTabPanelVariations(props) {
             }
             return null;
           })
-          ?.filter(axiosRequest=>axiosRequest!==null);
-
-          await Promise.all(axiosRequests);
+          ?.filter(axiosRequest=>axiosRequest!==null))
+          
         }catch(error){
 
         }finally{
+          console.log(loading, messages, variationIds)
           setLoading(false)
           if(messages.length!==0) triggerNotifications(messages, 50)
         }        
