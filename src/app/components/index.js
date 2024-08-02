@@ -24,4 +24,6 @@ export { default as MuiTable } from "./DataTable/MuiTable";
 export { default as FormDialog } from "./Dialog/FormDialog";
 export { default as NumberFormatField } from "./InputField/NumberFormatField";
 export { default as ReactQuillEditior } from "./ReactQuillEditior";
+export { default as TButton } from "./Button/TButton";
+export { default as TIconButton } from "./Button/TIconButton";
 

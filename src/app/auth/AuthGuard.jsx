@@ -20,13 +20,8 @@ const AuthGuard = ({ auth, children }) => {
     const { isAuthenticated, role } = useAuth();
     const location = useLocation();
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !auth.includes(role)) {
       return <Navigate replace to="/session/signin" state={{ from: location }} />;
-    }
-    console.log(auth, role)
-
-    if (!auth || !auth.includes(role)) {
-      return <Navigate replace to="/not-found" />;
     }
 
     return children;
