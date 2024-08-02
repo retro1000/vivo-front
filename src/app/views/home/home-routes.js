@@ -2,7 +2,7 @@ import { lazy } from "react";
 import Loadable from "app/components/Loadable";
 
 
-const Home = Loadable(lazy(() => import('../home/MainLayout.jsx')))
+const HomePage = Loadable(lazy(() => import('../home/HomePage.jsx')))
 const AboutPage = Loadable(lazy(() => import('../home/AboutPage')))
 const ContactPage = Loadable(lazy(() => import('../home/ContactPage.jsx')))
 
@@ -11,7 +11,7 @@ const ContactPage = Loadable(lazy(() => import('../home/ContactPage.jsx')))
 const homeRoutes = [
   {
     path: "/",
-    element: <Home />
+    element: <HomePage />
   },
   {
     path: "/About",

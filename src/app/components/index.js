@@ -31,3 +31,5 @@ export { default as SwiperSliderThumbLoop } from "./SwiperSlider/SwiperSliderThu
 export { default as ReviewStatsCard } from "./Review/ReviewStatsCard";
 export { default as QuantitySelector } from "./QuantitySelector";
 export { default as HomeBaner } from "./baner/HomeBaner";
+export { default as ProductCard } from "./Card/ProductCard";
+export { default as Header } from "./Header";
