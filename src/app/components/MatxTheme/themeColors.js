@@ -23,6 +23,25 @@ const errorColor = {
 };
 
 export const themeColors = {
+  red: {
+    palette: {
+      type: 'light',
+      primary: {
+        main: '#dd3333',
+        contrastText: textLight.primary,
+      },
+      secondary: {
+        main: 'black',
+        contrastText: '#ffffff',
+      },
+      background: {
+        paper: '#fff',
+        default: '#fafafa',
+      },
+      error: errorColor,
+      text: textLight,
+    },
+  },
   whitePurple: {
     palette: {
       type: 'light',
