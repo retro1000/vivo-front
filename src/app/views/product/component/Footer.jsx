@@ -20,77 +20,18 @@ const Footer = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-end',
         width: '100%',
         backgroundColor: 'black',
         color: 'white',
         pt: 5,
         pb: 1.5,
+        mt: 7,
       }}
     >
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
-        <Box sx={{ color: 'neutral.50', flex:1, width: '18%', minWidth: '250px', maxWidth: '300px' }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom>
-              Support
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              exclusive@gmail.com
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              +88015-88888-9999
-            </Typography>
-          </Grid>
-        </Box>
-
-        <Box sx={{ color: 'neutral.50', flex:1, width: '18%', minWidth: '250px', maxWidth: '300px' }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom>
-              Account
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              My Account
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Login / Register
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Cart
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Wishlist
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Shop
-            </Typography>
-          </Grid>
-        </Box>
-
-        <Box sx={{ color: 'neutral.50', flex:1, width: '18%', minWidth: '250px', maxWidth: '300px' }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom>
-              Quick Link
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Privacy Policy
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Terms Of Use
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              FAQ
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              Contact
-            </Typography>
-          </Grid>
-        </Box>
-
-        <Box sx={{ textAlign: 'center', color: 'neutral.50', flex:1, width: '18%', minWidth: '250px', maxWidth: '300px' }}>
-          <Grid item xs={12} sm={6} md={3}>
+        <Box sx={{ textAlign: 'left', color: 'neutral.50' }}>
+        <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>
               Exclusive
             </Typography>
@@ -119,7 +60,67 @@ const Footer = () => {
           </Grid>
         </Box>
 
-        <Box sx={{ color: 'neutral.50', textAlign: 'center', flex:1 }}>
+        <Box sx={{ color: 'neutral.50' }}>
+        <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom>
+              Support
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              exclusive@gmail.com
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              +88015-88888-9999
+            </Typography>
+          </Grid>
+        </Box>
+
+        <Box sx={{ color: 'neutral.50' }}>
+        <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom>
+              Account
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              My Account
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Login / Register
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Cart
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Wishlist
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Shop
+            </Typography>
+          </Grid>
+        </Box>
+
+        <Box sx={{ color: 'neutral.50' }}>
+        <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom>
+              Quick Link
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Privacy Policy
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Terms Of Use
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              FAQ
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Contact
+            </Typography>
+          </Grid>
+        </Box>
+
+        <Box sx={{ color: 'neutral.50', textAlign: 'center' }}>
         <Typography variant="h6" gutterBottom>
             Download App
           </Typography>

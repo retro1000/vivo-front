@@ -26,6 +26,15 @@ export { default as NumberFormatField } from "./InputField/NumberFormatField";
 export { default as ReactQuillEditior } from "./ReactQuillEditior";
 export { default as SwiperSlider1 } from "./SwiperSlider/SwiperSlider1";
 export { default as SwiperSliderThumbLoop } from "./SwiperSlider/SwiperSliderThumbLoop";
+export { default as SwiperSliderHeroAuto } from "./SwiperSlider/SwiperSliderHeroAuto";
 export { default as ReviewStatsCard } from "./Review/ReviewStatsCard";
 export { default as QuantitySelector } from "./QuantitySelector";
 export { default as HomeBaner } from "./baner/HomeBaner";
+
+
+export { default as Footer } from "./Footer";
+export { default as Header } from "./Header";
+export { default as TButton } from "./Button/TButton";
+export { default as TIconButton } from "./Button/TIconButton";
+export { default as ProductCard } from "./Card/ProductCard";
+export { default as PopupFormDialog } from "./Dialog/PopupFormDialog";

@@ -1,20 +1,14 @@
-// import { lazy } from "react";
-// import Loadable from "app/components/Loadable";
-// import { authRoles } from "app/auth/authRoles";
-// import AuthGuard from "app/auth/AuthGuard";
+import { lazy } from "react";
+import Loadable from "app/components/Loadable";
 
 
-// const Home = Loadable(lazy(() => import("./Home")));
+const HomePage = Loadable(lazy(() => import('../home/HomePage')))
 
+const homeRoutes = [
+  {
+    path: "/",
+    element: <HomePage />
+  }
+];
 
-// const homeRoutes = [
-//   { 
-//     path: "/",
-//     element: 
-//       <AuthGuard auth={authRoles.userOrGuest}>
-//         <Home />
-//       </AuthGuard>
-//   }
-// ];
-
-// export default homeRoutes;
+export default homeRoutes;

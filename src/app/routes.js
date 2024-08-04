@@ -9,8 +9,9 @@ import MatxLayout from "./components/MatxLayout/MatxLayout";
 
 import sessionRoutes from "./views/sessions/session-routes";
 import productRoutes from "./views/product/product-routes";
-import materialRoutes from "app/views/material-kit/MaterialRoutes";
 import homeRoutes from "app/views/home/home-routes";
+import aboutRoutes from "./views/about/about-routes";
+import contactRoutes from "./views/contact/contact-routes";
 
 // E-CHART PAGE
 const AppEchart = Loadable(lazy(() => import("app/views/charts/echarts/AppEchart")));
@@ -25,9 +26,10 @@ const routes = [
       // </AuthGuard>
     ),
     children: [
-      ...materialRoutes,
       ...productRoutes,
-      // ...homeRoutes,
+      ...homeRoutes,
+      ...aboutRoutes,
+      ...contactRoutes,
       // dashboard route
       {
         path: "/dashboard/default",
