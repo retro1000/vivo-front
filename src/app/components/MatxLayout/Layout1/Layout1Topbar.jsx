@@ -193,8 +193,8 @@ const Layout1Topbar = () => {
                   <Typography color={activeNav==='home'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='home'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("home")}>Home</Typography>
                   <Typography color={activeNav==='product'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='product'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("product")}>Products</Typography>
                   <Typography color={activeNav==='track'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='track'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("track")}>Track Order</Typography>
-                  <Typography color={activeNav==='about'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='about'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("about")}>About</Typography>
-                  <Typography color={activeNav==='contact'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='contact'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("contact")}>Contact</Typography>
+                  <Typography color={activeNav==='about'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='about'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("about")}>About Us</Typography>
+                  <Typography color={activeNav==='contact'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='contact'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("contact")}>Contact Us</Typography>
                   <Typography color={activeNav==='inquiries'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='inquiries'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("inquiries")}>Inquiries</Typography>
                 </Box>
               </React.Fragment> :

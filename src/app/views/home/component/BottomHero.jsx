@@ -94,6 +94,7 @@ const LetsPaintHero = () => {
             fontWeight: 500,
             lineHeight: '150%',
             padding: '16px 48px',
+            fontSize: '22px',
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.8)',
             },

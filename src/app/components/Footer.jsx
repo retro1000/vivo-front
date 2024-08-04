@@ -141,7 +141,7 @@ const Footer = () => {
 
       <Box sx={{ textAlign: 'center', color: 'white', pt: 1, mt: 1.5 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-          <Typography variant="body2">&copy; Copyright Paints 2024. All right reserved</Typography>
+          <Typography variant="body2">&copy; Copyright Vivolk 2024. All right reserved</Typography>
         </Box>
       </Box>
     </Box>

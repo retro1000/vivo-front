@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 // import required modules
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 
 export default function SwiperSliderHeroAuto({ slides }) {
@@ -17,10 +17,13 @@ export default function SwiperSliderHeroAuto({ slides }) {
             centeredSlides={true}
             autoplay={{
                 delay: 2500,
-                disableOnInteraction: true,
+                disableOnInteraction: false,
                 pauseOnMouseEnter: true,
             }}
-            modules={[Autoplay]}
+            pagination={{
+                clickable: true,
+            }}
+            modules={[Autoplay, Pagination]}
             className="mySwiper"
         >
             {
