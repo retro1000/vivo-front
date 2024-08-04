@@ -30,6 +30,7 @@ const routes = [
       ...homeRoutes,
       ...aboutRoutes,
       ...contactRoutes,
+      ...sessionRoutes,
       // dashboard route
       {
         path: "/dashboard/default",
@@ -48,7 +49,6 @@ const routes = [
   },
 
   // session pages route
-  ...sessionRoutes
 ];
 
 export default routes;

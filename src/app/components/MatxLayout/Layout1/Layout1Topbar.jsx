@@ -114,9 +114,9 @@ const Layout1Topbar = () => {
         setActiveNav('inquiries')
         break
       default:
-        setActiveNav('')
+        setActiveNav('n')
     }
-  }, [])
+  }, [location])
 
   const [activeNav, setActiveNav] = useState('home')
 
@@ -170,7 +170,7 @@ const Layout1Topbar = () => {
         navigates('/inquiries')
         break
       default:
-        navigates('/*')
+        navigates('/not-found')
     }
   }
 
@@ -231,14 +231,14 @@ const Layout1Topbar = () => {
                     label='Log in'
                     variant="outlined"
                     sx={{border: `0.1em solid ${themeColors.red.palette.secondary.main}`, color: themeColors.red.palette.secondary.main}}
-                    fun={() => navigate('/login')}
+                    fun={() => navigates('/login')}
                   ></TButton>
                   <TButton
                     title='Signup'
                     label='Sign up'
                     variant="contained"
                     sx={{background: themeColors.red.palette.primary.main, color: themeColors.red.palette.primary.contrastText}}
-                    fun={() => navigate('/signup')}
+                    fun={() => navigates('/signup')}
                   ></TButton>
                 </Box>
               </React.Fragment> :
