@@ -48,7 +48,7 @@ export default function SwiperSliderHeroAuto({ slides }) {
                                     <Typography variant="span" color="white" gutterBottom textAlign={'center'} width={'85%'}>
                                         {slide.sub}
                                     </Typography>
-                                    <Button variant="contained" color="primary" onClick={slide.fun}>{slide.act}</Button>
+                                    <Button size='large' variant="contained" color="primary" onClick={slide.fun} sx={{width: '200px', height: '60px', fontSize: '20px', mt: 2}}>{slide.act}</Button>
                                 </Stack>
                             </Container>
                         </Box>

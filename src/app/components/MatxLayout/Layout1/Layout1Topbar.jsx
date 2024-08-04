@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { memo, useState } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   styled,
@@ -38,6 +38,7 @@ import React from "react";
 
 import WishListIcon from '@mui/icons-material/Favorite'
 import { themeColors } from "app/components/MatxTheme/themeColors";
+import { useEffect } from "react";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -90,7 +91,36 @@ const Layout1Topbar = () => {
   const { logout, user, role } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    switch(location.pathname){
+      case '/' || undefined:
+        setActiveNav('home')
+        break;
+      case '/product/filter-product':
+        setActiveNav('product')
+        break
+      case '/about':
+        setActiveNav('about')
+        break
+      case '/contact':
+        setActiveNav('contact')
+        break
+      case '/track-order':
+        setActiveNav('track')
+        break
+      case '/inquiries':
+        setActiveNav('inquiries')
+        break
+      default:
+        setActiveNav('')
+    }
+  }, [])
+
+  const [activeNav, setActiveNav] = useState('home')
+
+  const navigates = useNavigate()
 
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({ layout1Settings: { leftSidebar: { ...sidebarSettings } } });
@@ -118,6 +148,32 @@ const Layout1Topbar = () => {
     background: 'white'
   });
 
+  const navigate = (path) => {
+    setActiveNav(path)
+    switch(path){
+      case 'home':
+        navigates('/')
+        break;
+      case 'product':
+        navigates('/product/filter-product')
+        break
+      case 'about':
+        navigates('/about')
+        break
+      case 'contact':
+        navigates('/contact')
+        break
+      case 'track':
+        navigates('/track-order')
+        break
+      case 'inquiries':
+        navigates('/inquiries')
+        break
+      default:
+        navigates('/*')
+    }
+  }
+
   return (
     <TopbarRoot>
       <TopbarContainer>
@@ -126,7 +182,7 @@ const Layout1Topbar = () => {
             !user || role==='USER' ?  
               <React.Fragment>
                 <Box
-                  onClick={()=>navigate("/")}
+                  onClick={()=>navigate("home")}
                   component="img"
                   src="/assets/images/logos/HH01.jpg"
                   alt="Logo"
@@ -134,12 +190,12 @@ const Layout1Topbar = () => {
                 >
                 </Box>
                 <Box display='flex' alignItems='center' gap='1.5em' marginLeft='3em'>
-                  <Typography style={{fontWeight: '500', fontSize: '15px', textDecoration: 'underline',cursor: 'pointer'}} onClick={()=>navigate("/")}>Home</Typography>
-                  <Typography style={{fontWeight: '500', fontSize: '15px', cursor: 'pointer'}} onClick={()=>navigate("/product/filter-product")}>Products</Typography>
-                  <Typography style={{fontWeight: '500', fontSize: '15px',cursor: 'pointer'}} onClick={()=>navigate("/track-order")}>Track Order</Typography>
-                  <Typography style={{fontWeight: '500', fontSize: '15px', cursor: 'pointer'}} onClick={()=>navigate("/about")}>About</Typography>
-                  <Typography style={{fontWeight: '500', fontSize: '15px', cursor: 'pointer'}} onClick={()=>navigate("/contact")}>Contact</Typography>
-                  <Typography style={{fontWeight: '500', fontSize: '15px', cursor: 'pointer'}} onClick={()=>navigate("/inquiries")}>Inquiries</Typography>
+                  <Typography color={activeNav==='home'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='home'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("home")}>Home</Typography>
+                  <Typography color={activeNav==='product'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='product'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("product")}>Products</Typography>
+                  <Typography color={activeNav==='track'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='track'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("track")}>Track Order</Typography>
+                  <Typography color={activeNav==='about'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='about'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("about")}>About</Typography>
+                  <Typography color={activeNav==='contact'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='contact'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("contact")}>Contact</Typography>
+                  <Typography color={activeNav==='inquiries'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='inquiries'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("inquiries")}>Inquiries</Typography>
                 </Box>
               </React.Fragment> :
               <React.Fragment>

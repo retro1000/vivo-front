@@ -221,7 +221,7 @@ const HomePage = () => {
   return (
     <>
       <CssBaseline />
-      <SwiperSliderHeroAuto slides={[{header: 'ELEVATE YOUR SPORTS PERFORMANCE', sub: "Get instant alerts for anyone who approaches, even they don't prsss the headphone.", act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/2099.jpg'}, {header: 'SHOP NOW', sub: '', act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/8735.jpg'}]}></SwiperSliderHeroAuto>
+      <SwiperSliderHeroAuto slides={[{header: 'ELEVATE YOUR SPORTS PERFORMANCE', sub: "Get instant alerts for anyone who approaches, even they don't prsss the headphone.", act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/2099.jpg'}, {header: 'SHOP NOW', sub: '', act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/home_hero/2149321866.jpg'}]}></SwiperSliderHeroAuto>
       <Box sx={( styles )}>
         <ProductSlider title={"Popular Products"}>
           {
