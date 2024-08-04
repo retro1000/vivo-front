@@ -11,6 +11,7 @@ const MatxTheme = ({ children }) => {
   const customTheme = createTheme({
     ...activeTheme,
     typography: {
+      // fontSize: '14px',
       fontFamily: 'Poppins, Arial, sans-serif', // Add Poppins to the font family
     },
     components: {
@@ -18,11 +19,34 @@ const MatxTheme = ({ children }) => {
       MuiTextField: {
         defaultProps: {
           size: 'small'
+        },
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif',
+            '& .MuiInputBase-root': {
+              fontSize: '14px',
+              fontFamily: 'Poppins, Arial, sans-serif',
+            },
+            '& .MuiInputLabel-root': {
+              fontSize: '14px',
+              fontFamily: 'Poppins, Arial, sans-serif',
+            },
+            '& .MuiFormHelperText-root': {
+              fontSize: '12px',
+              fontFamily: 'Poppins, Arial, sans-serif',
+            },
+            '& .MuiInputBase-input::placeholder': {
+              fontSize: '14px',
+              fontFamily: 'Poppins, Arial, sans-serif',
+            },
+          },
         }
       },
       MuiMenuItem: {
         styleOverrides: {
           root: {
+            fontSize: '14px',
             fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
           },
         },
@@ -30,6 +54,7 @@ const MatxTheme = ({ children }) => {
       MuiMenu: {
         styleOverrides: {
           root: {
+            fontSize: '14px',
             fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
           },
         },
@@ -37,6 +62,7 @@ const MatxTheme = ({ children }) => {
       MuiButton: {
         styleOverrides: {
           root: {
+            fontSize: '14px',
             fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to Button text
             textTransform: 'none',
             '&:hover': {

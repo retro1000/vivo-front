@@ -203,7 +203,7 @@ const Layout1Topbar = () => {
                   <Menu />
                 </StyledIconButton>
 
-                <IconBox>
+                {/* <IconBox>
                   <StyledIconButton>
                     <MailOutline />
                   </StyledIconButton>
@@ -215,7 +215,7 @@ const Layout1Topbar = () => {
                   <StyledIconButton>
                     <StarOutline />
                   </StyledIconButton>
-                </IconBox>
+                </IconBox> */}
               </React.Fragment>
           }
         </Box>

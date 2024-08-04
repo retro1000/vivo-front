@@ -8,13 +8,20 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useNavigate } from "react-router-dom";
+import { themeColors } from "app/components/MatxTheme/themeColors";
 
 const LoginForm = ({ loading, loginTitle, loginSubtitle, onClick, username, setUsername, password, setPassword, remember, setRemember }) => {
+
+const navigate = useNavigate()
+
   return (
     <Box
       sx={{
-        width: "46%",
+        width: "max-width",
         padding: "80px",
+        maxWidth: '500px',
+        minWidth: '400px',
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
@@ -36,7 +43,7 @@ const LoginForm = ({ loading, loginTitle, loginSubtitle, onClick, username, setU
           label="Username"
           variant="outlined"
           margin="normal"
-          sx={{ marginTop: "46px" }}
+          sx={{ marginTop: "20px" }}
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
@@ -49,54 +56,33 @@ const LoginForm = ({ loading, loginTitle, loginSubtitle, onClick, username, setU
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {/* <Typography
-          variant="caption"
-          sx={{ color: "#666", alignSelf: "flex-start" }}
-        >
-          Use 8 or more characters with a mix of letters, numbers & symbols
-        </Typography> */}
-        {/* <FormControlLabel
+        <FormControlLabel
           control={<Checkbox />}
           label={
             <Typography variant="body2">
-              Agree to our <u>Terms of use</u> and <u>Privacy Policy</u>
+              Remember me
             </Typography>
           }
-          sx={{ marginTop: "40px", alignSelf: "flex-start" }}
-        />
-        <FormControlLabel
-          control={<Checkbox />}
-          label="Subscribe to our monthly newsletter"
           sx={{ alignSelf: "flex-start" }}
-        /> */}
+        />
         
-        <Box sx={{display: 'flex',
-          justifyContent: 'center'}}>
+        <Box mt={3} sx={{display: 'flex', justifyContent: 'center'}}>
           <LoadingButton
             variant="contained"
             color="primary"
             type="submit"
             fullWidth
-            // onClick={onClick}
             loading={loading}
-            // sx={{
-            //   marginTop: "40px",
-            //   borderRadius: "32px",
-            //   padding: "16px",
-            //   fontSize: "22px",
-            //   fontWeight: 500,
-            //   width: "200px",
-            // }}
           >
-            Log In
+            Sign In
           </LoadingButton>
         </Box>
       </form>
       <Typography
         variant="body2"
-        sx={{ marginTop: "10px", alignSelf: "flex-start" }}
+        sx={{ marginTop: "10px", alignSelf: "flex-start", display: 'flex', gap: '0.3em', width: '100%' }}
       >
-        Don't have an account? <a href= "/signup">Sign Up</a>
+        Don't have an account? <Typography variant='body2' onClick={() => navigate('/signup')} sx={{color: themeColors.red.palette.primary.main, cursor: 'pointer'}}>Sign Up</Typography>
       </Typography>
     </Box>
   );

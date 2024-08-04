@@ -20,7 +20,8 @@ const LoginPage = () => {
 
   const { login } = useAuth();
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     try {
       const role = await login(username, password, remember);
@@ -46,7 +47,7 @@ const LoginPage = () => {
           setRemember={setRemember}
           loading={loading}
         />
-          <ImageSection />
+        <ImageSection />
         </Box>
       </Box>
       <Footer />

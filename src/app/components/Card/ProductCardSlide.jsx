@@ -18,7 +18,6 @@ import WichListIcon from "@mui/icons-material/FavoriteBorder";
 import WichListIconActive from "@mui/icons-material/Favorite";
 import ViewIcon from "@mui/icons-material/RemoveRedEye";
 import { ReviewStatsCard } from "..";
-import { ceil } from "lodash";
 import { themeColors } from "../MatxTheme/themeColors";
 
 const ProductCardSlide = ({ product }) => {
