@@ -252,7 +252,9 @@ const Layout1Topbar = () => {
                       <TIconButton
                         title="Wish List"
                         icon={WishListIcon}
+                        sx={{color: themeColors.red.palette.primary.main}}
                         variant='outlined'
+                        fun={() => navigates(`/wishlist/${user.userId}`)}
                       ></TIconButton>
                       <ShoppingCart />
                     </React.Fragment>
@@ -282,9 +284,9 @@ const Layout1Topbar = () => {
               </StyledItem>
 
               <StyledItem>
-                <Link to="/page-layouts/user-profile">
+                <Link to={`/profile/${user.userId}`}>
                   <Person />
-                  <Span>Profile</Span>
+                  <Span>My Account</Span>
                 </Link>
               </StyledItem>
 

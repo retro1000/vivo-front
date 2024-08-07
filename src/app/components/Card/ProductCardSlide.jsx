@@ -15,13 +15,13 @@ import 'swiper/css';
 import { Autoplay, Pagination } from 'swiper/modules';
 
 import WichListIcon from "@mui/icons-material/FavoriteBorder";
+import BinIcon from "@mui/icons-material/Delete";
 import WichListIconActive from "@mui/icons-material/Favorite";
 import ViewIcon from "@mui/icons-material/RemoveRedEye";
 import { ReviewStatsCard } from "..";
-import { ceil } from "lodash";
 import { themeColors } from "../MatxTheme/themeColors";
 
-const ProductCardSlide = ({ product }) => {
+const ProductCardSlide = ({ product, removeWishList }) => {
 
     const navigate = useNavigate();
 
@@ -141,25 +141,38 @@ const ProductCardSlide = ({ product }) => {
                         zIndex: '10'
                     }}
                     >
-                    {!product.wishList ? (
-                        <IconButton
-                            sx={{
-                                backgroundColor: "rgba(255, 255, 255, 0.6)",
-                                "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                            }}
-                        >
-                            <WichListIcon />
-                        </IconButton>
-                    ) : (
-                        <IconButton
-                        sx={{
-                            backgroundColor: "rgba(255, 255, 255, 0.6)",
-                            "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                        }}
-                        >
-                            <WichListIconActive sx={{ color: themeColors.red.palette.primary.main }} />
-                        </IconButton>
-                    )}
+                    {
+                        removeWishList ? (
+                            <IconButton
+                                sx={{
+                                    backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                    "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                                }}
+                            >
+                                <BinIcon />
+                            </IconButton>
+                        ) :
+                            (!product.wishList ? (
+                                <IconButton
+                                    sx={{
+                                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                        "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                                    }}
+                                >
+                                    <WichListIcon />
+                                </IconButton>
+                            ) : (
+                                <IconButton
+                                sx={{
+                                    backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                    "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                                }}
+                                >
+                                    <WichListIconActive sx={{ color: themeColors.red.palette.primary.main }} />
+                                </IconButton>
+                            )
+                        )
+                    }
                     <IconButton
                         sx={{
                         backgroundColor: "rgba(255, 255, 255, 0.6)",

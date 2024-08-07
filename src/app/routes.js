@@ -12,6 +12,8 @@ import productRoutes from "./views/product/product-routes";
 import homeRoutes from "app/views/home/home-routes";
 import aboutRoutes from "./views/about/about-routes";
 import contactRoutes from "./views/contact/contact-routes";
+import profileRoutes from "./views/profile/profile-routes";
+import billingRoutes from "./views/billing/billing-routes";
 
 // E-CHART PAGE
 const AppEchart = Loadable(lazy(() => import("app/views/charts/echarts/AppEchart")));
@@ -31,6 +33,8 @@ const routes = [
       ...aboutRoutes,
       ...contactRoutes,
       ...sessionRoutes,
+      ...profileRoutes,
+      ...billingRoutes,
       // dashboard route
       {
         path: "/dashboard/default",
