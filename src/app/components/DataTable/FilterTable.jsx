@@ -1,16 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import { Box, Slide, Typography } from '@mui/material'
-import { SearchPane, MuiTable } from '..';
+import { SearchPane, MuiTable, TButton } from '..';
 
 import ViewIcon from '@mui/icons-material/RemoveRedEye'
 import { useRef } from 'react';
 
-const FilterTable = ({ title, table, children, dataTableData, setDataTableData, selectedRows, selectableRows }) => {
+const FilterTable = ({ title, table, children, dataTableData, setDataTableData, selectedRows, selectableRows, filters, setFilters }) => {
 
   const [data, setData] = useState([]);
 
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(56);
 
   const [page, setPage] = useState(1);
 
@@ -26,27 +26,34 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
 
   const [showBox, setShowBox] = useState(false);
 
-  const childRef = useRef(null);
-
   const [path, setPath] = useState('') 
+
+  const [serverSide, setServerSide] = useState(true) 
 
   const handleToggle = () => {
     setShowBox((prev) => !prev);
   };
 
   const options = {
-    serverSide: true,
+    serverSide: serverSide,
     count: totalRecords,
     page: page,
     rowsPerPage: rowsPerPage,
     onTableChange: (action, tableState) => {
       switch (action) {
         case 'changePage':
+          setServerSide(true)
           setPage(tableState.page);
           break;
         case 'changeRowsPerPage':
+          setServerSide(true)
           setRowsPerPage(tableState.rowsPerPage);
           setPage(1); // Reset to the first page when changing rows per page
+          break;
+        case 'search':
+        case 'filterChange':
+        case 'sort':
+          setServerSide(false); // Switch to client-side processing
           break;
         default:
           break;
@@ -57,7 +64,6 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
   }
 
   useEffect(() => {
-    console.log(table)
     switch(table){
       case 'orders':
         setPath('/order')
@@ -76,15 +82,17 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
         })
         setColumns([
           {name: 'Order Id', options: {display: 'exclude'}},
-          {name:'Order No', label:'Order No'},
-          {name:'Waybill', label:'Waybill'},
-          {name:'Customer Name', label:'Customer Name'},
-          {name:'Address', label:'Address'},
-          {name:'Status', label:'Status'},
+          {name:'orderNo', label:'Order No'},
+          {name:'waybill', label:'Waybill'},
+          {name:'customerName', label:'Customer Name'},
+          {name:'address', label:'Address'},
+          {name:'contactNos', label:'Contact Numbers'},
+          {name:'status', label:'Status'},
           {
             name: "Actions",
             label: "Actions",
             options: {
+              sort: false,
               buttonsConfig: [
                 {
                   type: "icon",
@@ -142,13 +150,17 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
           {children?true:false}
         </SearchPane>
         <br></br>
-        <Box ref={childRef}></Box>
+        {/* <Box ref={childRef}></Box> */}
         {
           children && (
-            <Slide direction="up" in={showBox} mountOnEnter unmountOnExit container={childRef.current}>
-              <Box display={'flex'} flexDirection={'column'} marginTop={1} marginBottom={4}>
+            <Slide direction="up" in={showBox} mountOnEnter unmountOnExit>
+              <Box display={'flex'} flexDirection={'column'} marginBottom={2} sx={{zIndex: '-1', padding: '0 5px'}}>
                 <Typography variant='h6'>Filters</Typography>
                 {children}
+                <Box display={'flex'} gap={1} marginTop={3}>
+                  <TButton title={'Reset'} label={'Reset'} color={'secondary'} variant={'outlined'} fun={()=>setFilters({})}></TButton>
+                  <TButton title={'Filter'} label={'Filter'} color={'primary'} variant={'contained'}></TButton>
+                </Box>
               </Box>
             </Slide>
           )

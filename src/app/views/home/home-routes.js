@@ -8,7 +8,10 @@ const HomePage = Loadable(lazy(() => import('../home/HomePage')))
 const homeRoutes = [
   {
     path: "/",
-    element: <HomePage />
+    element: 
+      <AuthGuard auth={[...authRoles.guest, ...authRoles.user]}>
+        <HomePage />
+      </AuthGuard>
   }
 ];
 

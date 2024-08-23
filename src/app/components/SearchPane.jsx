@@ -11,7 +11,7 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
             display={"flex"}
             flexWrap={"wrap"}
             gap={"0.4em"}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", zIndex: '10' }}
         >
             <Select
                 sx={{ width: "20%" }}
@@ -26,7 +26,7 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
                 }
             </Select>
             <SearchBarDefault
-                style={{width: "60%"}}
+                style={{flex: 1}}
                 // sx={{ width: "80%" }}
                 value={searchText}
                 setValue={setSearchText}
@@ -34,7 +34,7 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
                 search={search}
             ></SearchBarDefault>
             <TButton title='Search' label='Search' variant={'contained'} color={'primary'} ></TButton>
-            {children?<TIconButton title='Filter' icon={FilterIcon} fun={setFilterToggle} color={showBox?'primary':'secondary'}></TIconButton>:''}
+            {children?<TIconButton title='Filter' icon={FilterIcon} fun={setFilterToggle} color={showBox?'primary':'secondary'} sx={{opacity: '0.7'}}></TIconButton>:''}
         </Box>
     );
 }

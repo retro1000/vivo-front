@@ -193,6 +193,7 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
         name: 'Actions',
         label: 'Actions',
         options: {
+          sort: option.options.sort===undefined || option.options.sort,
           customBodyRender: (value, tableMeta) => {
             const rowIndex = tableMeta.rowIndex;
             return <Grid sx={{display: 'flex', gap: '0.3em'}}>{renderButtons(option.options.buttonsConfig, rowIndex)}</Grid>;

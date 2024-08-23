@@ -45,17 +45,18 @@ function OrderList() {
     return (
         <Container>
         <Box className="breadcrumb">
-            <Breadcrumb routeSegments={[{ name: "Orders", path: "/order/list" }, { name: "List" }]} />
+            <Breadcrumb routeSegments={[{ name: "orders", path: "/order/list" }]} />
         </Box>
 
         <Stack alignItems={'center'} justifyContent={'center'} spacing={3}>
             {/* <MuiTable columns={columns} dataTableData={datatableData}/> */}
-            <FilterTable table='orders' dataTableData={datatableData} selectableRows={true} title={'orders'}>
+            <FilterTable table='orders' dataTableData={datatableData} selectableRows={true} title={'Orders'} filters={filters} setFilters={setFilters}>
 
                 <Box
                   display={"flex"}
                   flexWrap={"wrap"}
                   sx={{ marginTop: "1em" }}
+                  gap={2}
                 >
                   {/* <Box
                     width={"100%"}
@@ -83,7 +84,9 @@ function OrderList() {
                     />
                   </Box> */}
                   
-                  <CheckBoxPane title={'Order Status'} key={'status'} values={['confirmed', 'canceled', 'stock available', 'need to import', 'pending']} filters={filters} setFilters={setFilters}></CheckBoxPane>
+                  <CheckBoxPane title={'Order Status'} keyVal={'status'} values={['confirmed', 'canceled', 'stock available', 'need to import', 'pending']} filters={filters} setFilters={setFilters}></CheckBoxPane>
+                  <CheckBoxPane title={'District'} keyVal={'district'} values={['colombo', 'gampaha', 'kandy', 'galle', 'kaluthara']} filters={filters} setFilters={setFilters}></CheckBoxPane>
+                  <CheckBoxPane title={'City'} keyVal='city' values={['colombo', 'gampaha', 'kandy', 'galle', 'kaluthara']} filters={filters} setFilters={setFilters}></CheckBoxPane>
                 </Box>
             </FilterTable>
         </Stack>

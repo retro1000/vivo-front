@@ -18,7 +18,8 @@ const MatxTheme = ({ children }) => {
       ...activeTheme.components,
       MuiTextField: {
         defaultProps: {
-          size: 'small'
+          size: 'small',
+          // color: 'secondary'
         },
         styleOverrides: {
           root: {
@@ -55,6 +56,14 @@ const MatxTheme = ({ children }) => {
         styleOverrides: {
           root: {
             fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          root: {
+            fontSize: '15px',
             fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
           },
         },
