@@ -48,11 +48,12 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password, rememberMe) => {
     // const response = await axios.post(`${backendApi}/login/validate`, { username:username, password:password, rememberMe:rememberMe });
     // const { user, token, role } = response.data;
-    const { user, token, role } = { user: {name: 'damitha'}, token: 'token', role: 'USER' };
-    
+    const { user, token, role } = { user: {name: 'damitha'}, token: 'token', role: 'ADMIN' };
+    console.log(user, role, token)
     localStorage.setItem('token', token)
 
     dispatch({ type: "LOGIN", payload: { user, role } });
+    return role
   };
 
   // const login = async (email, password) => {

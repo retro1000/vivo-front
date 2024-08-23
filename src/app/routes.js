@@ -12,6 +12,7 @@ import productRoutes from "./views/product/product-routes";
 import homeRoutes from "app/views/home/home-routes";
 import aboutRoutes from "./views/about/about-routes";
 import contactRoutes from "./views/contact/contact-routes";
+import orderRoutes from "./views/orders/order-routes";
 import profileRoutes from "./views/profile/profile-routes";
 import billingRoutes from "./views/billing/billing-routes";
 
@@ -33,6 +34,7 @@ const routes = [
       ...aboutRoutes,
       ...contactRoutes,
       ...sessionRoutes,
+      ...orderRoutes,
       ...profileRoutes,
       ...billingRoutes,
       // dashboard route

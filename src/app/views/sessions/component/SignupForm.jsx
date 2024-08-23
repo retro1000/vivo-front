@@ -8,12 +8,21 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-const SignupForm = ({ loginTitle, loginSubtitle }) => {
+import { useNavigate } from "react-router-dom";
+import { themeColors } from "app/components/MatxTheme/themeColors";
+import { LoadingButton } from "@mui/lab";
+
+const SignupForm = ({ loading, loginTitle, loginSubtitle }) => {
+
+  const navigate = useNavigate()
+  
   return (
     <Box
       sx={{
-        width: "46%",
+        width: "max-width",
         padding: "80px",
+        maxWidth: '500px',
+        minWidth: '400px',
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
@@ -34,11 +43,24 @@ const SignupForm = ({ loginTitle, loginSubtitle }) => {
         label="Email address"
         variant="outlined"
         margin="normal"
-        sx={{ marginTop: "46px" }}
+        sx={{ marginTop: "20px" }}
+      />
+      <TextField
+        fullWidth
+        label="Username"
+        variant="outlined"
+        margin="normal"
       />
       <TextField
         fullWidth
         label="Password"
+        type="password"
+        variant="outlined"
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        label="Retype Password"
         type="password"
         variant="outlined"
         margin="normal"
@@ -52,34 +74,38 @@ const SignupForm = ({ loginTitle, loginSubtitle }) => {
       <FormControlLabel
         control={<Checkbox />}
         label={
-          <Typography variant="body2">
+          <Typography variant="body2" sx={{width: '100%'}}>
             Agree to our <u>Terms of use</u> and <u>Privacy Policy</u>
           </Typography>
         }
-        sx={{ marginTop: "40px", alignSelf: "flex-start" }}
+        sx={{ width: '100%', mt: 3, alignSelf: "flex-start", display: 'flex', justifyContent: 'flex-start', alignContent: 'flex-start' }}
       />
       <FormControlLabel
         control={<Checkbox />}
-        label="Subscribe to our monthly newsletter"
+        label={
+          <Typography variant="body2">
+            Subscribe to our monthly newsletter
+          </Typography>
+        }
         sx={{ alignSelf: "flex-start" }}
       />
       
-      <Box sx={{display: 'flex',
-        justifyContent: 'center', minWidth:350 }}>
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        fullWidth
-      > 
-        Sign Up
-      </Button>
+      <Box mt={3} sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+        <LoadingButton
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          loading={loading}
+        > 
+          Sign Up
+        </LoadingButton>
       </Box>
       <Typography
         variant="body2"
-        sx={{ marginTop: "10px", alignSelf: "flex-start" }}
+        sx={{ marginTop: "15px", alignSelf: "flex-start", display: 'flex', gap: '0.3em', width: '100%' }}
       >
-        Don't have an account? <a href= "#">Sign Up</a>
+        Allready have an account? <Typography variant='body2' onClick={() => navigate('/login')} sx={{color: themeColors.red.palette.primary.main, cursor: 'pointer'}}>Sign In</Typography>
       </Typography>
     </Box>
   );
