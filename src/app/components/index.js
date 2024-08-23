@@ -21,6 +21,7 @@ export { default as SearchableSelectMultiple } from "./SearchableSelectMultiple"
 export { default as FileUpload } from "./FileUploads/FileUpload";
 export { default as MultiFileUpload } from "./FileUploads/MultiFileUpload";
 export { default as MuiTable } from "./DataTable/MuiTable";
+export { default as FilterTable } from "./DataTable/FilterTable";
 export { default as FormDialog } from "./Dialog/FormDialog";
 export { default as NumberFormatField } from "./InputField/NumberFormatField";
 export { default as ReactQuillEditior } from "./ReactQuillEditior";
@@ -38,3 +39,8 @@ export { default as TButton } from "./Button/TButton";
 export { default as TIconButton } from "./Button/TIconButton";
 export { default as ProductCard } from "./Card/ProductCard";
 export { default as PopupFormDialog } from "./Dialog/PopupFormDialog";
+export { default as SearchBarDefault } from "./SearchBar/SearchBarDefault";
+export { default as NumSliderFilter } from "./SliderFilter/NumSliderFilter";
+export { default as SearchPane } from "./SearchPane";
+export { default as CheckBoxPane } from "./CheckBoxPane";
+
