@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 
-import { Tooltip, Chip, Grid, Button, IconButton } from '@mui/material'
+import { Tooltip, Chip, Grid, Button, IconButton, Box } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { TButton, TIconButton } from '..';
+import { QuantitySelector, TButton, TIconButton } from '..';
 
 import MUIDataTable from 'mui-datatables'
 // import { makeStyles } from '@mui/styles';
@@ -144,6 +144,23 @@ const renderUserRoleChip = (role) => {
   return <Chip label={role} sx={{background: color, color: 'white', height: '2em', border: 'none'}} variant="outlined" />;
 };
 
+// const renderQuantitySelector = (value, options, rowIdex) => {
+//   return (
+//     <QuantitySelector 
+//       count={value.quantity} 
+//       setCount={
+//         (val) => {
+//           const newList = [...items]
+//           const newQty = updateQty
+//           items[tableMeta.rowIndex].quantity = val
+//           setItems(newList)
+//         }
+//       }
+//       limit={value.limit}
+//     />
+//   )
+// }
+
 
 const options = {
   selectableRows: false,
@@ -170,6 +187,8 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
     const option = columns.find(val=>val.name==='Actions')
     const statusOption = columns.find(val=>val.name==='Status')
     const roleOption = columns.find(val=>val.name==='Role')
+    const quantitySelectorOption = columns.find(val=>val.name==='quantitySelector')
+
     if(statusOption){
       newCols.push({
         name: 'Status',
@@ -201,6 +220,18 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
         }
       })
     }
+    // if(quantitySelectorOption){
+    //   newCols.push({
+    //     name: 'Quantity',
+    //     label: 'Quantity',
+    //     options: {
+    //       customBodyRender: (value, tableMeta) => {
+    //         const rowIndex = tableMeta.rowIndex;
+    //         return <Box>{renderQuantitySelector(value, option.options.buttonsConfig, rowIndex)}</Box>;
+    //       }
+    //     }
+    //   })
+    // }
     setUpdatedCols(newCols)
   }, [columns])
 
