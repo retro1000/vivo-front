@@ -18,9 +18,9 @@ const orderRoutes = [
   { 
     path: "/order/view/:id",
     element: 
-      <AuthGuard auth={authRoles.manager}>
+      // <AuthGuard auth={authRoles.manager}>
         <OrderView />
-      </AuthGuard>
+      // </AuthGuard>
   },
 ];
 

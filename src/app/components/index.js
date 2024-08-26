@@ -43,4 +43,5 @@ export { default as SearchBarDefault } from "./SearchBar/SearchBarDefault";
 export { default as NumSliderFilter } from "./SliderFilter/NumSliderFilter";
 export { default as SearchPane } from "./SearchPane";
 export { default as CheckBoxPane } from "./CheckBoxPane";
+export { default as TimeLine } from "./TimeLine";
 

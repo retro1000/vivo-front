@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import React from 'react';
 import { Navigate, useParams } from "react-router-dom";
+import { useFormatter } from 'app/hooks/useFormatter';
 
 import _ from 'lodash'
 
@@ -146,6 +147,8 @@ function ProductView() {
 
     const NotFound = Loadable(lazy(() => import("../sessions/NotFound")));
 
+    const { formatToLKR } = useFormatter()
+
     const findVariation = useCallback((array) => {
         return variations.find(val => ((arr1, arr2) => {
             if(arr1.length !== arr2.length) return false
@@ -257,15 +260,6 @@ function ProductView() {
             setOrders(newOrders)
         }
     }, [qty])
-
-    const formatToLKR = (number) => {
-        return new Intl.NumberFormat('en-LK', {
-            style: 'currency',
-            currency: 'LKR',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(number);
-    }
 
     const a11yProps = (index) => {
         return {
