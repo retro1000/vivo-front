@@ -67,7 +67,7 @@ const getIcon = (status) => {
 
 export default function TimeLine({ path }) {
 
-    const { DefaultDateTimeFormat } = useFormatter()
+    const { DefaultDateTimeFormat, DefaultWordFormat } = useFormatter()
 
     const { api } = useAxios()
 
@@ -112,13 +112,13 @@ export default function TimeLine({ path }) {
                 timeLines.map((item, index) => (
                     <TimelineItem key={index}>
                         <TimelineOppositeContent
-                            sx={{ m: 'auto 0', position: 'relative', top: index===0?0:25 }}
+                            sx={{ m: 'auto 0', position: 'relative', top: index===0?0:26 }}
                             align={index%2===0?"right":""}
                             variant="body2"
                             color="text.secondary"
                         >
                             {DefaultDateTimeFormat(new Date(item.time))}
-                            <Typography>{item.user}</Typography>
+                            <Typography variant='body2'>{item.user}</Typography>
                         </TimelineOppositeContent>
                         <TimelineSeparator>
                             <TimelineConnector sx={{height:index===0?'0':'50px'}}/>
@@ -127,11 +127,11 @@ export default function TimeLine({ path }) {
                                 </TimelineDot>
                             <TimelineConnector />
                         </TimelineSeparator>
-                        <TimelineContent sx={{ py: '12px', px: 2, position: 'relative', top: ((index===0?0:45) + (item.note?0:13)) }}>
+                        <TimelineContent sx={{ py: '12px', px: 2, position: 'relative', top: ((index===0?0:47) + (item.note?0:13)) }}>
                             <Typography variant="h6" component="span">
-                                {(item.status.charAt(0) + item.status.slice(1).toLowerCase()).replace(/_/g, ' ')}
+                                {DefaultWordFormat(item.status)}
                             </Typography>
-                            {item.note && <Typography>{item.note}</Typography>}
+                            {item.note && <Typography variant='body2'>{item.note}</Typography>}
                         </TimelineContent>
                     </TimelineItem>
                 ))

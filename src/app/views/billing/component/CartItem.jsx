@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import { Box, Typography, IconButton, Checkbox } from '@mui/material';
 import BinIcon from '@mui/icons-material/Delete';
 import { QuantitySelector } from 'app/components';
+import { useFormatter } from 'app/hooks/useFormatter';
+
 
 const CartItem = ({ image, name, price, subtotal }) => {
   const [quantity, setQuantity] = useState(2);
+
+  const { formatToLKR } = useFormatter()
+
 
   return (
     <Box
@@ -55,7 +60,7 @@ const CartItem = ({ image, name, price, subtotal }) => {
           {name}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {price}
+          {formatToLKR(price)}
         </Typography>
       </Box>
       <Box
@@ -75,7 +80,7 @@ const CartItem = ({ image, name, price, subtotal }) => {
           justifyContent: 'center',
         }}
       >
-        <Typography variant="body1">{subtotal}</Typography>
+        <Typography variant="body1">{formatToLKR(subtotal)}</Typography>
       </Box>
       <Box
         sx={{

@@ -68,6 +68,13 @@ const MatxTheme = ({ children }) => {
           },
         },
       },
+      // MuiTypography: {
+      //   styleOverrides: {
+      //     body2: {
+      //       color: '#9c9c9c'
+      //     },
+      //   },
+      // },
       MuiButton: {
         styleOverrides: {
           root: {

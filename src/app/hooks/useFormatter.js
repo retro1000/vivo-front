@@ -19,8 +19,12 @@ const useFormatter = () => {
             maximumFractionDigits: 2
         }).format(number);
     }
+
+    const DefaultWordFormat = (word) => {
+        return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
+    }
   
-    return { DefaultDateTimeFormat, formatToLKR }
+    return { DefaultDateTimeFormat, formatToLKR, DefaultWordFormat }
   }
   
   export {useFormatter}
