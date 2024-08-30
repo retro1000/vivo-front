@@ -75,6 +75,18 @@ const MatxTheme = ({ children }) => {
       //     },
       //   },
       // },
+      MuiAutocomplete: {
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
+          },
+          listbox: {
+            fontSize: '14px', // Set your desired font size here
+            fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {

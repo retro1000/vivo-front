@@ -11,6 +11,13 @@ const useFormatter = () => {
                 )}`;
     }
 
+    const DefaultDateFormat = (date) => {
+        return `${date.toLocaleDateString(
+                'en-GB',
+                { day: '2-digit', month: 'short', year: 'numeric' }
+                )}`;
+    }
+
     const formatToLKR = (number) => {
         return new Intl.NumberFormat('en-LK', {
             style: 'currency',
@@ -23,8 +30,23 @@ const useFormatter = () => {
     const DefaultWordFormat = (word) => {
         return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
     }
+
+    const PaymentMethod = (method) => {
+        switch(method){
+            case 'COD':
+                return 'Cash on Delivery';
+            case 'CASH':
+                return 'On Site Payment';
+            case 'CARD':
+                return 'Credit/Debit Card';
+            case 'KOKO':
+                return 'KOKO payment';
+            default:
+                return '-'
+        }
+    }
   
-    return { DefaultDateTimeFormat, formatToLKR, DefaultWordFormat }
+    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat }
   }
   
   export {useFormatter}
