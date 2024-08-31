@@ -186,7 +186,7 @@ const Layout1Topbar = () => {
                   component="img"
                   src="/assets/images/logos/HH01.jpg"
                   alt="Logo"
-                  sx={{ width: '60px', height: '60px', borderRadius: 1, cursor:"pointer" }}
+                  sx={{ width: '120px', height: 'auto', borderRadius: 1, cursor:"pointer" }}
                 >
                 </Box>
                 <Box display='flex' alignItems='center' gap='1.5em' marginLeft='3em'>

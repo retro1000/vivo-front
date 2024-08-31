@@ -419,15 +419,36 @@ function OrderView() {
   }
 
   const invoiceData = {
-    customerName: customer.firstName+customer.lastName,
+    customerName: customer.firstName+' '+customer.lastName,
     billingAddress: order.billingAddress,
+    shippingAddress: order.shippingAddress,
+    contactNos: order.contactNos,
+    district: order.district,
+    city: order.city,
     id: order.id,
     date: order.createDate.split('T')[0],
     items: items.map(item => ({...item, attributes: item.attributes.slice(2)})),
     tax: order.tax,
+    paidAmount: 300,
+    discount: 200,
     delivery: order.delivery,
     fees: order.fees,
-    itemSubTotal: order.itemSubTotal
+    itemSubTotal: order.itemSubTotal,
+    orderNo: order.orderNo,
+    paymentMethod: order.paymentMethod
+  }
+
+  const packaginSlipData = {
+    customerName: customer.firstName+' '+customer.lastName,
+    shippingAddress: order.shippingAddress,
+    contactNos: order.contactNos,
+    district: order.district,
+    city: order.city,
+    date: order.createDate.split('T')[0],
+    total: (order.itemSubTotal + order.fees + order.delivery + (order.tax || 0) - (order.discount || 0) - (order.paidAmount || 0)),
+    items: items.map(item => ({imageUrl: item.imageUrl, name: item.name, quantity: item.quantity, attributes: item.attributes.slice(2)})),
+    orderNo: order.orderNo,
+    waybill: order.waybill,
   }
 
   return (
@@ -685,14 +706,14 @@ function OrderView() {
                         label={"Download packaging slip"}
                         variant={"outlined"}
                         color={"primary"}
-                        fun={() => downloadTemplate({}, "packaging_slip")}
+                        fun={() => downloadTemplate(packaginSlipData, "packagin_slip")}
                       ></TButton>
                       <TButton
                         title={"Print packaging slip"}
                         label={"Print packaging slip"}
                         variant={"outlined"}
                         color={"primary"}
-                        fun={() => printTemplate({}, "packaging_slip")}
+                        fun={() => printTemplate(packaginSlipData, "packagin_slip")}
                       ></TButton>
                     </>
                   }
