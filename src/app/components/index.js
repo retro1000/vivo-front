@@ -25,6 +25,8 @@ export { default as FilterTable } from "./DataTable/FilterTable";
 export { default as FormDialog } from "./Dialog/FormDialog";
 export { default as NumberFormatField } from "./InputField/NumberFormatField";
 export { default as ReactQuillEditior } from "./ReactQuillEditior";
+export { default as TButton } from "./Button/TButton";
+export { default as TIconButton } from "./Button/TIconButton";
 export { default as SwiperSlider1 } from "./SwiperSlider/SwiperSlider1";
 export { default as SwiperSliderThumbLoop } from "./SwiperSlider/SwiperSliderThumbLoop";
 export { default as SwiperSliderHeroAuto } from "./SwiperSlider/SwiperSliderHeroAuto";

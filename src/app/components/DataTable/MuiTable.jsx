@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Tooltip, Chip, Grid, Button, IconButton, Box } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { QuantitySelector, TButton, TIconButton } from '..';
 
 import MUIDataTable from 'mui-datatables'
+// import { makeStyles } from '@mui/styles';
 // import { makeStyles } from '@mui/styles';
 
 // const CustomMuiTable = styled(MUIDataTable)({
@@ -16,6 +18,24 @@ import MUIDataTable from 'mui-datatables'
 //       boxShadow: 'none'
 //   }
 // });
+
+// const useStyles = makeStyles((theme) => ({
+//   oddRow: {
+//       backgroundColor: '#f0f0f0',
+//       '&:hover': {
+//           backgroundColor: theme.palette.action.hover,
+//       },
+//   },
+//   evenRow: {
+//       backgroundColor: '#ffffff',
+//       '&:hover': {
+//           backgroundColor: theme.palette.action.hover,
+//       },
+//   },
+//   tableCell: {
+//       padding: '16px', // Adjust this value to make rows taller
+//   },
+// }));
 
 // const useStyles = makeStyles((theme) => ({
 //   oddRow: {
