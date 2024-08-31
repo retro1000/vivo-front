@@ -4,6 +4,7 @@
 /node_modules
 /docs/node_modules
 /.pnp
+/ngrok
 .pnp.js
 
 # testing

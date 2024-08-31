@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo, useState } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   styled,
@@ -8,7 +8,8 @@ import {
   useTheme,
   MenuItem,
   IconButton,
-  useMediaQuery
+  useMediaQuery,
+  Typography
 } from "@mui/material";
 
 import { NotificationProvider } from "app/contexts/NotificationContext";
@@ -18,9 +19,8 @@ import useSettings from "app/hooks/useSettings";
 
 import { Span } from "app/components/Typography";
 import ShoppingCart from "app/components/ShoppingCart";
-import { MatxMenu, MatxSearchBox } from "app/components";
+import { MatxMenu, MatxSearchBox, TButton, TIconButton } from "app/components";
 import { NotificationBar } from "app/components/NotificationBar";
-import { themeShadows } from "app/components/MatxTheme/themeColors";
 
 import { topBarHeight } from "app/utils/constant";
 
@@ -36,23 +36,19 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 
+import WishListIcon from '@mui/icons-material/Favorite'
+import { themeColors } from "app/components/MatxTheme/themeColors";
+import { useEffect } from "react";
+
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary
 }));
 
-const TopbarRoot = styled("div")({
-  top: 0,
-  zIndex: 96,
-  height: topBarHeight,
-  boxShadow: themeShadows[8],
-  transition: "all 0.3s ease"
-});
-
 const TopbarContainer = styled(Box)(({ theme }) => ({
-  padding: "8px",
-  paddingLeft: 18,
-  paddingRight: 20,
+  padding: "6px",
+  paddingLeft: 12,
+  paddingRight: 12,
   height: "100%",
   display: "flex",
   alignItems: "center",
@@ -95,6 +91,37 @@ const Layout1Topbar = () => {
   const { logout, user, role } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  const location = useLocation()
+
+  useEffect(() => {
+    switch(location.pathname){
+      case '/' || undefined:
+        setActiveNav('home')
+        break;
+      case '/product/filter-product':
+        setActiveNav('product')
+        break
+      case '/about':
+        setActiveNav('about')
+        break
+      case '/contact':
+        setActiveNav('contact')
+        break
+      case '/track-order':
+        setActiveNav('track')
+        break
+      case '/inquiries':
+        setActiveNav('inquiries')
+        break
+      default:
+        setActiveNav('n')
+    }
+  }, [location])
+
+  const [activeNav, setActiveNav] = useState('home')
+
+  const navigates = useNavigate()
+
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({ layout1Settings: { leftSidebar: { ...sidebarSettings } } });
   };
@@ -110,19 +137,73 @@ const Layout1Topbar = () => {
     updateSidebarMode({ mode });
   };
 
+  const TopbarRoot = styled("div")({
+    top: 0,
+    padding: !user || role==='USER' ? '0 3%' : '0',
+    zIndex: 96,
+    // borderBottom: '0.1em solid gray',
+    height: !user || role==='USER' ? 80 : topBarHeight,
+    // boxShadow: themeShadows[8],
+    transition: "all 0.3s ease",
+    background: 'white'
+  });
+
+  const navigate = (path) => {
+    setActiveNav(path)
+    switch(path){
+      case 'home':
+        navigates('/')
+        break;
+      case 'product':
+        navigates('/product/filter-product')
+        break
+      case 'about':
+        navigates('/about')
+        break
+      case 'contact':
+        navigates('/contact')
+        break
+      case 'track':
+        navigates('/track-order')
+        break
+      case 'inquiries':
+        navigates('/inquiries')
+        break
+      default:
+        navigates('/not-found')
+    }
+  }
+
   return (
     <TopbarRoot>
       <TopbarContainer>
         <Box display="flex">
           {
-            !user || role==='USER' ?
-              '' :
+            !user || role==='USER' ?  
+              <React.Fragment>
+                <Box
+                  onClick={()=>navigate("home")}
+                  component="img"
+                  src="/assets/images/logos/HH01.jpg"
+                  alt="Logo"
+                  sx={{ width: '120px', height: 'auto', borderRadius: 1, cursor:"pointer" }}
+                >
+                </Box>
+                <Box display='flex' alignItems='center' gap='1.5em' marginLeft='3em'>
+                  <Typography color={activeNav==='home'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='home'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("home")}>Home</Typography>
+                  <Typography color={activeNav==='product'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='product'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("product")}>Products</Typography>
+                  <Typography color={activeNav==='track'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='track'?'18px':'15px',cursor: 'pointer'}} onClick={()=>navigate("track")}>Track Order</Typography>
+                  <Typography color={activeNav==='about'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='about'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("about")}>About Us</Typography>
+                  <Typography color={activeNav==='contact'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='contact'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("contact")}>Contact Us</Typography>
+                  <Typography color={activeNav==='inquiries'?themeColors.red.palette.primary.main:''} style={{fontWeight: '500', fontSize: activeNav==='inquiries'?'18px':'15px', cursor: 'pointer'}} onClick={()=>navigate("inquiries")}>Inquiries</Typography>
+                </Box>
+              </React.Fragment> :
               <React.Fragment>
                 <StyledIconButton onClick={handleSidebarToggle}>
                   <Menu />
                 </StyledIconButton>
 
-                <IconBox>
+                {/* <IconBox>
                   <StyledIconButton>
                     <MailOutline />
                   </StyledIconButton>
@@ -134,60 +215,92 @@ const Layout1Topbar = () => {
                   <StyledIconButton>
                     <StarOutline />
                   </StyledIconButton>
-                </IconBox>
+                </IconBox> */}
               </React.Fragment>
           }
-          </Box>
+        </Box>
 
         <Box display="flex" alignItems="center">
           <MatxSearchBox />
           {
             !user ?
-              '' :
+              <React.Fragment>
+                <Box display='flex' gap='0.8em'>
+                  <TButton
+                    title='Login'
+                    label='Log in'
+                    variant="outlined"
+                    sx={{border: `0.1em solid ${themeColors.red.palette.secondary.main}`, color: themeColors.red.palette.secondary.main}}
+                    fun={() => navigates('/login')}
+                  ></TButton>
+                  <TButton
+                    title='Signup'
+                    label='Sign up'
+                    variant="contained"
+                    sx={{background: themeColors.red.palette.primary.main, color: themeColors.red.palette.primary.contrastText}}
+                    fun={() => navigates('/signup')}
+                  ></TButton>
+                </Box>
+              </React.Fragment> :
               <React.Fragment>
                 <NotificationProvider>
                   <NotificationBar />
                 </NotificationProvider>
-
-                <ShoppingCart />
+                {
+                  role==='USER'?
+                    <React.Fragment>
+                      <TIconButton
+                        title="Wish List"
+                        icon={WishListIcon}
+                        sx={{color: themeColors.red.palette.primary.main}}
+                        variant='outlined'
+                        fun={() => navigates(`/wishlist/${user.userId}`)}
+                      ></TIconButton>
+                      <ShoppingCart />
+                    </React.Fragment>
+                  : ''  
+                }
               </React.Fragment>
           }
+          {
+            !user ?
+            '' :
+            <MatxMenu
+              menuButton={
+                <UserMenu>
+                  {/* <Hidden xsDown>
+                    <Span>
+                      Hi <strong>{user?user.username:''}</strong>
+                    </Span>
+                  </Hidden> */}
+                  <Avatar src={user?user.avatar:''} sx={{ cursor: "pointer" }} />
+                </UserMenu>
+              }>
+              <StyledItem>
+                <Link to="/">
+                  <Home />
+                  <Span>Home</Span>
+                </Link>
+              </StyledItem>
 
-          <MatxMenu
-            menuButton={
-              <UserMenu>
-                <Hidden xsDown>
-                  <Span>
-                    Hi <strong>{user?user.username:''}</strong>
-                  </Span>
-                </Hidden>
-                <Avatar src={user?user.avatar:''} sx={{ cursor: "pointer" }} />
-              </UserMenu>
-            }>
-            <StyledItem>
-              <Link to="/">
-                <Home />
-                <Span>Home</Span>
-              </Link>
-            </StyledItem>
+              <StyledItem>
+                <Link to={`/profile/${user.userId}`}>
+                  <Person />
+                  <Span>My Account</Span>
+                </Link>
+              </StyledItem>
 
-            <StyledItem>
-              <Link to="/page-layouts/user-profile">
-                <Person />
-                <Span>Profile</Span>
-              </Link>
-            </StyledItem>
+              <StyledItem>
+                <Settings />
+                <Span>Settings</Span>
+              </StyledItem>
 
-            <StyledItem>
-              <Settings />
-              <Span>Settings</Span>
-            </StyledItem>
-
-            <StyledItem onClick={logout}>
-              <PowerSettingsNew />
-              <Span>Logout</Span>
-            </StyledItem>
-          </MatxMenu>
+              <StyledItem onClick={logout}>
+                <PowerSettingsNew />
+                <Span>Logout</Span>
+              </StyledItem>
+            </MatxMenu>
+          }
         </Box>
       </TopbarContainer>
     </TopbarRoot>

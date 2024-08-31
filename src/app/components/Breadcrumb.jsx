@@ -40,12 +40,12 @@ const StyledIcon = styled(Home)({
 export default function Breadcrumb({ routeSegments }) {
   return (
     <BreadcrumbRoot>
-      {routeSegments ? (
+      {/* {routeSegments ? (
         <>
           <BreadcrumbName>{routeSegments[routeSegments.length - 1]["name"]}</BreadcrumbName>
           <Separator>|</Separator>
         </>
-      ) : null}
+      ) : null} */}
 
       <Breadcrumbs
         separator={<NavigateNext sx={{ color: "text.hint" }} />}

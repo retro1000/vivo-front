@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-import { Tooltip, Grid, Select, MenuItem, styled, Button, IconButton, Chip } from '@mui/material'
+import { Tooltip, Chip, Grid, Button, IconButton, Box } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { TButton, TIconButton } from '..';
+import { QuantitySelector, TButton, TIconButton } from '..';
 
 import MUIDataTable from 'mui-datatables'
+// import { makeStyles } from '@mui/styles';
 // import { makeStyles } from '@mui/styles';
 
 // const CustomMuiTable = styled(MUIDataTable)({
@@ -16,6 +18,24 @@ import MUIDataTable from 'mui-datatables'
 //       boxShadow: 'none'
 //   }
 // });
+
+// const useStyles = makeStyles((theme) => ({
+//   oddRow: {
+//       backgroundColor: '#f0f0f0',
+//       '&:hover': {
+//           backgroundColor: theme.palette.action.hover,
+//       },
+//   },
+//   evenRow: {
+//       backgroundColor: '#ffffff',
+//       '&:hover': {
+//           backgroundColor: theme.palette.action.hover,
+//       },
+//   },
+//   tableCell: {
+//       padding: '16px', // Adjust this value to make rows taller
+//   },
+// }));
 
 // const useStyles = makeStyles((theme) => ({
 //   oddRow: {
@@ -60,45 +80,10 @@ const theme = () => createTheme({
   }
 })
 
-const CustomToolbarSelect = ({ selectedRows, displayData, onRowsDelete }) => {
-  const handleCustomAction = () => {
-    const selectedData = selectedRows.data.map(row => displayData[row.index]);
-    console.log('Custom action on selected rows:', selectedData);
-    // Perform your custom action here
-  };
-
-  return (
-    <Grid container alignItems="center" spacing={2}>
-      <Grid item>
-        <Chip label={`Selected Rows: ${selectedRows.data.length}`} color="primary" />
-      </Grid>
-      <Grid item>
-        <Select defaultValue="" displayEmpty>
-          <MenuItem value="" disabled>
-            Action
-          </MenuItem>
-          <MenuItem value="action1">Action 1</MenuItem>
-          <MenuItem value="action2">Action 2</MenuItem>
-        </Select>
-      </Grid>
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={handleCustomAction}>
-          Apply
-        </Button>
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => onRowsDelete(selectedRows)}>
-          {/* <DeleteIcon /> */}
-        </IconButton>
-      </Grid>
-    </Grid>
-  );
-};
-
 
 const renderButtons = (buttonsConfig, rowIndex) => {
   return buttonsConfig.map((buttonConfig, index) => {
-    const { title, type, label, color, size, icon, onClick } = buttonConfig;
+    const { title, type, label, color, size, icon, onClick, onMouseDown } = buttonConfig;
     
     if (type === 'icon') {
       return (
@@ -108,6 +93,7 @@ const renderButtons = (buttonsConfig, rowIndex) => {
           color={color}
           size={size}
           fun={() => onClick(rowIndex)}
+          fun2={() => onMouseDown(rowIndex)}
           icon={icon}
         ></TIconButton>
       );
@@ -120,7 +106,8 @@ const renderButtons = (buttonsConfig, rowIndex) => {
           variant="outlined"
           color={color}
           size={size}
-          onClick={() => onClick(rowIndex)}
+          fun={() => onClick(rowIndex)}
+          fun2={() => onMouseDown(rowIndex)}
           style={{ marginLeft: 8 }}
           label={label}
         ></TButton>
@@ -177,7 +164,39 @@ const renderUserRoleChip = (role) => {
   return <Chip label={role} sx={{background: color, color: 'white', height: '2em', border: 'none'}} variant="outlined" />;
 };
 
-export default function MuiTable({ rowsPerPage=true, pagination=true, filter, cols, search, download, print, dataTableData, columns, filterType, selectableRows, title }){
+// const renderQuantitySelector = (value, options, rowIdex) => {
+//   return (
+//     <QuantitySelector 
+//       count={value.quantity} 
+//       setCount={
+//         (val) => {
+//           const newList = [...items]
+//           const newQty = updateQty
+//           items[tableMeta.rowIndex].quantity = val
+//           setItems(newList)
+//         }
+//       }
+//       limit={value.limit}
+//     />
+//   )
+// }
+
+
+const options = {
+  selectableRows: false,
+  sort: true,
+  print: true,
+  download: true,
+  search: true,
+  filter: true,
+  viewColumns: true,
+  filterType: true,
+  pagination: true,
+  // rowsPerPage: true,
+  responsive: 'simple'
+}
+
+export default function MuiTable({ newOptions, dataTableData, columns, title }){
 
   // const classes = useStyles();
 
@@ -188,6 +207,8 @@ export default function MuiTable({ rowsPerPage=true, pagination=true, filter, co
     const option = columns.find(val=>val.name==='Actions')
     const statusOption = columns.find(val=>val.name==='Status')
     const roleOption = columns.find(val=>val.name==='Role')
+    const quantitySelectorOption = columns.find(val=>val.name==='quantitySelector')
+
     if(statusOption){
       newCols.push({
         name: 'Status',
@@ -211,6 +232,7 @@ export default function MuiTable({ rowsPerPage=true, pagination=true, filter, co
         name: 'Actions',
         label: 'Actions',
         options: {
+          sort: option.options.sort===undefined || option.options.sort,
           customBodyRender: (value, tableMeta) => {
             const rowIndex = tableMeta.rowIndex;
             return <Grid sx={{display: 'flex', gap: '0.3em'}}>{renderButtons(option.options.buttonsConfig, rowIndex)}</Grid>;
@@ -218,6 +240,18 @@ export default function MuiTable({ rowsPerPage=true, pagination=true, filter, co
         }
       })
     }
+    // if(quantitySelectorOption){
+    //   newCols.push({
+    //     name: 'Quantity',
+    //     label: 'Quantity',
+    //     options: {
+    //       customBodyRender: (value, tableMeta) => {
+    //         const rowIndex = tableMeta.rowIndex;
+    //         return <Box>{renderQuantitySelector(value, option.options.buttonsConfig, rowIndex)}</Box>;
+    //       }
+    //     }
+    //   })
+    // }
     setUpdatedCols(newCols)
   }, [columns])
 
@@ -229,41 +263,35 @@ export default function MuiTable({ rowsPerPage=true, pagination=true, filter, co
                     title={title}
                     data={dataTableData}
                     columns={updatedCols}
-                    options={{
-                      selectableRows: selectableRows,
-                      // customRowRender: (data, dataIndex, rowIndex) => {
-                      //   const rowColor = rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'; // Alternating colors
-                      //   return (
-                      //     <tr style={{ backgroundColor: rowColor }}>
-                      //       {data.map((value, columnIndex) => (
-                      //         <td key={columnIndex}>{value}</td>
-                      //       ))}
-                      //     </tr>
-                      //   );
-                      // },
-                      // setRowProps: (row, dataIndex, rowIndex) => {
-                      //   return {
-                      //       className: rowIndex % 2 === 0 ? 'evenRow' : 'oddRow',
-                      //   };
-                      // },
-                      sort: true,
-                      customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-                        <CustomToolbarSelect 
-                          selectedRows={selectedRows} 
-                          displayData={displayData} 
-                          onRowsDelete={() => setSelectedRows([])} // Custom delete action
-                        />
-                      ),
-                      print: print,
-                      download: download,
-                      search: search,
-                      filter: filter,
-                      viewColumns: cols,
-                      filterType: filterType,
-                      pagination: pagination,
-                      rowsPerPage: rowsPerPage,
-                      responsive: 'simple'
-                    }}
+                    options={
+                      newOptions?{...options, ...newOptions}:options
+                      // selectableRows: selectableRows,
+                      // // customRowRender: (data, dataIndex, rowIndex) => {
+                      // //   const rowColor = rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'; // Alternating colors
+                      // //   return (
+                      // //     <tr style={{ backgroundColor: rowColor }}>
+                      // //       {data.map((value, columnIndex) => (
+                      // //         <td key={columnIndex}>{value}</td>
+                      // //       ))}
+                      // //     </tr>
+                      // //   );
+                      // // },
+                      // // setRowProps: (row, dataIndex, rowIndex) => {
+                      // //   return {
+                      // //       className: rowIndex % 2 === 0 ? 'evenRow' : 'oddRow',
+                      // //   };
+                      // // },
+                      // sort: true,
+                      // print: print,
+                      // download: download,
+                      // search: search,
+                      // filter: filter,
+                      // viewColumns: cols,
+                      // filterType: filterType,
+                      // pagination: pagination,
+                      // rowsPerPage: rowsPerPage,
+                      // responsive: 'simple'
+                    }
                     // classes={{
                     //   row: classes.tableRow,
                     // }}

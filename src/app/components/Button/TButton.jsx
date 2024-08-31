@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "@mui/material";
 
-const TButton = ({ key, style, sx, title, label, color, size, variant, startIcon: Icon, fun }) => {
+const TButton = ({ key, style, sx, title, label, color, size, variant, startIcon: Icon, fun, fun2, disabled }) => {
     return(
         <Tooltip key={key} title={title}>
             <Button
@@ -11,6 +11,8 @@ const TButton = ({ key, style, sx, title, label, color, size, variant, startIcon
                 size={size}
                 startIcon={Icon}
                 onClick={fun}
+                onMouseDown={fun2}
+                disabled={disabled}
             >
                 {label}
             </Button>

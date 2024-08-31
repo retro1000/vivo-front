@@ -23,25 +23,25 @@ const errorColor = {
 };
 
 export const themeColors = {
-  red: {
-    palette: {
-      type: 'light',
-      primary: {
-        main: '#dd3333',
-        contrastText: textLight.primary,
-      },
-      secondary: {
-        main: 'black',
-        contrastText: '#ffffff',
-      },
-      background: {
-        paper: '#fff',
-        default: '#fafafa',
-      },
-      error: errorColor,
-      text: textLight,
-    },
-  },
+  // red: {
+  //   palette: {
+  //     type: 'light',
+  //     primary: {
+  //       main: '#dd3333',
+  //       contrastText: textLight.primary,
+  //     },
+  //     secondary: {
+  //       main: '#000000',
+  //       contrastText: '#ffffff',
+  //     },
+  //     background: {
+  //       paper: '#fff',
+  //       default: '#fafafa',
+  //     },
+  //     error: errorColor,
+  //     text: textLight,
+  //   },
+  // },
   whitePurple: {
     palette: {
       type: 'light',
@@ -232,15 +232,15 @@ export const themeColors = {
     palette: {
       type: 'dark',
       primary: {
-        main: '#e53935',
+        main: '#dd3333',
         contrastText: '#ffffff',
       },
       secondary: {
-        main: '#FFAF38',
+        main: '#000000',
         contrastText: textLight.primary,
       },
       error: errorColor,
-      text: textDark,
+      text: textLight,
     },
   },
 };

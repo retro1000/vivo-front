@@ -2,7 +2,9 @@ import React from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
-const ReviewStatsCard = ({ rating, reviewCount }) => {
+const ReviewStatsCard = ({ specOff, size, rating, reviewCount }) => {
+
+  const sizing = size==='small'?{width: 17, height: 17}:{width: 24, height: 24}
   // Function to generate the stars with partial filling
   const renderStars = () => {
     const stars = [];
@@ -21,8 +23,7 @@ const ReviewStatsCard = ({ rating, reviewCount }) => {
           sx={{
             position: 'relative',
             display: 'inline-block',
-            width: 24,
-            height: 24,
+            ...sizing
           }}
         >
           <svg
@@ -37,7 +38,7 @@ const ReviewStatsCard = ({ rating, reviewCount }) => {
           >
             <defs>
               <linearGradient id={'grad' + i} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset={fillPercentage + '%'} stopColor="gold" stopOpacity="1" />
+                <stop offset={fillPercentage + '%'} stopColor="#faaf00" stopOpacity="1" />
                 <stop offset={fillPercentage + '%'} stopColor="#d0d0d0" stopOpacity="1" />
               </linearGradient>
             </defs>
@@ -58,15 +59,19 @@ const ReviewStatsCard = ({ rating, reviewCount }) => {
   };
 
   return (
-    <Grid container alignItems="center" sx={{marginTop: '0.5em'}}>
+    <Grid container alignItems="center" sx={{mt: size==='samll'?'0.5em':'0em'}}>
       <Grid item>
         <Box display="flex" alignItems="center">
           {renderStars()}
         </Box>
       </Grid>
-      <Grid item sx={{ marginLeft: 1 }}>
+      <Grid item sx={{ ml: 1 }}>
         <Typography variant="body2" color="textSecondary">
-          {`${reviewCount!==undefined?reviewCount===1?reviewCount+' review':reviewCount+' reviews':'0 reviews'}`}
+          {
+            specOff ? 
+              `${reviewCount!==undefined?reviewCount===1?reviewCount+' review':reviewCount+' reviews':'0 reviews'}` : 
+              reviewCount!==undefined?`(${reviewCount})`:''
+          }
         </Typography>
       </Grid>
     </Grid>
