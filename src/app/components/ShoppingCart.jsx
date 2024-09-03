@@ -8,6 +8,8 @@ import useSettings from "app/hooks/useSettings";
 import { themeShadows } from "./MatxTheme/themeColors";
 
 import { sideNavWidth, topBarHeight } from "app/utils/constant";
+import { useNavigate } from "react-router-dom";
+import useAuth from "app/hooks/useAuth";
 
 // STYLED COMPONENTS
 const MiniCart = styled(Box)({
@@ -85,6 +87,10 @@ export default function ShoppingCart({ container }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const [cartList, setCartList] = useState([...data]);
 
+  const navigate = useNavigate()
+
+  const { user } = useAuth()
+
   const handleDrawerToggle = () => setPanelOpen(!panelOpen);
 
   const handleCheckoutClick = () => setPanelOpen(false);
@@ -105,7 +111,7 @@ export default function ShoppingCart({ container }) {
 
   return (
     <Fragment>
-      <IconButton onClick={handleDrawerToggle}>
+      <IconButton onClick={() => navigate(`/cart/${user.userId}`)}>
         <Badge color="secondary" badgeContent={cartList.length}>
           <ShoppingCartIcon sx={{ color: "text.primary" }} />
         </Badge>

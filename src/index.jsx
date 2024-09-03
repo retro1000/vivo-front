@@ -1,17 +1,23 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
+import {SnackbarProvider} from "notistack";
+// import useDynamicMaxSnack from './hooks/useDynamicMaxSnack'; 
+
 import * as serviceWorker from "./serviceWorker";
 import App from "./app/App";
 
 // third party style
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
+
 const root = createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <App />
+    <SnackbarProvider maxSnack={10}>
+      <App />
+    </SnackbarProvider>
   </BrowserRouter>
 );
 

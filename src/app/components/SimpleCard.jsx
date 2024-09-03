@@ -13,9 +13,9 @@ const CardTitle = styled("div")(({ subtitle }) => ({
   marginBottom: !subtitle && "16px"
 }));
 
-export default function SimpleCard({ children, title, subtitle }) {
+export default function SimpleCard({ sx, children, title, subtitle }) {
   return (
-    <CardRoot elevation={6}>
+    <CardRoot sx={sx} elevation={6}>
       <CardTitle subtitle={subtitle}>{title}</CardTitle>
       {subtitle && <Box mb={2}>{subtitle}</Box>}
       {children}

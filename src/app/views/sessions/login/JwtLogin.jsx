@@ -47,8 +47,8 @@ const StyledRoot = styled("div")(() => ({
 
 // initial login credentials
 const initialValues = {
-  email: "jason@ui-lib.com",
-  password: "dummyPass",
+  username: 'damitha200',
+  password: 'Damitha2001@',
   remember: true
 };
 
@@ -57,7 +57,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, "Password must be 6 character length")
     .required("Password is required!"),
-  email: Yup.string().email("Invalid Email address").required("Email is required!")
+  username: Yup.string().required("Email is required!")
 });
 
 export default function JwtLogin() {
@@ -68,10 +68,11 @@ export default function JwtLogin() {
   const { login } = useAuth();
 
   const handleFormSubmit = async (values) => {
+    console.log(values)
     setLoading(true);
     try {
-      await login(values.email, values.password);
-      navigate("/");
+      await login(values.username, values.password);
+      navigate("/dashboard/default");
     } catch (e) {
       setLoading(false);
     }
@@ -98,15 +99,15 @@ export default function JwtLogin() {
                     <TextField
                       fullWidth
                       size="small"
-                      type="email"
-                      name="email"
-                      label="Email"
+                      type="text"
+                      name="username"
+                      label="Username"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.email}
+                      value={values.username}
                       onChange={handleChange}
-                      helperText={touched.email && errors.email}
-                      error={Boolean(errors.email && touched.email)}
+                      helperText={touched.username && errors.username}
+                      error={Boolean(errors.username && touched.username)}
                       sx={{ mb: 3 }}
                     />
 
