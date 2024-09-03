@@ -270,6 +270,8 @@ const useTemplate = () => {
                                         flex-direction: column;
                                         gap: 15px"
                                 >
+                                    <label>Sub total :</label>
+                                    <label>Delivery :</label>
                                     <strong><label style="font-size: 18px">COD :</label></strong>
                                 </div>
                                 <div
@@ -279,7 +281,9 @@ const useTemplate = () => {
                                         flex-direction: column;
                                         gap: 15px"
                                 >
-                                    <strong><label style="font-size: 18px">${formatToLKR(order.total)}</label></strong>
+                                    <label>${formatToLKR(order.total)}</label>
+                                    <label>${formatToLKR(order.delivery)}</label>
+                                    <strong><label style="font-size: 18px">${formatToLKR(order.delivery+order.total)}</label></strong>
                                 </div>
                             </div>
                         </div>
