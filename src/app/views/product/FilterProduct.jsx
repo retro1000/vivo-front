@@ -6,7 +6,7 @@ import SortButton from "./component/SortButton";
 import SearchBar from "./component/SearchBar";
 import { FilterList } from "@mui/icons-material";
 import ProductGrid from "./component/ProductGrid";
-import { filtersConfig } from "./component/Filtering";
+import FilterBar, { filtersConfig } from "./component/Filtering";
 
 const ProductPage = () => {
   const [filters, setFilters] = useState({
@@ -197,11 +197,12 @@ const ProductPage = () => {
                 <Button variant="text" color="primary" onClick={handleClearAll}>
                   Clear All
                 </Button>
-                <FilterList
+                {/* <FilterList
                   filters={filters}
                   filtersConfig={filtersConfig}
                   handleFilterChange={handleFilterChange}
-                />
+                /> */}
+                <FilterBar filters={filters} handleFilterChange={handleFilterChange} handleClearAll={handleClearAll}/>
               </Box>
               <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5}>
                 <ProductGrid products={filteredProducts}/>
