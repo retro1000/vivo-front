@@ -3,7 +3,6 @@ import { useAxios } from "app/hooks/useAxios";
 
 // CUSTOM COMPONENT
 import { MatxLoading } from "app/components";
-import { backendApi } from "config";
 
 const initialState = {
   user: null,
@@ -101,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     (async () => {
         const token = localStorage.getItem('token');
         if(token){
-          await apiNonAuth.get(`/login/profile/view`, {headers: {'Authorization':`Bearer ${token}`}})
+          await apiNonAuth.get(`/login/profile`, {headers: {'Authorization':`Bearer ${token}`}})
             .then((res) => {
               if(res.status===200){
                 const { user, role } = res.data

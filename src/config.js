@@ -14,5 +14,5 @@ export const auth0Config = {
   domain: process.env.REACT_APP_AUTH0_DOMAIN
 };
 
-//export const backendApi = 'http://localhost:8080'
+// export const backendApi = 'http://localhost:8080'
 export const backendApi = 'https://gazelle-winning-remotely.ngrok-free.app'
