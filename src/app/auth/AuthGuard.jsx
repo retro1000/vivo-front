@@ -26,6 +26,4 @@ const AuthGuard = ({ auth, children }) => {
 
   return children;
 };
-
-
 export default AuthGuard;

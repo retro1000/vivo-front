@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { themeColors } from "./MatxTheme/themeColors";
 
 const Header = ({ title, subTitle }) => {
   return (
@@ -10,11 +11,11 @@ const Header = ({ title, subTitle }) => {
           sx={{
             width: 4,
             height: 40,
-            bgcolor: '#ED005D' ,
+            bgcolor: themeColors.red.palette.primary.main ,
             borderRadius: "0 4px 4px 0",
           }}
         />
-        <Typography variant="subtitle1" color='#ED005D'>
+        <Typography variant="subtitle1" color={themeColors.red.palette.primary.main}>
           {title}
         </Typography>
       </Box>

@@ -1,7 +1,3 @@
-import { maxWidth } from '@mui/system'
-import { height } from '@mui/system'
-import { minWidth } from '@mui/system'
-import { width } from '@mui/system'
 import { useSnackbar } from 'notistack'
 
 const useNotistack = () => {
@@ -29,7 +25,12 @@ const useNotistack = () => {
     })
   }
 
-  return { triggerNotifications }
+  const triggerCommonErrors = (error) => {
+    if(error.response.status===500) triggerNotifications({text: error.response.data.message || 'Internal server error!!! please try again.', variant: 'error'})
+    if(error.response.status===403) triggerNotifications({text: error.response.data.message || 'Forbidden.', variant: 'error'})
+  }
+
+  return { triggerNotifications, triggerCommonErrors }
 }
 
 export {useNotistack}
