@@ -25,16 +25,16 @@ import useSettings from "app/hooks/useSettings";
 
 import { Span } from "app/components/Typography";
 import ShoppingCart from "app/components/ShoppingCart";
-import { MatxMenu, TButton, TIconButton } from "app/components";
+import { MatxMenu, TButton, TIconButton, MenuList } from "app/components";
 import { NotificationBar } from "app/components/NotificationBar";
 
 import { topBarHeight } from "app/utils/constant";
 
 import {
   Home,
-  Menu,
   Person,
   Settings,
+  Menu,
   PowerSettingsNew
 } from "@mui/icons-material";
 
@@ -101,13 +101,90 @@ const TabPanel = memo(({ children, value, index, ...other }) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box 
+          sx={{ 
+            p: 1, 
+            mt: 1,
+            maxHeight: '76dvh', 
+            height: '90dvh', 
+            overflowY: 'auto', 
+            background: '#191919',
+            '&::-webkit-scrollbar': {
+              width: '4px', // Adjust the width of the scrollbar
+            },
+            '&::-webkit-scrollbar-track': {
+              background: '#333', // Background of the scrollbar track
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#555', // Color of the scrollbar thumb
+              borderRadius: '8px', // Rounded corners
+              border: '2px solid transparent', // Adds a little padding between the thumb and track
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#777', // Thumb color on hover
+            }
+    }} >
           {children}
         </Box>
       )}
     </div>
   );
 })
+
+const categories = [
+  {
+    id: 1,
+    name: 'Electronics',
+    subCategories: [
+      {
+        id: 11,
+        name: 'Mobile Phones',
+        subCategories: [
+          { id: 111, name: 'Smartphones', subCategories: [] },
+          { id: 112, name: 'Feature Phones', subCategories: [] }
+        ]
+      },
+      {
+        id: 12,
+        name: 'Laptops',
+        subCategories: [
+          { id: 121, name: 'Gaming Laptops', subCategories: [] },
+          { id: 122, name: 'Ultrabooks', subCategories: [] }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Clothing',
+    subCategories: [
+      {
+        id: 21,
+        name: 'Men',
+        subCategories: [
+          { id: 211, name: 'Shirts', subCategories: [] },
+          { id: 212, name: 'Jeans', subCategories: [] }
+        ]
+      },
+      {
+        id: 22,
+        name: 'Women',
+        subCategories: [
+          { id: 221, name: 'Dresses', subCategories: [] },
+          { id: 222, name: 'Tops', subCategories: [] }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Accessories',
+    subCategories: [
+      { id: 31, name: 'Watches', subCategories: [] },
+      { id: 32, name: 'Bags', subCategories: [] }
+    ]
+  }
+];
 
 const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
 
@@ -173,7 +250,7 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
         Content for Tab 1
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Content for Tab 2
+        <MenuList menuItems={categories}/>
       </TabPanel>
     </Box>
   </Slide>

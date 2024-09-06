@@ -44,6 +44,22 @@ const MatxTheme = ({ children }) => {
           },
         }
       },
+      MuiTabs: {
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Ensure Tabs use the font
+          },
+        },
+      },
+      MuiList: {
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Ensure Lists use the font
+          },
+        },
+      },
       MuiMenuItem: {
         styleOverrides: {
           root: {
