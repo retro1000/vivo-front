@@ -115,7 +115,7 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
   <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
     <Box sx={{
         zIndex: 99, 
-        background: 'white', 
+        background: '#191919', 
         height: '100dvh',
         position: 'fixed',
         top: '137px',
@@ -131,8 +131,8 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
           aria-label="basic tabs menu"
           variant="fullWidth"
           sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
+            // borderBottom: 1,
+            // borderColor: 'white',
             // backgroundColor: themeColors.red.palette.primary.main, // Background color of Tabs
             color: themeColors.red.palette.primary.main,
             '& .MuiTabs-indicator': {
@@ -148,7 +148,7 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
             sx={{ 
               fontSize: '14px',
               textTransform: 'none',
-              // color: themeColors.red.palette.secondary.main,        // Color of the Tab labels
+              color: 'white',        // Color of the Tab labels
               '&.Mui-selected': {
                 color: themeColors.red.palette.primary.main,  
               }, // Color when the Tab is selected
@@ -161,7 +161,7 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
             sx={{ 
               fontSize: '14px',
               textTransform: 'none',
-              // color: themeColors.red.palette.secondary.main,        // Color of the Tab labels
+              color: 'white',        // Color of the Tab labels
               '&.Mui-selected': {
                 color: themeColors.red.palette.primary.main,     // Color when the Tab is selected
               }
