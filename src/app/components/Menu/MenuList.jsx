@@ -20,7 +20,6 @@ export default function Menu({ menuItems }) {
       newList[menu.id] = !(newList[menu.id] && newList[menu.id])
       setOpen(newList)
     }else navigate()
-    
   };
 
   const createList = (menu) => {
@@ -32,8 +31,8 @@ export default function Menu({ menuItems }) {
               onClick={()=>handleClick(menu)}
               sx={{
                 '&:hover': { 
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)', // Change background color on hover
-                  color: themeColors.red.palette.primary.main, // Change text color on hover (optional)
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  color: themeColors.red.palette.primary.main,
                 },
               }}
             >
@@ -64,30 +63,6 @@ export default function Menu({ menuItems }) {
                 createList(menu)
             ))
         }
-      
-      {/* <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse> */}
     </List>
   );
 }

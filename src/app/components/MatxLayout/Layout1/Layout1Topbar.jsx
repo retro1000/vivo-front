@@ -15,7 +15,10 @@ import {
   Tooltip,
   Slide,
   Tabs,
-  Tab
+  Tab,
+  List,
+  ListItemButton,
+  ListItemText
 } from "@mui/material";
 
 import { NotificationProvider } from "app/contexts/NotificationContext";
@@ -186,7 +189,7 @@ const categories = [
   }
 ];
 
-const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
+const SideMenu = memo(({ sideMenuOn, tab, setTabs, navigates, activeNav, navigate }) => {
 
  return (
   <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
@@ -247,7 +250,102 @@ const SideMenu = memo(({ sideMenuOn, tab, setTabs }) => {
         </Tabs>
 
       <TabPanel value={tab} index={0}>
-        Content for Tab 1
+        <List
+          sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+              <ListItemButton 
+                onClick={()=>navigate('home')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'home' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'Home'} />
+              </ListItemButton>
+              <ListItemButton 
+                onClick={()=>navigate('product')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'product' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'Products'} />
+              </ListItemButton>
+              <ListItemButton 
+                onClick={()=>navigate('track')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'track' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'Track Orders'} />
+              </ListItemButton>
+              <ListItemButton 
+                onClick={()=>navigate('about')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'about' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'About Us'} />
+              </ListItemButton>
+              <ListItemButton 
+                onClick={()=>navigate('contact')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'contact' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'Conatct Us'} />
+              </ListItemButton>
+              <ListItemButton 
+                onClick={()=>navigate('inquiries')}
+                sx={{
+                  '&:hover': { 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  },
+                  ...(activeNav === 'inquiries' && {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: themeColors.red.palette.primary.main,
+                  })
+                }}
+              >
+                  <ListItemText primary={'Inquiries'} />
+              </ListItemButton>
+        </List>
       </TabPanel>
       <TabPanel value={tab} index={1}>
         <MenuList menuItems={categories}/>
@@ -630,7 +728,7 @@ const Layout1Topbar = () => {
           }
         </TopbarContainer>
       </TopbarRoot>
-      { (!user || user==='USER' || user==='GUEST') && <SideMenu sideMenuOn={sideMenuOn} tab={tab} setTabs={setTabs}/>}
+      { (!user || user==='USER' || user==='GUEST') && <SideMenu sideMenuOn={sideMenuOn} tab={tab} setTabs={setTabs} navigates={navigates} activeNav={activeNav} navigate={navigate}/>}
     </React.Fragment>  
   );
 };
