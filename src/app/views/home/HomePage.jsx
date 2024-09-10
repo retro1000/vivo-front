@@ -15,7 +15,7 @@ import ProductSlider from "app/components/SwiperSlider/ProductSlider";
 import ProductCardSlide from "app/components/Card/ProductCardSlide";
 
 const styles = {
-  padding: 10,
+  padding: {xs: 3, md: 5, lg: 10},
   display: 'flex',
   flexDirection: 'column',
   gap: 10
@@ -241,9 +241,6 @@ const HomePage = () => {
               ))}
           </Grid>
         </Box>
-        <Banner />
-        <PaintStories/>
-        <ColorOfTheYear/>
       </Box>
       <LetsPaintHero/>
       <Footer />

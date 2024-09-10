@@ -18,13 +18,16 @@ import {
   Tab,
   List,
   ListItemButton,
-  ListItemText
+  ListItemText,
+  lighten
 } from "@mui/material";
 
 import { NotificationProvider } from "app/contexts/NotificationContext";
 
 import useAuth from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
+import { useAxios } from "app/hooks/useAxios";
+import { useFormatter } from "app/hooks/useFormatter";
 
 import { Span } from "app/components/Typography";
 import ShoppingCart from "app/components/ShoppingCart";
@@ -38,7 +41,8 @@ import {
   Person,
   Settings,
   Menu,
-  PowerSettingsNew
+  PowerSettingsNew,
+  ArrowDropUp
 } from "@mui/icons-material";
 
 import WishListIcon from '@mui/icons-material/Favorite'
@@ -47,6 +51,7 @@ import PhotoCamera from '@mui/icons-material/CameraAlt'
 import SearchIcon from '@mui/icons-material/Search'
 
 import { themeColors } from "app/components/MatxTheme/themeColors";
+import { useRef } from "react";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -93,6 +98,23 @@ const IconBox = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("md")]: { display: "none !important" }
 }));
 
+const scrollBar = {
+  '&::-webkit-scrollbar': {
+    width: '4px', // Adjust the width of the scrollbar
+  },
+  '&::-webkit-scrollbar-track': {
+    background: '#333', // Background of the scrollbar track
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'white', // Color of the scrollbar thumb
+    borderRadius: '8px', // Rounded corners
+    border: '2px solid transparent', // Adds a little padding between the thumb and track
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#777', // Thumb color on hover
+  }
+}
+
 const TabPanel = memo(({ children, value, index, ...other }) => {
   
   return (
@@ -112,20 +134,7 @@ const TabPanel = memo(({ children, value, index, ...other }) => {
             height: '90dvh', 
             overflowY: 'auto', 
             background: '#191919',
-            '&::-webkit-scrollbar': {
-              width: '4px', // Adjust the width of the scrollbar
-            },
-            '&::-webkit-scrollbar-track': {
-              background: '#333', // Background of the scrollbar track
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#555', // Color of the scrollbar thumb
-              borderRadius: '8px', // Rounded corners
-              border: '2px solid transparent', // Adds a little padding between the thumb and track
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              backgroundColor: '#777', // Thumb color on hover
-            }
+            ...scrollBar
     }} >
           {children}
         </Box>
@@ -189,170 +198,360 @@ const categories = [
   }
 ];
 
-const SideMenu = memo(({ sideMenuOn, tab, setTabs, navigates, activeNav, navigate }) => {
+const searchResult = [
+  {
+    type: 'Electronics',
+    count: 2,
+    result: [
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'Smartphone X10',                 // Product name
+        price: 150000,                          // Original price
+        discount: 130000                        // Discounted price (optional)
+      },
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes   Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes',
+        price: 25000
+      }
+    ]
+  },
+  {
+    type: 'Furniture',
+    count: 1,
+    result: [
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'Modern Chair',
+        price: 12000
+      }
+    ]
+  },
+  {
+    type: 'Clothing',
+    count: 3,
+    result: [
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'Leather Jacket',
+        price: 50000,
+        discount: 45000
+      },
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'Jeans',
+        price: 8000
+      },
+      {
+        img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
+        name: 'T-Shirt',
+        price: 3000
+      }
+    ]
+  }
+];
 
- return (
-  <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
-    <Box sx={{
-        zIndex: 99, 
-        background: '#191919', 
-        height: '100dvh',
-        position: 'fixed',
-        top: '137px',
-        left: 0,
-        width: 300,
-        boxShadow: 8,
-        display: {sx: 'flex', md: 'none'}
-      }}
-    >
-        <Tabs
-          value={tab}
-          onChange={(e, newValue) => setTabs(newValue)}
-          aria-label="basic tabs menu"
-          variant="fullWidth"
+
+
+
+
+const getAllCategories = async (setAllCategories, setLoading, api) => {
+
+  setLoading(true)
+  await api.get('/category/view')
+    .then(response => {
+      if(response.status===200){
+        setAllCategories(response.data)
+      }
+    })
+    .catch(error => {
+
+    })
+    .finally(() => setLoading(false))
+}
+
+const AllCategoryDropDown = memo(({ ref, dropDownOn, allCategories, setAllCategories, loading, setLoading, menuPosition }) => {
+
+  const { api } = useAxios();
+  const theme = useTheme();
+  const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  if(!loading && (!allCategories || allCategories.length===0)){
+    getAllCategories(setAllCategories, setLoading, api)
+  }
+
+  return !isMdScreen && (
+    <div style={{display: {sx: 'none', md: 'flex'}}}>
+      <Slide direction="down" in={dropDownOn} mountOnEnter unmountOnExit ref={ref}>
+        <Box 
           sx={{
-            // borderBottom: 1,
-            // borderColor: 'white',
-            // backgroundColor: themeColors.red.palette.primary.main, // Background color of Tabs
-            color: themeColors.red.palette.primary.main,
-            '& .MuiTabs-indicator': {
-              backgroundColor: themeColors.red.palette.primary.main, // Color of the indicator (underline)
-              height: '1.5px', // Height of the underline
-            },  // Text color of Tabs
+            display: {sx: 'none', md: 'flex'},
+            zIndex: 99, 
+            background: 'gray', 
+            height: 'max-content',
+            maxHeight: '500px',
+            // minHeight: '300px',
+            position: 'fixed',
+            boxShadow: 8,
+            borderRadius: 1,
+            overflowY: 'auto',
+            ...scrollBar,
+            ...menuPosition
+
           }}
         >
-          <Tab 
-            label="Menu" 
-            id="tab-0" 
-            aria-controls="tabpanel-0" 
-            sx={{ 
-              fontSize: '14px',
-              textTransform: 'none',
-              color: 'white',        // Color of the Tab labels
-              '&.Mui-selected': {
-                color: themeColors.red.palette.primary.main,  
-              }, // Color when the Tab is selected
-            }}
-          />
-          <Tab 
-            label="All Categories"
-            id="tab-1" 
-            aria-controls="tabpanel-1"
-            sx={{ 
-              fontSize: '14px',
-              textTransform: 'none',
-              color: 'white',        // Color of the Tab labels
-              '&.Mui-selected': {
-                color: themeColors.red.palette.primary.main,     // Color when the Tab is selected
-              }
-            }} 
-          />
-        </Tabs>
+          <MenuList menuItems={allCategories} bgcolor='gray' hoverColor='white'/>
+        </Box>
+      </Slide>
+    </div>
+  )
+})
 
-      <TabPanel value={tab} index={0}>
-        <List
-          sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-        >
-              <ListItemButton 
-                onClick={()=>navigate('home')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'home' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'Home'} />
-              </ListItemButton>
-              <ListItemButton 
-                onClick={()=>navigate('product')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'product' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'Products'} />
-              </ListItemButton>
-              <ListItemButton 
-                onClick={()=>navigate('track')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'track' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'Track Orders'} />
-              </ListItemButton>
-              <ListItemButton 
-                onClick={()=>navigate('about')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'about' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'About Us'} />
-              </ListItemButton>
-              <ListItemButton 
-                onClick={()=>navigate('contact')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'contact' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'Conatct Us'} />
-              </ListItemButton>
-              <ListItemButton 
-                onClick={()=>navigate('inquiries')}
-                sx={{
-                  '&:hover': { 
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  },
-                  ...(activeNav === 'inquiries' && {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: themeColors.red.palette.primary.main,
-                  })
-                }}
-              >
-                  <ListItemText primary={'Inquiries'} />
-              </ListItemButton>
-        </List>
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <MenuList menuItems={categories}/>
-      </TabPanel>
-    </Box>
-  </Slide>
- ); 
+const SearchBarDropDown = ({ ref, searchBarOn, navigates, searchRes, loading, setLoading, searchBarMenuPosition }) => {
+
+  const { formatToLKR } = useFormatter()
+
+  return searchBarOn && (
+    <Stack 
+      ref={ref}
+      zIndex={199} 
+      sx={{
+        position: 'absolute', 
+        background: 'white', 
+        borderRadius: 1, 
+        overflowY: 'auto', 
+        maxHeight: '400px', 
+        boxShadow: 4, 
+        ...searchBarMenuPosition,
+         ...{
+          ...scrollBar,
+          '&::-webkit-scrollbar-track': {
+            background: 'white',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'gray',
+          }
+        }
+      }}
+    >
+      { 
+        searchRes && searchRes.length>0 && searchRes.map(res => (
+
+          res.type && res.count && res.count>0 && res.result && res.result.length>0 && (
+            <Stack>
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} p={2} sx={{background: lighten(themeColors.red.palette.primary.main, 0), color: 'white'}}>
+                <Typography variant="body2" fontSize={'16px'}>{res.type}</Typography>
+                <Typography variant="body2">{`${res.count} results found`}</Typography>
+              </Box>
+              {
+                res.result.map(resEl => (
+                  <Tooltip title={resEl.name||''} placement="top-end">
+                    <Box width={'100%'} sx={{cursor: 'pointer', '&:hover': {backgroundColor: 'rgba(240, 237, 237, 0.8)'}}} display={'flex'} padding={1} gap={1} alignItems={'flex-start'}>
+                      {
+                        resEl.img && 
+                        <Box
+                          component="img"
+                          src={resEl.img}
+                          sx={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: '0.3em',
+                            flex: '0 0 auto',
+                          }}
+                        />
+                      }
+                      <Stack display={'flex'} flex={1} gap={1}>
+                        {resEl.name && <Typography variant="body2" flexWrap={'wrap'}>{resEl.name}</Typography>}
+                        {
+                          resEl.price && 
+                            <Box display={'flex'} gap={1} justifyContent={'flex-start'} alignItems={'flex-start'} flexWrap={'wrap'}>
+                              <Typography variant="body2" sx={{textDecoration: resEl.discount?'line-through':'none'}}>{formatToLKR(resEl.price)}</Typography>
+                              {resEl.discount && <Typography variant="body2" color={themeColors.red.palette.primary.main}>{formatToLKR(resEl.discount)}</Typography>}
+                            </Box>
+                        }
+                      </Stack>
+                    </Box>
+                  </Tooltip>
+                ))
+              }
+            </Stack>
+          )
+        ))  
+      }
+    </Stack>
+  )
+}
+
+const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, activeNav, navigate, setAllCategories, loading, setLoading }) => {
+
+  const { api } = useAxios();
+
+  if(!loading && (!allCategories || allCategories.length===0)){
+    getAllCategories(setAllCategories, setLoading, api)
+  }
+
+  return (
+    <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
+      <Box sx={{
+          zIndex: 99, 
+          background: '#191919', 
+          height: '100dvh',
+          position: 'fixed',
+          top: '137px',
+          left: 0,
+          width: 300,
+          boxShadow: 8,
+          display: {sx: 'flex', md: 'none'}
+        }}
+      >
+          <Tabs
+            value={tab}
+            onChange={(e, newValue) => setTabs(newValue)}
+            aria-label="basic tabs menu"
+            variant="fullWidth"
+            sx={{
+              // borderBottom: 1,
+              // borderColor: 'white',
+              // backgroundColor: themeColors.red.palette.primary.main, // Background color of Tabs
+              color: themeColors.red.palette.primary.main,
+              '& .MuiTabs-indicator': {
+                backgroundColor: themeColors.red.palette.primary.main, // Color of the indicator (underline)
+                height: '1.5px', // Height of the underline
+              },  // Text color of Tabs
+            }}
+          >
+            <Tab 
+              label="Menu" 
+              id="tab-0" 
+              aria-controls="tabpanel-0" 
+              sx={{ 
+                fontSize: '14px',
+                textTransform: 'none',
+                color: 'white',        // Color of the Tab labels
+                '&.Mui-selected': {
+                  color: themeColors.red.palette.primary.main,  
+                }, // Color when the Tab is selected
+              }}
+            />
+            <Tab 
+              label="All Categories"
+              id="tab-1" 
+              aria-controls="tabpanel-1"
+              sx={{ 
+                fontSize: '14px',
+                textTransform: 'none',
+                color: 'white',        // Color of the Tab labels
+                '&.Mui-selected': {
+                  color: themeColors.red.palette.primary.main,     // Color when the Tab is selected
+                }
+              }} 
+            />
+          </Tabs>
+
+        <TabPanel value={tab} index={0}>
+          <List
+            sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          >
+                <ListItemButton 
+                  onClick={()=>navigate('home')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'home' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'Home'} />
+                </ListItemButton>
+                <ListItemButton 
+                  onClick={()=>navigate('product')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'product' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'Products'} />
+                </ListItemButton>
+                <ListItemButton 
+                  onClick={()=>navigate('track')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'track' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'Track Orders'} />
+                </ListItemButton>
+                <ListItemButton 
+                  onClick={()=>navigate('about')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'about' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'About Us'} />
+                </ListItemButton>
+                <ListItemButton 
+                  onClick={()=>navigate('contact')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'contact' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'Conatct Us'} />
+                </ListItemButton>
+                <ListItemButton 
+                  onClick={()=>navigate('inquiries')}
+                  sx={{
+                    '&:hover': { 
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    },
+                    ...(activeNav === 'inquiries' && {
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: themeColors.red.palette.primary.main,
+                    })
+                  }}
+                >
+                    <ListItemText primary={'Inquiries'} />
+                </ListItemButton>
+          </List>
+        </TabPanel>
+        <TabPanel value={tab} index={1}>
+          <MenuList menuItems={allCategories}/>
+        </TabPanel>
+      </Box>
+    </Slide>
+  ); 
 })
 
 const Layout1Topbar = () => {
@@ -363,9 +562,94 @@ const Layout1Topbar = () => {
 
   const [sideMenuOn, setSideMenuOn] = useState(false)
 
+  const [dropDownOn, setDropDownOn] = useState(false)
+
+  const [searchBarOn, setSearchBarOn] = useState(true)
+
+  const [allCategories, setAllCategories] = useState(categories)
+
+  const [categoryLoading, setCategoryLoading] = useState(false)
+
+  const [searchLoading, setSearchLoading] = useState(false)
+
+  const [searchRes, setSearchRes] = useState(searchResult)
+
   const [tab, setTabs] = useState(0)
 
+  const [allCategoryDropDownMenuPosition, setAllCategoryDropDownMenuPosition] = useState({ top: 0, left: 0 })
+
+  const categoryButtonRef = useRef(null);
+
+  const [searchBarDropDownMenuPosition, setsearchBarDropDownMenuPosition] = useState({ top: 0, left: 0 })
+
+  const searchBarRef1 = useRef(null);
+  const searchBarRef2 = useRef(null);
+  const searchBarContainerRef = useRef(null);
+  const categoryDropDownContainerRef = useRef(null);
+
   const location = useLocation()
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (categoryButtonRef.current) {
+        const rect = categoryButtonRef.current.getBoundingClientRect();
+  
+        // Update the position on resize
+        setAllCategoryDropDownMenuPosition({
+          top: rect.bottom + 4, // Dropdown starts just below the button
+          left: rect.left,      // Align horizontally with the button
+          width: rect.width     // Match dropdown width with button width
+        });
+      }
+    };
+  
+    if (categoryButtonRef.current) {
+      // Set initial position
+      handleResize();
+  
+      // Add event listener for window resize
+      window.addEventListener('resize', handleResize);
+  
+      // Clean up the event listener when the component unmounts
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [dropDownOn]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      var rect;
+      if (!searchBarRef1.current || !searchBarRef2.current) return
+      
+      rect = (window.innerWidth<900?searchBarRef2:searchBarRef1).current.getBoundingClientRect();
+      // }else if(searchBarRef2.current){
+      //   rect = searchBarRef2.current.getBoundingClientRect();
+      
+      if(rect){
+        // Update the position on resize
+        setsearchBarDropDownMenuPosition({
+          top: rect.bottom + 4, // Dropdown starts just below the button
+          left: rect.left,      // Align horizontally with the button
+          width: rect.width     // Match dropdown width with button width
+        });
+      }
+    };
+  
+    if (searchBarRef1.current || searchBarRef2.current) {
+      // Set initial position
+      handleResize();
+  
+      // Add event listener for window resize
+      window.addEventListener('resize', handleResize);
+  
+      // Clean up the event listener when the component unmounts
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [searchRes]);
+  
 
   useEffect(() => {
     switch(location.pathname){
@@ -391,6 +675,32 @@ const Layout1Topbar = () => {
         setActiveNav('n')
     }
   }, [location])
+
+  useEffect(() => {
+    const handleClick = (event) => {
+      console.log(searchBarRef1.current,  searchBarRef2.current , searchBarContainerRef.current ,categoryDropDownContainerRef.current)
+
+      if(!searchBarRef1.current || !searchBarRef2.current || !searchBarContainerRef.current || !categoryDropDownContainerRef.current) return
+
+      if (!searchBarContainerRef.current.contains(event.target) && (!searchBarRef1.current.contains(event.target) || !searchBarRef2.current.contains(event.target)) && searchBarOn) {
+        setSearchBarOn(false)
+      } else if(!categoryDropDownContainerRef.current.contains(event.target) && dropDownOn){
+        setDropDownOn(false)
+      }
+
+      if(sideMenuOn && (searchBarOn || dropDownOn)) setSideMenuOn(false)
+    };
+  
+      // Add event listener for window resize
+    document.addEventListener('click', handleClick);
+    document.addEventListener('keydown', handleClick);
+  
+      // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('keydown', handleClick);
+    };
+  }, [])
 
   const [activeNav, setActiveNav] = useState('home')
 
@@ -470,15 +780,32 @@ const Layout1Topbar = () => {
 
 
                       {/* for categery bar */}
-                      <Box justifyContent={'center'} alignItems={'center'} minWidth={'170px'} width={'40%'} maxWidth={'180px'} sx={{display: { xs: 'none', md: 'flex' }, background: 'gray', padding: '0 0.2em', borderRadius: 1, cursor: 'pointer'}} color={'white'}>
+                      <Box 
+                        justifyContent={'center'} 
+                        alignItems={'center'} 
+                        minWidth={'170px'} 
+                        width={'40%'} 
+                        maxWidth={'220px'} 
+                        zIndex={100}
+                        sx={{
+                          display: { xs: 'none', md: 'flex' }, 
+                          background: 'gray', 
+                          padding: '0 0.2em', 
+                          borderRadius: 1, 
+                          cursor: 'pointer'
+                        }}
+                        color={'white'}
+                        onClick={()=>setDropDownOn(!dropDownOn)}
+                        ref={categoryButtonRef}
+                      >
                         <StyledIconButton>
                           <Menu />
                         </StyledIconButton>
-                        <Typography flex={1}>All categories</Typography>
-                        <ArrowDropDown />
+                        <Typography flex={1}>All Categories</Typography>
+                        {!dropDownOn?<ArrowDropDown />:<ArrowDropUp />}
                       </Box>
                       {/* for search bar */}
-                      <Box flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'none', md: 'flex' }, background: 'white', borderRadius: 1, minWidth: '190px'}}>
+                      <Box ref={searchBarRef1} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'none', md: 'flex' }, background: 'white', borderRadius: 1, minWidth: '190px'}}>
                         <TextField 
                           placeholder="Find your perfect match today!"
                           sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px'}}
@@ -500,7 +827,7 @@ const Layout1Topbar = () => {
                                 title='Login'
                                 label='Log in'
                                 variant="outlined"
-                                sx={{background: `white`, color: 'black',}}
+                                sx={{background: `white`, color: 'black'}}
                                 fun={() => navigates('/login')}
                               ></TButton>
                               <TButton
@@ -647,16 +974,8 @@ const Layout1Topbar = () => {
                         <Menu sx={{padding: 0}}/>
                       </StyledIconButton>
                     </Box>
-                    {/* for categery bar */}
-                    {/* <Box justifyContent={'center'} alignItems={'center'} minWidth={'130px'} width={'40%'} maxWidth={'180px'} sx={{display: { xs: 'flex', md: 'none' }, background: 'gray', padding: '0 0.2em', borderRadius: 1, cursor: 'pointer', position: 'relative', left: '-10px'}} color={'white'}>
-                      <StyledIconButton>
-                        <Menu />
-                      </StyledIconButton>
-                      <Typography flex={1} ml={0.8}>All categories</Typography>
-                      <ArrowDropDown />
-                    </Box> */}
                     {/* for search bar */}
-                    <Box flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'flex', md: 'none' }, background: 'white', borderRadius: 1, position: 'relative', left: '-10px'}}>
+                    <Box ref={searchBarRef2} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'flex', md: 'none' }, background: 'white', borderRadius: 1, position: 'relative', left: '-10px'}}>
                       <TextField 
                         placeholder="Find your perfect match today!"
                         sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px'}}
@@ -728,7 +1047,9 @@ const Layout1Topbar = () => {
           }
         </TopbarContainer>
       </TopbarRoot>
-      { (!user || user==='USER' || user==='GUEST') && <SideMenu sideMenuOn={sideMenuOn} tab={tab} setTabs={setTabs} navigates={navigates} activeNav={activeNav} navigate={navigate}/>}
+      { (!user || user==='USER' || user==='GUEST') && <SideMenu sideMenuOn={sideMenuOn} tab={tab} setTabs={setTabs} navigates={navigates} activeNav={activeNav} navigate={navigate} allCategories={allCategories} setAllCategories={setAllCategories} loading={categoryLoading} setLoading={setCategoryLoading}/>}
+      { (!user || user==='USER' || user==='GUEST') && <AllCategoryDropDown ref={categoryDropDownContainerRef} dropDownOn={dropDownOn} navigates={navigates} activeNav={activeNav} navigate={navigate} allCategories={allCategories} setAllCategories={setAllCategories} loading={categoryLoading} setLoading={setCategoryLoading} menuPosition={allCategoryDropDownMenuPosition}/>}
+      <SearchBarDropDown ref={searchBarContainerRef} searchBarOn={searchBarOn} navigates={navigates} searchRes={searchRes} loading={searchLoading} setLoading={setSearchLoading} searchBarMenuPosition={searchBarDropDownMenuPosition}/>
     </React.Fragment>  
   );
 };

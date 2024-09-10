@@ -8,7 +8,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router-dom';
 import { themeColors } from '../MatxTheme/themeColors';
 
-export default function Menu({ menuItems }) {
+export default function Menu({ menuItems, bgcolor, hoverColor }) {
 
   const [open, setOpen] = useState({});
 
@@ -32,7 +32,7 @@ export default function Menu({ menuItems }) {
               sx={{
                 '&:hover': { 
                   backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  color: themeColors.red.palette.primary.main,
+                  color: hoverColor||themeColors.red.palette.primary.main,
                 },
               }}
             >
@@ -54,7 +54,7 @@ export default function Menu({ menuItems }) {
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
+      sx={{ width: '100%', maxWidth: 360, bgcolor: bgcolor||'#191919', color: 'white' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
