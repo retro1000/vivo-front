@@ -12,7 +12,6 @@ import {
   Typography,
   Stack,
   TextField,
-  Tooltip,
   Slide,
   Tabs,
   Tab,
@@ -52,6 +51,7 @@ import SearchIcon from '@mui/icons-material/Search'
 
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
+import { forwardRef } from "react";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -91,11 +91,6 @@ const StyledItem = styled(MenuItem)(({ theme }) => ({
     textDecoration: "none"
   },
   "& span": { marginRight: "10px", color: theme.palette.text.primary }
-}));
-
-const IconBox = styled("div")(({ theme }) => ({
-  display: "inherit",
-  [theme.breakpoints.down("md")]: { display: "none !important" }
 }));
 
 const scrollBar = {
@@ -207,12 +202,14 @@ const searchResult = [
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'Smartphone X10',                 // Product name
         price: 150000,                          // Original price
-        discount: 130000                        // Discounted price (optional)
+        discount: 130000,                        // Discounted price (optional)
+        nav: '/product/view/1'
       },
       {
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes   Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes Men Shoes 2024 Casual Fashion Outdoor Breatable Comfortable Male Sneakers Mesh Wear-resistant Student Running Training Shoes',
-        price: 25000
+        price: 25000,
+        nav: '/product/view/1'
       }
     ]
   },
@@ -223,7 +220,8 @@ const searchResult = [
       {
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'Modern Chair',
-        price: 12000
+        price: 12000,
+        nav: 'http://new/product/view/1'
       }
     ]
   },
@@ -235,25 +233,24 @@ const searchResult = [
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'Leather Jacket',
         price: 50000,
-        discount: 45000
+        discount: 45000,
+        nav: '/product/view/1'
       },
       {
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'Jeans',
-        price: 8000
+        price: 8000,
+        nav: '/product/view/1'
       },
       {
         img: 'https://www.cucoo.lk/wp-content/uploads/2024/01/Men-Shoes-2023-Casual-Fashion-Outdoor-Breatable-Comfortable-Male-Sneakers-Mesh-Wear-resistant-Student-Running-Training-768x768.webp',  // Image URL
         name: 'T-Shirt',
-        price: 3000
+        price: 3000,
+        nav: '/product/view/1'
       }
     ]
   }
 ];
-
-
-
-
 
 const getAllCategories = async (setAllCategories, setLoading, api) => {
 
@@ -270,7 +267,7 @@ const getAllCategories = async (setAllCategories, setLoading, api) => {
     .finally(() => setLoading(false))
 }
 
-const AllCategoryDropDown = memo(({ ref, dropDownOn, allCategories, setAllCategories, loading, setLoading, menuPosition }) => {
+const AllCategoryDropDown = memo(forwardRef(({ dropDownOn, allCategories, setAllCategories, loading, setLoading, menuPosition }, ref) => {
 
   const { api } = useAxios();
   const theme = useTheme();
@@ -280,9 +277,9 @@ const AllCategoryDropDown = memo(({ ref, dropDownOn, allCategories, setAllCatego
     getAllCategories(setAllCategories, setLoading, api)
   }
 
-  return !isMdScreen && (
-    <div style={{display: {sx: 'none', md: 'flex'}}}>
-      <Slide direction="down" in={dropDownOn} mountOnEnter unmountOnExit ref={ref}>
+  return (
+    <div style={{display: {sx: 'none', md: 'flex'}}} ref={ref}>
+      <Slide direction="down" in={dropDownOn} mountOnEnter unmountOnExit>
         <Box 
           sx={{
             display: {sx: 'none', md: 'flex'},
@@ -305,16 +302,39 @@ const AllCategoryDropDown = memo(({ ref, dropDownOn, allCategories, setAllCatego
       </Slide>
     </div>
   )
-})
+}))
 
-const SearchBarDropDown = ({ ref, searchBarOn, navigates, searchRes, loading, setLoading, searchBarMenuPosition }) => {
+const SearchBar = memo(forwardRef(({ search, searchVal, sx }, ref) => {
+  return (
+    <Box ref={ref} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'none', md: 'flex' }, background: 'white', borderRadius: 1, minWidth: '190px', ...sx}}>
+      <form onSubmit={search} style={{width: '100%'}}>
+        <TextField 
+          placeholder="Find your perfect match today!"
+          sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px', width: '100%'}}
+          type="search"
+          value={searchVal.trim()}
+          focused
+          size="small"
+          onChange={search}
+        />
+      </form>
+      <Box display={'flex'} sx={{position: 'relative', background: 'white'}} alignItems={'center'} mr={1}>
+        <TIconButton icon={SearchIcon} title={'Search'} fun={search} color={themeColors.red.palette.secondary.main} name={'search'} disabled={searchVal===undefined || searchVal.trim()===''}></TIconButton>
+        <TIconButton icon={PhotoCamera} title={'Search by image'} fun={search} color={themeColors.red.palette.secondary.main} name={'img'}></TIconButton>
+      </Box>
+    </Box>
+  )
+}))
+
+const SearchBarDropDown = memo(forwardRef(({ searchBarOn, navigates, searchRes, loading, setLoading, searchBarMenuPosition }, ref ) => {
 
   const { formatToLKR } = useFormatter()
 
-  return searchBarOn && (
+  return (
     <Stack 
       ref={ref}
       zIndex={199} 
+      display={searchBarOn ? 'flex' : 'none'}
       sx={{
         position: 'absolute', 
         background: 'white', 
@@ -345,8 +365,7 @@ const SearchBarDropDown = ({ ref, searchBarOn, navigates, searchRes, loading, se
               </Box>
               {
                 res.result.map(resEl => (
-                  <Tooltip title={resEl.name||''} placement="top-end">
-                    <Box width={'100%'} sx={{cursor: 'pointer', '&:hover': {backgroundColor: 'rgba(240, 237, 237, 0.8)'}}} display={'flex'} padding={1} gap={1} alignItems={'flex-start'}>
+                    <Box width={'100%'} sx={{cursor: 'pointer', '&:hover': {backgroundColor: 'rgba(240, 237, 237, 0.8)'}}} display={'flex'} padding={1} gap={1} alignItems={'flex-start'} onClick={()=> resEl.nav && window.open(''+resEl.nav)}>
                       {
                         resEl.img && 
                         <Box
@@ -371,7 +390,6 @@ const SearchBarDropDown = ({ ref, searchBarOn, navigates, searchRes, loading, se
                         }
                       </Stack>
                     </Box>
-                  </Tooltip>
                 ))
               }
             </Stack>
@@ -380,7 +398,7 @@ const SearchBarDropDown = ({ ref, searchBarOn, navigates, searchRes, loading, se
       }
     </Stack>
   )
-}
+}))
 
 const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, activeNav, navigate, setAllCategories, loading, setLoading }) => {
 
@@ -564,7 +582,7 @@ const Layout1Topbar = () => {
 
   const [dropDownOn, setDropDownOn] = useState(false)
 
-  const [searchBarOn, setSearchBarOn] = useState(true)
+  const [searchBarOn, setSearchBarOn] = useState(false)
 
   const [allCategories, setAllCategories] = useState(categories)
 
@@ -572,7 +590,12 @@ const Layout1Topbar = () => {
 
   const [searchLoading, setSearchLoading] = useState(false)
 
-  const [searchRes, setSearchRes] = useState(searchResult)
+  const [loading, setLoading] = useState(false)
+
+  const [searchRes, setSearchRes] = useState([])
+
+  const [searchVal, setSearchVal] = useState("") 
+  const [searchImg, setSearchImg] = useState(null)
 
   const [tab, setTabs] = useState(0)
 
@@ -586,8 +609,11 @@ const Layout1Topbar = () => {
   const searchBarRef2 = useRef(null);
   const searchBarContainerRef = useRef(null);
   const categoryDropDownContainerRef = useRef(null);
+  const hiddenFIleInputRef = useRef(null);
 
   const location = useLocation()
+
+  const { api, apiNonAuth } = useAxios()
 
   useEffect(() => {
     const handleResize = () => {
@@ -623,11 +649,8 @@ const Layout1Topbar = () => {
       if (!searchBarRef1.current || !searchBarRef2.current) return
       
       rect = (window.innerWidth<900?searchBarRef2:searchBarRef1).current.getBoundingClientRect();
-      // }else if(searchBarRef2.current){
-      //   rect = searchBarRef2.current.getBoundingClientRect();
       
       if(rect){
-        // Update the position on resize
         setsearchBarDropDownMenuPosition({
           top: rect.bottom + 4, // Dropdown starts just below the button
           left: rect.left,      // Align horizontally with the button
@@ -637,13 +660,10 @@ const Layout1Topbar = () => {
     };
   
     if (searchBarRef1.current || searchBarRef2.current) {
-      // Set initial position
       handleResize();
   
-      // Add event listener for window resize
       window.addEventListener('resize', handleResize);
   
-      // Clean up the event listener when the component unmounts
       return () => {
         window.removeEventListener('resize', handleResize);
       };
@@ -678,15 +698,17 @@ const Layout1Topbar = () => {
 
   useEffect(() => {
     const handleClick = (event) => {
-      console.log(searchBarRef1.current,  searchBarRef2.current , searchBarContainerRef.current ,categoryDropDownContainerRef.current)
-
-      if(!searchBarRef1.current || !searchBarRef2.current || !searchBarContainerRef.current || !categoryDropDownContainerRef.current) return
-
-      if (!searchBarContainerRef.current.contains(event.target) && (!searchBarRef1.current.contains(event.target) || !searchBarRef2.current.contains(event.target)) && searchBarOn) {
-        setSearchBarOn(false)
-      } else if(!categoryDropDownContainerRef.current.contains(event.target) && dropDownOn){
+      if(!searchBarRef1.current || !searchBarRef2.current || !searchBarContainerRef.current || !categoryDropDownContainerRef.current || !categoryButtonRef.current) return
+      
+      if(searchBarContainerRef.current.contains(event.target) || searchBarRef1.current.contains(event.target) || searchBarRef2.current.contains(event.target)){
+        setSideMenuOn(false)
         setDropDownOn(false)
-      }
+      }else setSearchBarOn(false)
+console.log(event.target, categoryButtonRef.current, categoryDropDownContainerRef.current.contains(event.target) , categoryButtonRef.current.contains(event.target))
+      if(categoryDropDownContainerRef.current.contains(event.target) || categoryButtonRef.current.contains(event.target)){
+        setSideMenuOn(false)
+        setSearchBarOn(false)
+      }else setDropDownOn(false)
 
       if(sideMenuOn && (searchBarOn || dropDownOn)) setSideMenuOn(false)
     };
@@ -758,6 +780,82 @@ const Layout1Topbar = () => {
     }
   }
 
+  const search = (event) => {
+    switch(event.type){
+      case 'submit':
+        setLoading(true)
+        setSearchVal(searchVal+' ')
+        break
+      case 'change':
+        setSearchVal(event.target.value)
+        if (searchBarRef1.current) {
+          searchBarRef1.current.children[0].children[0].focus();
+        }
+        setSearchLoading(true)
+        break
+      case 'click':
+        setLoading(true)
+        if(event.target.name==='search' || event.target.parentNode.name==='search' || event.target.parentNode.parentNode.name==='search'){
+          setSearchVal(searchVal+' ')
+        }
+        if(event.target.name==='img' || event.target.parentNode.name==='img' || event.target.parentNode.parentNode.name==='img'){
+          hiddenFIleInputRef.current.click()
+        }
+        break
+      default:
+    }
+  }
+
+  useEffect(() => {
+
+    const search = async () => {
+
+      const formData = new FormData()
+      if(searchImg) formData.append('img', searchImg)
+
+      if(searchVal || searchImg){ 
+        await apiNonAuth.post(
+          `/search${searchImg?'':'?value='+searchVal}`, 
+          searchImg && formData,
+          {
+            headers: searchImg ? { 'Content-Type': 'multipart/form-data' } : {}
+          }
+        )
+          .then(response => {
+            if(response.status===200){
+              if(searchVal) setSearchRes(response.data)
+              else if(searchImg) navigate(`/search${searchImg?'':'?value='+searchVal}`, {state: {searchVal: searchVal, searchImg: searchImg, ...response.data}})
+            }
+            if(response.status===204){
+              setSearchRes([])
+            }
+          })
+          .catch(error => {
+
+          })
+          .finally(() => {
+            setSearchImg(null)
+            setLoading(false)
+            setSearchLoading(false)
+
+            // for testing
+            setSearchRes(searchResult)
+            setSearchBarOn(true)
+          })
+        }
+      }
+
+      search()
+
+  }, [searchVal, searchImg])
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSearchImg(file);
+    }
+  };
+
   return (
     <React.Fragment>
       <TopbarRoot>
@@ -780,44 +878,50 @@ const Layout1Topbar = () => {
 
 
                       {/* for categery bar */}
-                      <Box 
-                        justifyContent={'center'} 
-                        alignItems={'center'} 
-                        minWidth={'170px'} 
-                        width={'40%'} 
-                        maxWidth={'220px'} 
-                        zIndex={100}
-                        sx={{
-                          display: { xs: 'none', md: 'flex' }, 
-                          background: 'gray', 
-                          padding: '0 0.2em', 
-                          borderRadius: 1, 
-                          cursor: 'pointer'
-                        }}
-                        color={'white'}
-                        onClick={()=>setDropDownOn(!dropDownOn)}
-                        ref={categoryButtonRef}
-                      >
-                        <StyledIconButton>
-                          <Menu />
-                        </StyledIconButton>
-                        <Typography flex={1}>All Categories</Typography>
-                        {!dropDownOn?<ArrowDropDown />:<ArrowDropUp />}
-                      </Box>
-                      {/* for search bar */}
-                      <Box ref={searchBarRef1} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'none', md: 'flex' }, background: 'white', borderRadius: 1, minWidth: '190px'}}>
-                        <TextField 
-                          placeholder="Find your perfect match today!"
-                          sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px'}}
-                          type="search"
-                          focused
-                          size="small"
-                        />
-                        <Box display={'flex'} sx={{position: 'relative', background: 'white'}} alignItems={'center'} mr={1} gap={1}>
-                          <Tooltip title="Search"><SearchIcon sx={{cursor: 'pointer'}}/></Tooltip>
-                          <Tooltip title="Search by image"><PhotoCamera sx={{cursor: 'pointer'}}/></Tooltip>
+                      <div ref={categoryButtonRef}>
+                        <Box 
+                          justifyContent={'center'} 
+                          alignItems={'center'} 
+                          minWidth={'170px'} 
+                          width={'40%'} 
+                          maxWidth={'220px'} 
+                          zIndex={100}
+                          sx={{
+                            display: { xs: 'none', md: 'flex' }, 
+                            background: 'gray', 
+                            padding: '0 0.2em', 
+                            borderRadius: 1, 
+                            cursor: 'pointer'
+                          }}
+                          color={'white'}
+                          onClick={()=>setDropDownOn(!dropDownOn)}
+                        >
+                          <StyledIconButton>
+                            <Menu />
+                          </StyledIconButton>
+                          <Typography flex={1}>All Categories</Typography>
+                          {!dropDownOn?<ArrowDropDown />:<ArrowDropUp />}
                         </Box>
-                      </Box>
+                      </div>
+                      {/* for search bar */}
+                      <SearchBar search={search} ref={searchBarRef1} searchVal={searchVal}/>
+                      {/* <Box ref={searchBarRef1} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'none', md: 'flex' }, background: 'white', borderRadius: 1, minWidth: '190px'}}>
+                        <form onSubmit={search} style={{width: '100%'}}>
+                          <TextField 
+                            placeholder="Find your perfect match today!"
+                            sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px', width: '100%'}}
+                            type="search"
+                            value={searchVal.trim()}
+                            focused
+                            size="small"
+                            onChange={search}
+                          />
+                        </form>
+                        <Box display={'flex'} sx={{position: 'relative', background: 'white'}} alignItems={'center'} mr={1} gap={1}>
+                          <TIconButton icon={SearchIcon} title={'Search'} fun={search} color={themeColors.red.palette.secondary.main} name={'search'} disabled={searchVal===undefined || searchVal.trim()===''}></TIconButton>
+                          <TIconButton icon={PhotoCamera} title={'Search by image'} fun={search} color={themeColors.red.palette.secondary.main} name={'img'}></TIconButton>
+                        </Box>
+                      </Box> */}
 
                       {
                         !user ?
@@ -975,7 +1079,8 @@ const Layout1Topbar = () => {
                       </StyledIconButton>
                     </Box>
                     {/* for search bar */}
-                    <Box ref={searchBarRef2} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'flex', md: 'none' }, background: 'white', borderRadius: 1, position: 'relative', left: '-10px'}}>
+                    <SearchBar search={search} ref={searchBarRef2} searchVal={searchVal} sx={{display: { xs: 'flex', md: 'none' }}}/>
+                    {/* <Box ref={searchBarRef2} flex={1} display={'flex'} alignItems={'center'} sx={{display: { xs: 'flex', md: 'none' }, background: 'white', borderRadius: 1, position: 'relative', left: '-10px'}}>
                       <TextField 
                         placeholder="Find your perfect match today!"
                         sx={{background: 'white', borderRadius: 1, flex: 1, height: '39.5px'}}
@@ -987,7 +1092,7 @@ const Layout1Topbar = () => {
                         <Tooltip title="Search"><SearchIcon sx={{cursor: 'pointer'}}/></Tooltip>
                         <Tooltip title="Search by image"><PhotoCamera sx={{cursor: 'pointer'}}/></Tooltip>
                       </Box>
-                    </Box>
+                    </Box> */}
                   </Box>
                 </Box>
               </Stack>  
@@ -1050,6 +1155,7 @@ const Layout1Topbar = () => {
       { (!user || user==='USER' || user==='GUEST') && <SideMenu sideMenuOn={sideMenuOn} tab={tab} setTabs={setTabs} navigates={navigates} activeNav={activeNav} navigate={navigate} allCategories={allCategories} setAllCategories={setAllCategories} loading={categoryLoading} setLoading={setCategoryLoading}/>}
       { (!user || user==='USER' || user==='GUEST') && <AllCategoryDropDown ref={categoryDropDownContainerRef} dropDownOn={dropDownOn} navigates={navigates} activeNav={activeNav} navigate={navigate} allCategories={allCategories} setAllCategories={setAllCategories} loading={categoryLoading} setLoading={setCategoryLoading} menuPosition={allCategoryDropDownMenuPosition}/>}
       <SearchBarDropDown ref={searchBarContainerRef} searchBarOn={searchBarOn} navigates={navigates} searchRes={searchRes} loading={searchLoading} setLoading={setSearchLoading} searchBarMenuPosition={searchBarDropDownMenuPosition}/>
+      <input type="file" ref={hiddenFIleInputRef} style={{display: 'none'}} onChange={handleFileChange} accept=".jpg,.jpeg,.png" />
     </React.Fragment>  
   );
 };
