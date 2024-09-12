@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, IconButton, Checkbox, Avatar, Icon } from '@mui/material';
+import { Box, Typography, IconButton, Icon } from '@mui/material';
 import BinIcon from '@mui/icons-material/Delete';
 import { QuantitySelector } from 'app/components';
 import { useFormatter } from 'app/hooks/useFormatter';

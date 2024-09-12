@@ -112,6 +112,53 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
           }   
         ])
         break;
+      case 'purchase-orders':
+        setPath('/purchase-order')
+        setSelectedAction('STATUS')
+        setSearchOptions({
+          menuActions: [
+            {value:'STATUS', label: 'Seach by order status'},
+            {value:'WAYBILL', label: 'Seach by order waybill'},
+            {value:'ORDER_NO', label: 'Seach by order number'},
+            {value:'ORDER_ID', label: 'Seach by order id'},
+            {value:'CUSTOMER_NAME', label: 'Seach by customer name'},
+            {value:'ALL', label: 'Seach by anything'},
+          ], 
+          // search: , 
+          placeholder: 'Search orders'
+        })
+        setColumns([
+          {name: 'Order Id', options: {display: 'exclude'}},
+          {name:'orderNo', label:'Order No'},
+          {name:'waybill', label:'Waybill'},
+          {name:'customerName', label:'Customer Name'},
+          {name:'address', label:'Address'},
+          {name:'contactNos', label:'Contact Numbers'},
+          {name:'status', label:'Status'},
+          {
+            name: "Actions",
+            label: "Actions",
+            options: {
+              sort: false,
+              buttonsConfig: [
+                {
+                  type: "icon",
+                  title: "View item",
+                  icon: ViewIcon,
+                  color: "primary",
+                  size: "small",
+                  onClick: (index) => {
+                    window.location.href = `/purchase-order/view/${dataTableData[index][0]}`
+                  },
+                  onMouseDown: (index) => {
+                    window.open(`/purchase-order/view/${dataTableData[index][0]}`, '_blank')
+                  }, 
+                },
+              ]
+            }
+          }   
+        ])
+        break;
       default:
         console.log(searchOptions)
         break;
