@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import SearchBar from '@mkyy/mui-search-bar';
+import { themeColors } from '../MatxTheme/themeColors';
 
 const CustomSearchBar = styled(SearchBar)(({ theme }) => ({
     '& .MuiInputBase-root': {
@@ -12,7 +13,7 @@ const CustomSearchBar = styled(SearchBar)(({ theme }) => ({
         borderColor: 'black',
       },
       '&.Mui-focused': {
-        borderColor: '#1976D2',
+        borderColor: themeColors.red.palette.primary.main,
         borderWidth: '2px',
         // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
       },
@@ -28,6 +29,7 @@ function SearchBarDefault({ style, sx, value, setValue, search, placeholder }){
         onChange={newValue => setValue(newValue)}
         onSearch={search}
         placeholder={placeholder?placeholder:'Search...'}
+        onCancelResearch={() => setValue('')}
     />
     );
 }

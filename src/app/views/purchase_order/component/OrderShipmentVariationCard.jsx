@@ -1,15 +1,11 @@
 import { useState } from "react";
 
-import { Stack, Box, Typography, IconButton, Checkbox } from "@mui/material";
-import { useFormatter } from "app/hooks/useFormatter";
-import BinIcon from '@mui/icons-material/Delete';
+import { Box, Typography, Checkbox } from "@mui/material";
 import { QuantitySelector } from "app/components";
 
-function OrderShipmentVariationCard({ item }) {
+function OrderShipmentVariationCard({ item, handleCheck }) {
 
   const [quantity, setQuantity] = useState(2);
-
-  const { formatToLKR } = useFormatter()
 
   return (
     <Box
@@ -26,7 +22,13 @@ function OrderShipmentVariationCard({ item }) {
     >
 
       <Box display={'flex'} alignItems={'flex-start'} width={'100%'}>
-        <Checkbox size="small" sx={{position: 'relative', top: '0'}}/>
+      {item.checkBox && (
+        <Checkbox
+          size="small"
+          checked={item.checked}
+          onChange={() => {handleCheck(item.id)}}
+        />
+      )}
         <Box flex={1} width={"100%"} display={'flex'} flexWrap={'wrap'} justifyContent={'center'} gap={1}>
           <Box width={'70%'} minWidth={'400px'} display={'flex'} gap={'1em'} justifyContent={'space-between'} alignItems={'flex-start'} flex={1}>
             {
@@ -63,7 +65,7 @@ function OrderShipmentVariationCard({ item }) {
                 alignItems: 'center',
               }}
             >
-              <QuantitySelector count={item.quantity} setCount={setQuantity} limit={item.limit || -1} />
+              <QuantitySelector count={item.quantity} setCount={setQuantity} limit={item.limit || -1} lowLimit={item.lowLimit || 0}/>
             </Box>
           }
           </Box>

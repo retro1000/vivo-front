@@ -63,10 +63,17 @@ const MatxTheme = ({ children }) => {
       MuiSelect: {
         styleOverrides: {
           root: {
-            fontSize: '15px',
+            fontSize: '14px',
             fontFamily: 'Poppins, Arial, sans-serif', // Apply Poppins to MenuItem text
           },
         },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+          }
+        }
       },
       // MuiTypography: {
       //   styleOverrides: {

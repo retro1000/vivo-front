@@ -193,6 +193,7 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
           setSearchText={setSearchText}
           setFilterToggle={handleToggle}
           showBox={showBox}
+          fieldSearch={false}
         >
           {children?true:false}
         </SearchPane>

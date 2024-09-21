@@ -4,7 +4,7 @@ import React from "react";
 import { SearchBarDefault, TButton, TIconButton } from ".";
 import FilterIcon from '@mui/icons-material/FilterAlt'
 
-const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText, setSearchText, search, placeholder, children, setFilterToggle, showBox}) => {
+const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText, setSearchText, search, placeholder, children, setFilterToggle, showBox, fieldSearch}) => {
 
     return(
         <Box
@@ -14,7 +14,7 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
             sx={{ width: "100%", zIndex: '10' }}
         >
             <Select
-                sx={{ width: "20%" }}
+                sx={{ width: 'max-content' }}
                 value={selectedAction}
                 size="small"
                 onChange={(event) => setSelectedAction(event.target.value)}
@@ -27,13 +27,13 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
             </Select>
             <SearchBarDefault
                 style={{flex: 1}}
-                // sx={{ width: "80%" }}
+                sx={{ minWidth: "200px" }}
                 value={searchText}
                 setValue={setSearchText}
                 placeholder={placeholder}
                 search={search}
             ></SearchBarDefault>
-            <TButton title='Search' label='Search' variant={'contained'} color={'primary'} ></TButton>
+            {!fieldSearch && <TButton title='Search' label='Search' variant={'contained'} color={'primary'}></TButton>}
             {children?<TIconButton title='Filter' icon={FilterIcon} fun={setFilterToggle} color={showBox?'primary':'secondary'} sx={{opacity: '0.7'}}></TIconButton>:''}
         </Box>
     );
