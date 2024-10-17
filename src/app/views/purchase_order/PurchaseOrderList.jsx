@@ -49,7 +49,6 @@ function PurchaseOrderList() {
 
         <Stack alignItems={'center'} justifyContent={'center'} spacing={3}>
             <FilterTable table='purchase-orders' dataTableData={datatableData} selectableRows={true} title={'Orders'} filters={filters} setFilters={setFilters}>
-
                 <Box
                   display={"flex"}
                   flexWrap={"wrap"}
