@@ -458,7 +458,7 @@ function OrderView() {
         <Breadcrumb
           routeSegments={[
             { name: "Orders", path: "/order/list" },
-            { name: "view" },
+            { name: "Order Details" },
           ]}
         />
       </Box>

@@ -1,20 +1,21 @@
 import { IconButton, Tooltip } from "@mui/material";
+import React, { forwardRef } from "react";
 
-const TIconButton = ({ sx, key, title, color, size, variant, fun, icon: Icon, ref, fun2 }) => {
-    return(
-        <Tooltip key={key} title={title} ref={ref}>
-            <IconButton
-                sx={sx}
-                color={color}
-                variant={variant}
-                size={size}
-                onClick={fun}
-                onMouseDown={fun2}
-            >
-                <Icon />
-            </IconButton>
-        </Tooltip>
-    )
-}
+const TIconButton = forwardRef(({ sx, key, title, color, size, variant, fun, icon: Icon, fun2 }, ref) => {
+  return (
+    <Tooltip key={key} title={title}>
+      <IconButton
+        ref={ref}  // Use the ref passed by forwardRef here
+        onClick={fun}
+        color={color}
+        size={size}
+        variant={variant}
+        sx={sx}
+      >
+        <Icon />
+      </IconButton>
+    </Tooltip>
+  );
+});
 
-export default TIconButton
+export default TIconButton;

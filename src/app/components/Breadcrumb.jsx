@@ -48,20 +48,20 @@ export default function Breadcrumb({ routeSegments }) {
       ) : null} */}
 
       <Breadcrumbs
-        separator={<NavigateNext sx={{ color: "text.hint" }} />}
+        separator={<NavigateNext sx={{ color: "text.hint"}} />}
         sx={{ display: "flex", alignItems: "center", position: "relative" }}>
         <NavLink to="/">
-          <StyledIcon color="primary" />
+          <SubName sx={{fontSize: "14px"}}>Home</SubName>
         </NavLink>
 
         {routeSegments
           ? routeSegments.map((route, index) => {
               return index !== routeSegments.length - 1 ? (
                 <NavLink key={index} to={route.path}>
-                  <SubName>{route.name}</SubName>
+                  <SubName sx={{fontSize: "14px"}}>{route.name}</SubName>
                 </NavLink>
               ) : (
-                <SubName key={index}>{route.name}</SubName>
+                <SubName key={index} sx={{fontSize: "14px"}}>{route.name}</SubName>
               );
             })
           : null}

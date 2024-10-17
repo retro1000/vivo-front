@@ -31,6 +31,10 @@ const useFormatter = () => {
         return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
     }
 
+    const TitleCaseWordFormat = (word) => {
+        return (word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    }
+
     const PaymentMethod = (method) => {
         switch(method){
             case 'COD':
@@ -46,7 +50,7 @@ const useFormatter = () => {
         }
     }
   
-    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat }
+    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat }
   }
   
   export {useFormatter}

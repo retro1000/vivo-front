@@ -1,55 +1,9 @@
-import { useState } from "react";
-import {
-  styled,
-  Stack,
-  Box,
-  Radio,
-  FormControlLabel,
-  RadioGroup,
-  Grid,
-  Select,
-  MenuItem,
-  Typography,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import TextField from "@mui/material/TextField";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-
-import moment from "moment";
-
-import {
-  MuiTable,
-  SearchableSelectMultiple,
-  FileUpload,
-  NumberFormatField,
-  SearchSelectAdd,
-} from "..";
-
+import { Box, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack, TextField, Typography } from "@mui/material";
+import { FileUpload, MuiTable, NumberFormatField, SearchableSelectMultiple, SearchSelectAdd } from "..";
 import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-
-import AddIcon from "@mui/icons-material/Add";
-import MinusIcon from "@mui/icons-material/Remove";
-import { useEffect } from "react";
-
-const AccordionRoot = styled("div")(({ theme }) => ({
-  width: "100%",
-  "& .heading": {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-}));
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
 
 let f_index = 0;
 
@@ -262,186 +216,22 @@ const createFormFields = (fields, submit) => {
   });
 };
 
-
-const formMaxHeight = 500;
-
-export default function PopupFormDialog({
-  popupSx = "md",
-  open,
-  titleIcon: TitleIcon,
-  title,
-  setOpen,
-  message,
-  fields,
-  submitButton,
-  reasonCloseOn = false,
-  setValues,
-  submit,
-  children,
-  loading,
-  disableSubmit
-}) {
-
-  const [expand, setExpand] = useState([]);
-
-  useEffect(() => {
-    fields && fields.length>0 && setExpand(fields.map((f, index) => index === 0));
-  }, []);
-
-  const handleClose = (event, reason) => {
-    if (
-      !reasonCloseOn ||
-      (reason !== "backdropClick" && reason !== "escapeKeyDown")
-    ) {
-      setOpen(false);
-      setValues && setValues({});
-      setExpand([]);
-    }
-  };
-
-  const handleAccordionClick = (i) => {
-    setExpand(expand.map((e, index) => (i === index ? !e : e)));
-  };
-
-  const handleSubmit = () => {
-    submit();
-    setOpen(false);
-    setValues && setValues({})
-  };
-
-  return (
-    <Box>
-      <Dialog
-        sx={{ "& .MuiPaper-root": { borderRadius: "10px" } }}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-        maxWidth={popupSx}
-        fullWidth={true}
-      >
-        <DialogTitle
-          id="form-dialog-title"
-          sx={{ borderBottom: "1px solid silver" }}
-        >
-          {TitleIcon ? (
-            <Grid
-              marginLeft={"-18px"}
-              display={"flex"}
-              gap={"0.5em"}
-              justifyContent={"flex-start"}
-              alignItems={"center"}
-            >
-              {TitleIcon}
-              <Typography variant="h6" sx={{ color: "gray" }}>
-                {title}
-              </Typography>
-            </Grid>
-          ) : (
-            <Typography
-              marginLeft={"-18px"}
-              variant="h6"
-              sx={{ color: "gray" }}
-            >
-              {title}
-            </Typography>
-          )}
-        </DialogTitle>
-
-        <DialogContent
-          fullWidth={true}
-          sx={{ overflowY: "auto", maxHeight: "500px" }}
-        >
-          {/* <DialogContentText sx={{marginBottom: '1.2em'}}>
-            {message ? message : ''}
-          </DialogContentText> */}
-          <br></br>
-          <Box
+const FieldCreator = ({ fields, submit }) => {
+    return(
+        <Box
             sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              width: "100%",
-              flexWrap: "wrap",
+                display: "flex",
+                alignItems: "flex-start",
+                width: "100%",
+                flexWrap: "wrap",
+                overflowY: "auto"
             }}
             spacing={3}
             gap={3}
-          >
-            {children}
-            {fields && fields.length > 0
-              ? fields.map((field, index) => (
-                  <AccordionRoot key={field.title}>
-                    {index === 0 ? "" : <br></br>}
-                    <Accordion
-                      sx={{ padding: "none", boxShadow: "none" }}
-                      defaultExpanded={index === 0}
-                    >
-                      <AccordionSummary
-                        style={{
-                          padding: "0",
-                          borderBottom: "0.1em solid gray",
-                          minHeight: "0",
-                          height: "25px",
-                          color: "gray",
-                          fontSize: "1.1em",
-                        }}
-                        expandIcon={(() => {
-                          return !expand[index] ? (
-                            <MinusIcon sx={{ color: "gray" }} />
-                          ) : (
-                            <AddIcon sx={{ color: "gray" }} />
-                          );
-                        })()}
-                        onClick={() => handleAccordionClick(index)}
-                      >
-                        {field.title}
-                      </AccordionSummary>
-                      <br></br>
-                      <AccordionDetails sx={{ padding: "0" }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            width: "100%",
-                            flexWrap: "wrap",
-                            overflowY: "auto"
-                          }}
-                          spacing={3}
-                          gap={3}
-                        >
-                          {createFormFields(field.inputs)}
-                        </Box>
-                      </AccordionDetails>
-                    </Accordion>
-                  </AccordionRoot>
-                ))
-              : ""}
-            {/* {
-              (fields && fields.require && fields.require.length>0) ?
-                <>{createFormFields(fields.require)}</> : ''
-            }
-            {
-              (fields && fields.optional && fields.optional.length>0) ?
-                <AccordionRoot>
-                  <br></br>
-                  <Accordion sx={{padding: 'none', boxShadow: 'none'}}>
-                    <AccordionSummary style={{padding: '0', borderBottom: '0.1em solid gray', minHeight: '0', height: '25px', color:'gray', fontSize: '1.1em'}} expandIcon={!expand?<MinusIcon sx={{color:'gray'}} />:<AddIcon sx={{color: 'gray'}} />} onClick={handleAccordionClick}>Additional Information</AccordionSummary>
-                    <br></br>
-                    <AccordionDetails sx={{padding: '0'}}><Box sx={{display: 'flex', alignItems: 'flex-start', width: '100%', flexWrap: 'wrap'}} spacing={3} gap={3}>{createFormFields(fields.optional)}</Box></AccordionDetails>
-                  </Accordion>
-                </AccordionRoot> : ''
-            } */}
-          </Box>
-        </DialogContent>
-        <br></br>
-        <DialogActions>
-          <Button variant="outlined" color="primary" onClick={handleClose}>
-            Close
-          </Button>
-
-          <Button variant="contained" onClick={handleSubmit} color="primary" disabled={disableSubmit}>
-            {submitButton}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
-  );
+        >
+            {createFormFields(fields)}
+        </Box>
+    )
 }
+
+export default FieldCreator;
