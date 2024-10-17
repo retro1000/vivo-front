@@ -2,6 +2,8 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import SearchBar from '@mkyy/mui-search-bar';
 import { themeColors } from '../MatxTheme/themeColors';
+import { forwardRef } from 'react';
+import { Box } from '@mui/material';
 
 const CustomSearchBar = styled(SearchBar)(({ theme }) => ({
     '& .MuiInputBase-root': {
@@ -20,18 +22,20 @@ const CustomSearchBar = styled(SearchBar)(({ theme }) => ({
     },
   }));
 
-function SearchBarDefault({ style, sx, value, setValue, search, placeholder }){
+const SearchBarDefault = forwardRef(({ style, sx, value, setValue, search, placeholder }, ref) => {
     return (
-    <CustomSearchBar
-        style={style}
-        sx={sx}
-        value={value}
-        onChange={newValue => setValue(newValue)}
-        onSearch={search}
-        placeholder={placeholder?placeholder:'Search...'}
-        onCancelResearch={() => setValue('')}
-    />
+      <Box ref={ref} display={"flex"} flex={1}>
+        <CustomSearchBar
+            style={style}
+            sx={sx}
+            value={value}
+            onChange={newValue => setValue(newValue)}
+            onSearch={search}
+            placeholder={placeholder?placeholder:'Search...'}
+            onCancelResearch={() => setValue('')}
+        />
+      </Box>
     );
-}
+})
 
 export default SearchBarDefault

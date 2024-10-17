@@ -189,17 +189,17 @@ function ProductView() {
 
                 if (productRes.value.status === 200) {
                     setNotFound(false)
-                  const product = productRes.value.data;
-                  setProductTitle(product.productTitle);
-                  setProductSubTitle(product.productSubTitle);
-                  setProductDescription(product.productDescription);
-                  setProductImages(product.images);
-                  setAttributes(product.attributes);
-                  setVariations(product.variations);
-                  setSelectedAttributeVariables(product.variations[0]?.attributeVariable || []);
+                    const product = productRes.value.data;
+                    setProductTitle(product.productTitle);
+                    setProductSubTitle(product.productSubTitle);
+                    setProductDescription(product.productDescription);
+                    setProductImages(product.images);
+                    setAttributes(product.attributes);
+                    setVariations(product.variations);
+                    setSelectedAttributeVariables(product.variations[0]?.attributeVariable || []);
                 }
 
-                if(productRes.value.status === 204){
+                if(productRes.value.status === 204 || productRes.value.status === 500){
                     setNotFound(true)
                 }
         
@@ -207,7 +207,7 @@ function ProductView() {
                   setReviews(reviewRes.value.data);
                 }
             } catch (err) {
-                console.error('Error fetching product or reviews:', err);
+                
             } finally {
                 setPageLoading(false);
             }
@@ -231,13 +231,13 @@ function ProductView() {
     useEffect(() => {
         if(variation){
             if(variation.availableStockAmount && variation.availableStockAmount!==0){
-                setTypeStatus({col: 'green', text: `${variation.availableStockAmount} items are available in availableStockAmount.`})
+                setTypeStatus({col: 'green', text: `${variation.availableStockAmount} items are available in stocks.`})
                 setQty(1)
             }else if(variation.backendOrder){
                 setTypeStatus({col: 'green', text: 'Backend orders are available.'})
                 setQty(1)
             }else{
-                setTypeStatus({col: 'red', text: 'Out of availableStockAmount.'})
+                setTypeStatus({col: 'red', text: 'Out of stocks.'})
                 setQty(0)
             }
             setSwipTo(variation.variationImageIndex)
@@ -275,7 +275,7 @@ function ProductView() {
 
     const addToCart = async () => {
         if(orders && orders.length>0){
-            await api.post('/order/order-variation/create', orders)
+            await api.post('/cart/add', orders)
                 .then((res) => {
                     if(res.status===200){
 

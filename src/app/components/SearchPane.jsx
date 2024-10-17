@@ -3,8 +3,9 @@ import { Box, MenuItem, Select } from "@mui/material";
 import React from "react";
 import { SearchBarDefault, TButton, TIconButton } from ".";
 import FilterIcon from '@mui/icons-material/FilterAlt'
+import { forwardRef } from "react";
 
-const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText, setSearchText, search, placeholder, children, setFilterToggle, showBox, fieldSearch}) => {
+const SearchPane = forwardRef(({ selectedAction, menuActions, setSelectedAction, searchText, setSearchText, search, placeholder, children, setFilterToggle, showBox, fieldSearch }, ref) => {
 
     return(
         <Box
@@ -32,11 +33,12 @@ const SearchPane = ({ selectedAction, menuActions, setSelectedAction, searchText
                 setValue={setSearchText}
                 placeholder={placeholder}
                 search={search}
+                ref={ref}
             ></SearchBarDefault>
             {!fieldSearch && <TButton title='Search' label='Search' variant={'contained'} color={'primary'}></TButton>}
             {children?<TIconButton title='Filter' icon={FilterIcon} fun={setFilterToggle} color={showBox?'primary':'secondary'} sx={{opacity: '0.7'}}></TIconButton>:''}
         </Box>
     );
-}
+})
 
 export default SearchPane;
