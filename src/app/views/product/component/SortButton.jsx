@@ -32,7 +32,7 @@ const SortButton = () => {
       >
         Sort by popularity
       </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose} sx={{width: anchorEl ? `${anchorEl.getBoundingClientRect().width}px` : 'auto'}}>
         <MenuItem onClick={handleClose}>Popularity</MenuItem>
         <MenuItem onClick={handleClose}>Price: Low to High</MenuItem>
         <MenuItem onClick={handleClose}>Price: High to Low</MenuItem>

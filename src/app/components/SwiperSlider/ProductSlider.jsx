@@ -33,10 +33,37 @@ const ProductSlider = ({ title, children }) => {
                     ".swiper-button-next::after, .swiper-button-prev::after": {
                         fontSize: '16px',
                         color: 'inherit'
-                    }
+                    },
+                    ".swiper-container": {
+                        position: 'relative',
+                        overflow: 'hidden',
+                      },
+                     ".swiper-container::before": {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        zIndex: 10,
+                        width: '50px',
+                        height: '100%',
+                        background: 'linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))',
+                        pointerEvents: 'none',
+                      },
+                      ".swiper-container::after": {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        zIndex: 10,
+                        width: '50px',
+                        height: '100%',
+                        background: 'linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))',
+                        pointerEvents: 'none',
+                      }
                 }}
             />
             <Swiper
+                effect='slide'
                 loop={true}
                 ref={swiperRefs}
                 spaceBetween={0}

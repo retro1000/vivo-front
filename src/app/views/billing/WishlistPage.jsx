@@ -1,8 +1,7 @@
 
 import React from "react";
 import { Container, Typography, Grid, Button, Divider,Breadcrumbs,Link,Box } from "@mui/material";
-import { Breadcrumb, Footer, Header, ProductCard } from "app/components";
-import ProductGrid from "../product/component/ProductGrid";
+import { Breadcrumb, Footer, Header, ProductCard, ProductGrid } from "app/components";
 import useAuth from "app/hooks/useAuth";
 import ProductSlider from "app/components/SwiperSlider/ProductSlider";
 import { useState } from "react";

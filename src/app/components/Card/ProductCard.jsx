@@ -1,14 +1,13 @@
 import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardMedia,
   Typography,
-  Rating,
   Box,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import WichListIcon from "@mui/icons-material/FavoriteBorder";
@@ -22,114 +21,138 @@ const ProductCard = ({ product }) => {
     const navigate = useNavigate()
 
     return (
-        
-            <Card
-                sx={{ 
-                    display: "flex",
-                    flexDirection: "column", 
-                    cursor: 'pointer', 
-                    boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    width: 250, 
-                    // maxWidth: 280, 
-                    transition: 'transform 0.1s ease-in-out',
-                    '&:hover': {
-                        transform: 'scale(1.1)',
-                    },}}
-            >
-                <Box sx={{ position: "relative" }}>
-                    <CardMedia
-                        component="img"
-                        image={product.imgs}
-                        alt={product.name}
-                        sx={{ height: 250, objectFit: "cover", borderBottomRightRadius: '5px', borderBottomLeftRadius: '5px' }}
-                    />
-                    {product.isNew && (
-                        <Typography
-                        variant="caption"
-                        sx={{
-                            position: "absolute",
-                            top: 10,
-                            left: 10,
-                            backgroundColor: "#00c950",
-                            color: "#fafafa",
-                            padding: "4px 12px",
-                            borderRadius: 0.5,
-                            zIndex: '10'
-                        }}
-                        >
-                        NEW
-                        </Typography>
-                    )}
-                    {product.isSale && (
-                        <Typography
-                        variant="caption"
-                        sx={{
-                            position: "absolute",
-                            top: product.isNew?45:10,
-                            left: 10,
-                            backgroundColor: themeColors.red.palette.primary.main,
-                            color: "#fafafa",
-                            padding: "4px 12px",
-                            borderRadius: 0.5,
-                            zIndex: '10'
-                        }}
-                        >
-                        SALE
-                        </Typography>
-                    )}
-                    <Box
-                        sx={{
-                        position: "absolute",
-                        top: 10,
-                        right: 10,
+        <>
+            
+                <Card
+                    sx={{ 
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        }}
-                    >
-                        {
-                        product.wishList ?
-                        <IconButton sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)", "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} }}>
-                            <WichListIcon />
-                        </IconButton> : 
-                        <IconButton sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)", "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} }}>
-                            <WichListIconActive sx={{color: themeColors.red.palette.primary.main}}/>
-                        </IconButton>
+                        flexDirection: "column", 
+                        cursor: 'pointer', 
+                        boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
+                        borderRadius: '8px', 
+                        width: 250,
+                        height: '360px', 
+                        // maxWidth: 280, 
+                        transition: 'transform 0.1s ease-in-out',
+                        '&:hover': {
+                            transform: 'scale(1.04)',
                         }
-                        <IconButton sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)", "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} }} onClick={()=>navigate(`/product/view/${product.id}`)}>
-                            <ViewIcon />
-                        </IconButton>
-                    </Box>
-                </Box>
-                <CardContent
-                sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+                    }}
                 >
-                <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
-                    {product.name}
-                </Typography>
-                <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating}></ReviewStatsCard>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "flex-start",
-                            mt: 1,
-                            gap: 1
-                        }}
-                    >
-                        {
-                            product.realPrice ?
-                                <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through'}}>
-                                    {product.realPrice}
-                                </Typography> : ''
-                        }
-                        <Typography variant="subtitle2" color="error">
-                            {product.price}
-                        </Typography>
+                    <Box sx={{ position: "relative" }}>
+                        <CardMedia
+                            component="img"
+                            image={product.imgs}
+                            alt={product.name}
+                            sx={{ height: 250, objectFit: "cover", borderBottomRightRadius: '5px', borderBottomLeftRadius: '5px' }}
+                        />
+                        {product.isNew && (
+                            <Typography
+                            variant="caption"
+                            sx={{
+                                position: "absolute",
+                                top: 10,
+                                left: 10,
+                                backgroundColor: "#00c950",
+                                color: "#fafafa",
+                                padding: "4px 12px",
+                                borderRadius: 0.5,
+                                zIndex: '10'
+                            }}
+                            >
+                            NEW
+                            </Typography>
+                        )}
+                        {product.isSale && (
+                            <Typography
+                            variant="caption"
+                            sx={{
+                                position: "absolute",
+                                top: product.isNew?45:10,
+                                left: 10,
+                                backgroundColor: themeColors.red.palette.primary.main,
+                                color: "#fafafa",
+                                padding: "4px 12px",
+                                borderRadius: 0.5,
+                                zIndex: '10'
+                            }}
+                            >
+                            SALE
+                            </Typography>
+                        )}
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                top: 10,
+                                right: 10,
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                                zIndex: '10'
+                            }}
+                        >
+                            {
+                                product.wishList ?
+                                    <IconButton 
+                                        sx={{ 
+                                            backgroundColor: "rgba(255, 255, 255, 0.8)", 
+                                            "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} 
+                                        }}
+                                    >
+                                        <WichListIcon />
+                                    </IconButton> : 
+                                    <IconButton sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)", "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} }}>
+                                        <WichListIconActive sx={{color: themeColors.red.palette.primary.main}}/>
+                                    </IconButton>
+                            }
+                            <IconButton sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)", "&:hover": {backgroundColor: "rgba(255, 255, 255, 1)"} }} onClick={()=>navigate(`/product/view/${product.id}`)}>
+                                <ViewIcon />
+                            </IconButton>
+                        </Box>
                     </Box>
-                </CardContent>
-            </Card>
+                    <CardContent
+                        sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '0.5em 0.5em 0.2em 0.5em' }}
+                    >
+                        <Tooltip title={product.name}>
+                            <Typography 
+                                variant="body1" 
+                                component="div" 
+                                sx={{
+                                    display: '-webkit-box',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'normal', // Allows text to wrap to multiple lines
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: 2,  // Limit the text to 2 lines
+                                    fontSize: '14px'
+                                }}
+                            >
+                                {product.name}
+                            </Typography>
+                        </Tooltip>
+                        <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating} id={product.id}></ReviewStatsCard>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                mt: 1,
+                                gap: 1
+                            }}
+                        >
+                            {
+                                product.realPrice ?
+                                    <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through'}}>
+                                        {product.realPrice}
+                                    </Typography> : ''
+                            }
+                            <Typography variant="subtitle2" color="error">
+                                {product.price}
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </>
             );
 };
 

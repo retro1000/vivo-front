@@ -8,7 +8,7 @@ import ColorOfTheYear from "./component/UnderUnderHero";
 import PaintStories from "./component/UnderHero";
 import LetsPaintHero from "./component/BottomHero";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { Footer, ProductCard, SwiperSliderHeroAuto } from "app/components";
+import { Footer, ProductCard, ProductGrid, SwiperSliderHeroAuto } from "app/components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProductSlider from "app/components/SwiperSlider/ProductSlider";
@@ -49,7 +49,7 @@ const HomePage = () => {
       },
       {
         id: 3,
-        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint",
+        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
         price: "LKR 5990.00",
         rating: 4.7,
         reviews: 145,
@@ -196,7 +196,7 @@ const HomePage = () => {
       },
       {
         id: 3,
-        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint",
+        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
         price: "LKR 5990.00",
         rating: 4.7,
         reviews: 145,
@@ -233,13 +233,12 @@ const HomePage = () => {
         <CategorySec />
         <Box display={'flex'} flexDirection={'column'} gap='1em' alignItems={'center'}>
           <Typography variant="h4">More to Love</Typography>
-          <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'2em'} flexWrap={'wrap'} mt={4}>
-              {showProducts.map((product, index) => (
-                // <Grid item xs={12} sm={6} md={3} key={index}>
-                  <ProductCardSlide product={product} />
-                // </Grid>
+          <ProductGrid products={showProducts} sx={{justifyContent: 'center', alignItems: 'center', mt: 4}}/>
+          {/* <Grid spacing={4.5} display={'flex'} gap={4.5} flexWrap={'wrap'} mt={4}>
+              {showProducts.map((product) => (
+                  <ProductCardSlide product={product} key={product.id}/>
               ))}
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
       <LetsPaintHero/>

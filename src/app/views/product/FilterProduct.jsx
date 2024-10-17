@@ -1,11 +1,10 @@
 // ProductPage.jsx
 import React, { useState } from "react";
 import { Box, Typography, Button, Grid, Container } from "@mui/material";
-import { Header, Footer } from "app/components";
+import { Header, Footer, ProductGrid } from "app/components";
 import SortButton from "./component/SortButton";
 import SearchBar from "./component/SearchBar";
 import { FilterList } from "@mui/icons-material";
-import ProductGrid from "./component/ProductGrid";
 import FilterBar, { filtersConfig } from "./component/Filtering";
 
 const ProductPage = () => {
@@ -64,7 +63,7 @@ const ProductPage = () => {
         id: 1,
         name: "Dummy Paint",
         price: "$360",
-        rating: 4.5,
+        rating: 3.6,
         reviews: 95,
         imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
         wishList: true
@@ -81,13 +80,14 @@ const ProductPage = () => {
       },
       {
         id: 3,
-        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint",
+        name: " Paint Dummy Paint Dummy Paint Dummy Paint Dummy Paint Dummy Paint",
         price: "LKR 5990.00",
-        rating: 4.7,
+        rating: 2.8,
         reviews: 145,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
+        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
         wishList: true,
         isNew: true,
+        isSale: true,
         realPrice: 'LKR 6990.00'
     
       },
@@ -187,7 +187,7 @@ const ProductPage = () => {
               }}
             >
               <SortButton/>
-              <SearchBar/>
+              {/* <SearchBar/> */}
             </Box>
             <Grid sx={{display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap:'1em', marginTop: '2em'}}>
               <Box sx={{ position: 'sticky', width: '30%', mr: 2 }}>
