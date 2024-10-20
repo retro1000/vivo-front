@@ -15,7 +15,7 @@ import ProductSlider from "app/components/SwiperSlider/ProductSlider";
 import ProductCardSlide from "app/components/Card/ProductCardSlide";
 
 const styles = {
-  padding: 10,
+  padding: '50px',
   display: 'flex',
   flexDirection: 'column',
   gap: 10
@@ -233,7 +233,7 @@ const HomePage = () => {
         <CategorySec />
         <Box display={'flex'} flexDirection={'column'} gap='1em' alignItems={'center'}>
           <Typography variant="h4">More to Love</Typography>
-          <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'2em'} flexWrap={'wrap'} mt={4}>
+          <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'2em'} flexWrap={'wrap'} mt={4} maxWidth={'100%'}>
               {showProducts.map((product, index) => (
                 // <Grid item xs={12} sm={6} md={3} key={index}>
                   <ProductCardSlide product={product} />

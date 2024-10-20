@@ -107,7 +107,7 @@ const Layout1 = () => {
         )}
 
         {settings.perfectScrollbar && (
-          <StyledScrollBar>
+          <StyledScrollBar id="@content_box">
             {layout1Settings.topbar.show && !layout1Settings.topbar.fixed && (
               <ThemeProvider theme={topbarTheme}>
                 <Layout1Topbar />
@@ -124,7 +124,7 @@ const Layout1 = () => {
         )}
 
         {!settings.perfectScrollbar && (
-          <ContentBox>
+          <ContentBox id="@content_box">
             {layout1Settings.topbar.show && !layout1Settings.topbar.fixed && (
               <ThemeProvider theme={topbarTheme}>
                 <Layout1Topbar />

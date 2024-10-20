@@ -5,8 +5,11 @@ import { SearchPane, MuiTable, TButton } from '..';
 
 import ViewIcon from '@mui/icons-material/RemoveRedEye'
 import { useRef } from 'react';
+import { useAxios } from 'app/hooks/useAxios';
 
 const FilterTable = ({ title, table, children, dataTableData, setDataTableData, selectedRows, selectableRows, filters, setFilters }) => {
+
+  const { api } = useAxios()
 
   const [data, setData] = useState([]);
 
@@ -170,17 +173,24 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
   }, [page, rowsPerPage]);
 
   const fetchData = async () => {
-    // const offset = page * rowsPerPage;
-    try {
-      const response = await fetch(
-        `${path}/filter?page=${page}&limit=${rowsPerPage}`
-      );
-      const result = await response.json();
-      setData(result.data); // Assuming the API returns { data: [], total: number }
-      setTotalRecords(result.total);
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
+    const filterUrl = `/${path}/filter?
+        page=${page}
+        &limit=${rowsPerPage}
+        ${filters && Object.keys(filters).length>0 && '&'+Object.keys(filters).map(key => key+'='+(Array.isArray(filters[key])?filters[key].join(','):filters[key])).join('&')}`;
+    window.history.pushState({}, '', filterUrl)
+    await api.get(filterUrl)
+      .then(response => {
+        if(response.status===200){
+          setData(response.data.results);
+          setTotalRecords(response.data.total);
+        }
+      })
+      .catch(error => {
+
+      })
+      .finally(() => {
+
+      })
   };
 
   return (

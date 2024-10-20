@@ -1,18 +1,25 @@
 import React from 'react';
 import { Box, Slider, Typography } from '@mui/material';
 
-const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange }) => {
+const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange, minWidth }) => {
 //   const [range, setrange] = useState([800, 156940]);
 
   const handleChange = (event, newValue) => {
     setRange(newValue);
   };
 
+  if (!range || range.length !== 2) {
+    range = [min, max]; // Fallback to default range if `range` is not properly initialized
+  }
+
   return (
-    <Box sx={{ width: 250, padding: 2 }}>
-      <Typography fontSize={'1.1em'} gutterBottom>
-        {heading}
-      </Typography>
+    <Box sx={{ width: '100%', padding: 2, minWidth: minWidth || 250 }}>
+      {
+        heading && 
+        <Typography fontSize={'1.1em'} gutterBottom>
+          {heading}
+        </Typography>
+      }
       <Slider
         value={range}
         onChange={handleChange}
@@ -22,8 +29,8 @@ const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange }
         sx={sx}
         size='small'
       />
-      <Typography>
-        {`${label}: ${curr} ${range[0].toLocaleString()} – ${curr} ${range[1].toLocaleString()}`}
+      <Typography variant='body2'>
+        {`${label?label+':':''} ${curr} ${range && range.length!==0 && range[0] ? range[0].toLocaleString() : min} – ${curr} ${range && range.length!==0 && range[1] ? range[1].toLocaleString() : max}`}
       </Typography>
     </Box>
   );

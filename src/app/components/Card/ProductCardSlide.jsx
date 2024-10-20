@@ -207,15 +207,15 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                             gap: 1
                         }}
                     >
+                        <Typography variant="subtitle2" color="error">
+                            {product.price}
+                        </Typography>
                         {
                             product.realPrice ?
                                 <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through'}}>
                                     {product.realPrice}
                                 </Typography> : ''
                         }
-                        <Typography variant="subtitle2" color="error">
-                            {product.price}
-                        </Typography>
                     </Box>
                 </CardContent>
             </Card>
