@@ -204,11 +204,12 @@ const filterReducer = (state, action) => {
       return {...state, page: page || 1, limit: limit || 100, selectedFilters: filters || {}, init: true, actionType: 'page', sort: sort || state.sort, isPagingBlock: false };
     }case "PAGE": {
       const { filteredProducts, totalResults, filters, isPagingBlock } = action.payload
+      console.log(isPagingBlock)
       return {...state, filteredProducts: [...state.filteredProducts, ...filteredProducts], totalResults: totalResults, actionType: 'page', filters: filters?[...state.filters, ...filters]:state.filters, isPagingBlock: isPagingBlock };
     }case "SET_PAGE": {
-      return {...state, page: state.isPagingBlock?state.page:(parseInt(state.page, 10)+1), actionType: 'page', isPagingBlock: false };
+      return {...state, page: state.isPagingBlock?state.page:(parseInt(state.page, 10)+1), actionType: 'page' };
     }case "CLEAR_ALL_FILTERS": {
-      return {...state, selectedFilters: {}, page: 1, actionType: 'page', isPagingBlock: false };
+      return {...state, selectedFilters: {}, page: 1, actionType: 'page' };
     }case "SORT": {
       const { sort } = action.payload
       return {...state, sort: sort || state.sort, page: 1, actionType: 'sort', isPagingBlock: false };
@@ -287,26 +288,37 @@ const ProductPage = () => {
     }`;
   } 
 
-  const fetchData = async (controller) => {
-    console.log(state)
-    setLoading(true)
+  const fetchData = async (controller, retries=5, delay=1000) => {
+    if(retries===0){
+      dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
+      setLoading(false)
+      //Add manual realoading button for user here
+    }
+    setLoading(true) // create a loading effect for this loading
     const filterUrl = generateFilterUrl();
     window.history.pushState({}, '', filterUrl)
     await api.get(filterUrl, {signal: controller.signal})
       .then(response => {
         if(response.status===200){
-          // dispatch({ type: state.filter ? "FILTER" : "PAGE", payload: {...response.data} })
+          // dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {...response.data, isPagingBlock: state.actionType!=='page'} })
           dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [...state.filteredProducts, ...state.filteredProducts], totalResults: 1000, isPagingBlock: state.actionType!=='page' } })
-          if(response.status===204) dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
+          setLoading(false)
         }
+        if(response.status===204) dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .catch(error => {
         triggerCommonErrors(error)
         dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .finally(() => {
-        setLoading(false)
+
       })
+
+    // Wait for the delay (increasing with each retry) before trying again
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    // Retry again, with an increased delay (exponential backoff)
+    return fetchData(controller, retries - 1, delay * 2);
   };
 
   return (
@@ -349,6 +361,7 @@ const ProductPage = () => {
                 Clear All
               </Button>
             </Box>
+            {/* update filter details for type of enums(eg.ACTIVE_NOW) for support to backend */}
             <FilterBar filters={state.filters} handleFilterChange={handleFilterChange} selectedFilters={state.selectedFilters} />
           </Box>
 
