@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { useReducer } from "react";
 import { useNotistack } from "app/hooks/useNotistack";
 import { min } from "lodash";
+import { backendApi } from "config";
 
 
 const demoData = [
@@ -288,37 +289,48 @@ const ProductPage = () => {
     }`;
   } 
 
-  const fetchData = async (controller, retries=5, delay=1000) => {
+  const fetchData = async (controller, retries=5, delay=1000, errors=undefined) => {
+
+    if(!window.location.href.match('/product/filter-product')){
+      controller.abort()
+      return;
+    }
+
     if(retries===0){
       dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       setLoading(false)
       //Add manual realoading button for user here
     }
+    var isError = false
     setLoading(true) // create a loading effect for this loading
     const filterUrl = generateFilterUrl();
-    window.history.pushState({}, '', filterUrl)
+    retries===5 && window.history.pushState({}, '', filterUrl)
     await api.get(filterUrl, {signal: controller.signal})
       .then(response => {
         if(response.status===200){
           // dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {...response.data, isPagingBlock: state.actionType!=='page'} })
           dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [...state.filteredProducts, ...state.filteredProducts], totalResults: 1000, isPagingBlock: state.actionType!=='page' } })
-          setLoading(false)
         }
         if(response.status===204) dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
+        setLoading(false)
       })
       .catch(error => {
-        triggerCommonErrors(error)
+        isError = true
+        triggerCommonErrors(error, errors)
+        errors = error
         dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .finally(() => {
 
       })
 
+    if(!isError) return
+
     // Wait for the delay (increasing with each retry) before trying again
     await new Promise(resolve => setTimeout(resolve, delay));
 
     // Retry again, with an increased delay (exponential backoff)
-    return fetchData(controller, retries - 1, delay * 2);
+    return fetchData(controller, retries - 1, delay * 2, errors);
   };
 
   return (

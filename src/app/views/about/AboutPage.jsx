@@ -11,10 +11,11 @@ const AboutPage = () => {
   return (
     <Box>
       <Container maxWidth="lg">
-        <Grid container spacing={3}>
+      <Header title={"About"} subTitle={"About Vivolk"}/>
+
+        <Grid container>
           <Grid item xs={12} md={7}>
             <br />
-            <Header title={"About"} subTitle={"About Vivolk"}/>
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
               With nearly 4 years of dedicated service, Vivolk has established itself as a trusted provider of high-quality mobile accessories, shoes, clothes, and gift items. Our commitment to excellence and customer satisfaction has been the cornerstone of our success.
               <br />
