@@ -18,10 +18,11 @@ const ContactUsPage = () => {
   return (
     <Box>
       <Container maxWidth="lg" sx={{width: '100%', pl: '10px', pr: '10px'}}>
+      <Header title={"Contact Us"} subTitle={"Get in Touch with Vivolk"} sx={{mt: 2}}/>
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={7}>
             <br />
-            <Header title={"Contact Us"} subTitle={"Get in Touch with Vivolk"} />
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
               We are here to assist you with any inquiries, issues, or support you may need. At Vivolk, customer satisfaction is our priority, and we strive to make every interaction smooth and helpful.
               <br />

@@ -321,7 +321,7 @@ const ProductPage = () => {
         dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .finally(() => {
-        
+
       })
 
     if(!isError) return
@@ -364,7 +364,7 @@ const ProductPage = () => {
           }}
         >
           {/* Filters section */}
-          <Box sx={{ position: 'sticky', top: 0, width: '20%', maxHeight: '100vh', overflowY: 'auto'}}>
+          <Box sx={{ position: 'sticky', top: 0, width: '350px', maxHeight: '100vh', overflowY: 'auto'}}>
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
               <Typography variant="h5" gutterBottom>
                 Filters

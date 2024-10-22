@@ -3,10 +3,10 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { themeColors } from "./MatxTheme/themeColors";
 
-const Header = ({ title, subTitle }) => {
+const Header = ({ title, subTitle, sx }) => {
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, ...sx }}>
         <Box
           sx={{
             width: 4,

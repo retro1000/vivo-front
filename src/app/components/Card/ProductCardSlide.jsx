@@ -25,6 +25,8 @@ const ProductCardSlide = ({ product, removeWishList }) => {
 
     const navigate = useNavigate();
 
+    const cardRef = useRef(null)
+
     const swiperRef = useRef(null)
 
     const handleMouseMove = (e) => {
@@ -44,14 +46,20 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                 }}
             />
             <Card
+                ref={cardRef}
                 sx={{ 
                     display: "flex", 
                     flexDirection: "column", 
                     cursor: 'pointer', 
                     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
                     borderRadius: '8px', 
-                    width: 250, 
-                    // maxWidth: 350
+                    // width: 250,
+                    flexShrink: 1, // Make the card grow to fill the available space
+                    // flex: '1 1 calc(25% - 16px)',
+                    flexBasis: 'calc(25% - 16px)', // Base width for 4 cards per row (adjust as needed)
+                    maxWidth: 280, // Maximum width so that it maintains balance
+                    minWidth: 210, // Minimum width for small screens or when space is limited
+                    boxSizing: 'border-box'
                 }}
             >
                 <Box 
@@ -80,7 +88,8 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                                     backgroundImage: "url(" + slide + ")",
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
-                                    height: 250,
+                                    aspectRatio: "1 / 1",
+                                    // height: 250,
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: 'center',

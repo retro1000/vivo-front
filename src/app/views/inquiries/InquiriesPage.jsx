@@ -25,8 +25,8 @@ const InquiriesPage = () => {
 
   return (
     <Box>
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
+      <Container sx={{maxWidth: '100%', pr: 20, pl: 20}}>
+        {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={7}>
             <br />
             <Header title={"Inquiries"} subTitle={"Submit your questions or concerns"} />
@@ -76,16 +76,8 @@ const InquiriesPage = () => {
               </Typography>
             )}
           </Grid>
-          <Grid item xs={12} md={5}>
-            <br />
-            <Box
-              component="img"
-              src="/assets/images/inquiries.png"
-              alt="Inquiries"
-              sx={{ width: "100%", height: "auto", borderRadius: '10px' }}
-            />
-          </Grid>
-        </Grid>
+          
+        {/* </Grid> */}
       </Container>
       <br></br>
       <Footer />

@@ -11,7 +11,7 @@ const AboutPage = () => {
   return (
     <Box>
       <Container maxWidth="lg">
-      <Header title={"About"} subTitle={"About Vivolk"}/>
+      <Header title={"About"} subTitle={"About Vivolk"} sx={{mt: 2}}/>
 
         <Grid container>
           <Grid item xs={12} md={7}>

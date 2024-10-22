@@ -43,7 +43,7 @@ const OrderTrackingPage = () => {
   return (
     <Box>
       <Container maxWidth="lg">
-        <Grid container spacing={3}>
+        {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={7}>
             <br />
             <Header title={"Order Tracking"} subTitle={"Track your order"} />
@@ -109,7 +109,7 @@ const OrderTrackingPage = () => {
               </Typography>
             ) : null}
           </Grid>
-          <Grid item xs={12} md={5}>
+          {/* <Grid item xs={12} md={5}>
             <br />
             <Box
               component="img"
@@ -117,8 +117,8 @@ const OrderTrackingPage = () => {
               alt="Order Tracking"
               sx={{ width: "100%", height: "auto", borderRadius: '10px' }}
             />
-          </Grid>
-        </Grid>
+          </Grid> */}
+        {/* </Grid> */}
       </Container>
       <br></br>
       <Footer />

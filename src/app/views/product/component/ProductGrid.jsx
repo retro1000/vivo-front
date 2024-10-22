@@ -9,8 +9,8 @@ const ProductGrid = ({ removeWishList, products, maxWidth }) => {
   return (
     <Grid
       container
-      spacing={4.5}
-      sx={{ width: "100%", maxWidth: maxWidth || 1360, display: 'flex', gap: 4.5, flexWrap: 'wrap', mt: '1em'}}
+      spacing={2}
+      sx={{ width: "100%", maxWidth: maxWidth || 1360, display: 'flex', gap: 2, flexWrap: 'wrap', mt: '1em', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))'}}
     >
       {products.map((product) => (
           <ProductCardSlide removeWishList={removeWishList} key={product.id} product={product} />
