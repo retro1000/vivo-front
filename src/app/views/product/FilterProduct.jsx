@@ -321,7 +321,7 @@ const ProductPage = () => {
         dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .finally(() => {
-
+        
       })
 
     if(!isError) return

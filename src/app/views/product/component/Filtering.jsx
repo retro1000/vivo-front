@@ -1,6 +1,6 @@
 // FilterBar.jsx
-import React, { useState } from 'react';
-import { Box, Typography, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary, AccordionDetails, Radio } from '@mui/material';
+import React from 'react';
+import { Typography, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary, AccordionDetails, Radio } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { NumSliderFilter } from 'app/components';
 
@@ -117,6 +117,7 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
           max={30000} 
           {...filter.config}
           minWidth={100}
+          submitBtn={true}
         />
       )
     default: return ''
