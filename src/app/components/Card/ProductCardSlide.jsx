@@ -53,6 +53,8 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                     cursor: 'pointer', 
                     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
                     borderRadius: '8px', 
+                    aspectRatio: 0.65,
+                    // height: 'calc(25% - 16px)',
                     // width: 250,
                     flexShrink: 1, // Make the card grow to fill the available space
                     // flex: '1 1 calc(25% - 16px)',

@@ -43,6 +43,7 @@ export { default as PopupFormDialog } from "./Dialog/PopupFormDialog";
 export { default as SearchSelectAdd } from "./InputField/SearchSelectAdd";
 export { default as SearchBarDefault } from "./SearchBar/SearchBarDefault";
 export { default as InputField } from "./InputField/InputField";
+export { default as DataField } from "./DataField/DataField";
 export { default as NumSliderFilter } from "./SliderFilter/NumSliderFilter";
 export { default as SearchPane } from "./SearchPane";
 export { default as CheckBoxPane } from "./CheckBoxPane";

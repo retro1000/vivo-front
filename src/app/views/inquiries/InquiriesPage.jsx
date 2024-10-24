@@ -25,7 +25,7 @@ const InquiriesPage = () => {
 
   return (
     <Box>
-      <Container sx={{maxWidth: '100%', pr: 20, pl: 20}}>
+      <Container maxWidth="1300px" sx={{pr: 20, pl: 20}}>
         {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={7}>
             <br />
@@ -33,35 +33,37 @@ const InquiriesPage = () => {
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
               Have a question about an order, a product, or anything else? Fill out the form below, and our customer support team will get back to you as soon as possible.
             </Typography>
-            <TextField
-              fullWidth
-              label="Name"
-              variant="outlined"
-              name="name"
-              value={formValues.name}
-              onChange={handleInputChange}
-              sx={{ mt: 4 }}
-            />
-            <TextField
-              fullWidth
-              label="Email"
-              variant="outlined"
-              name="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              sx={{ mt: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Your Inquiry"
-              variant="outlined"
-              name="inquiry"
-              value={formValues.inquiry}
-              onChange={handleInputChange}
-              multiline
-              rows={4}
-              sx={{ mt: 2 }}
-            />
+            <Box sx={{display: "flex", flexDirection: "column", gap: 2, mt: 3}}>
+              <TextField
+                fullWidth
+                label="Name"
+                variant="outlined"
+                name="name"
+                value={formValues.name}
+                onChange={handleInputChange}
+                sx={{ maxWidth: 600 }}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                variant="outlined"
+                name="email"
+                value={formValues.email}
+                onChange={handleInputChange}
+                sx={{ maxWidth: 600 }}
+              />
+              <TextField
+                fullWidth
+                label="Your Inquiry"
+                variant="outlined"
+                name="inquiry"
+                value={formValues.inquiry}
+                onChange={handleInputChange}
+                multiline
+                rows={4}
+                sx={{ maxWidth: 600 }}
+              />
+            </Box>
             <Button
               variant="contained"
               color="primary"

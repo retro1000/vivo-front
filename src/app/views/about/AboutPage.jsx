@@ -10,7 +10,7 @@ import FAQSection from "./component/FAQSection";
 const AboutPage = () => {
   return (
     <Box>
-      <Container maxWidth="lg">
+      <Container maxWidth="1300px">
       <Header title={"About"} subTitle={"About Vivolk"} sx={{mt: 2}}/>
 
         <Grid container>

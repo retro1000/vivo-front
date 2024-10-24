@@ -17,7 +17,7 @@ const ContactUsPage = () => {
 
   return (
     <Box>
-      <Container maxWidth="lg" sx={{width: '100%', pl: '10px', pr: '10px'}}>
+      <Container maxWidth="1300px" sx={{width: '100%', pl: '10px', pr: '10px'}}>
       <Header title={"Contact Us"} subTitle={"Get in Touch with Vivolk"} sx={{mt: 2}}/>
 
         <Grid container spacing={3}>
@@ -77,7 +77,7 @@ const ContactUsPage = () => {
               <Typography variant="h6">
                 Send Us a Message
               </Typography>
-              <Typography variant="body2" sx={{ mb: 2 }}>
+              <Typography variant="body2" sx={{ mb: 3, color: "text.secondary" }}>
                 Please complete this form, and we'll contact you soon.......
               </Typography>
             </Box>

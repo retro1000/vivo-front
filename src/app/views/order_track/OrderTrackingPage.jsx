@@ -1,23 +1,41 @@
 import React, { useState } from "react";
-import { Box, Typography, Grid, Container, TextField, Button, Card, CardContent } from "@mui/material";
+import { Box, Typography, Grid, Container, TextField, Button, Card, CardContent, CircularProgress, Stepper, Step, StepLabel } from "@mui/material";
 import Header from "app/components/Header";
 import Footer from "app/components/Footer";
+import { useAxios } from "app/hooks/useAxios";
+import { LoadingButton } from "@mui/lab";
+import { useNotistack } from "app/hooks/useNotistack";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PersonIcon from '@mui/icons-material/Person';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import styled from "@emotion/styled";
+import { themeColors } from "app/components/MatxTheme/themeColors";
+import { DataField, SimpleCard2 } from "app/components";
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
 const OrderTrackingPage = () => {
   const [orderId, setOrderId] = useState('');
+  const [contactNo, setContactNo] = useState('');
   const [trackingInfo, setTrackingInfo] = useState(null);
+
+  const { apiNonAuth } = useAxios()
+
+  const { triggerCommonErrors, triggerNotifications } = useNotistack()
+
+  const [loading, setLoading] = useState(false)
+
+  const steps = ['Order confirmed', 'Picked by courier', 'On the way', 'Delivered'];
   
   // Simulated tracking data for different order IDs
   const mockTrackingData = {
-    "12345": {
-      status: "Shipped",
-      estimatedDelivery: "October 28, 2024",
-      currentLocation: "Warehouse - New York, NY",
-      history: [
-        { date: "October 20, 2024", description: "Order Placed" },
-        { date: "October 22, 2024", description: "Order Processed" },
-        { date: "October 23, 2024", description: "Shipped from New York, NY" },
-      ]
+    "OD453453454535": {
+      orderNo: 'OD453453454535',
+      estimatedDelivery: '29 Nov 2019',
+      shippingBy: 'BLUEDART',
+      contact: '+1598675986',
+      status: 'Picked by the courier',
+      trackingNumber: 'BD045903594059',
     },
     "67890": {
       status: "Delivered",
@@ -32,81 +50,206 @@ const OrderTrackingPage = () => {
     }
   };
 
-  const handleTrackOrder = () => {
-    if (orderId && mockTrackingData[orderId]) {
-      setTrackingInfo(mockTrackingData[orderId]);
-    } else {
-      setTrackingInfo(null);
-    }
+  const handleTrackOrder = async () => {
+    setLoading(true)
+    orderId && contactNo && !loading && await apiNonAuth.get(`/order/track-order?orderId=${orderId}&contactNo=${contactNo}`)
+      .then(response => {
+        if(response.status===200){
+          setTrackingInfo(response.data)
+        }
+        if(response.status===204){
+          setTrackingInfo(null)
+          triggerNotifications([{text: 'No order found to match given details.', variant: 'warning'}])
+        }
+      })
+      .catch(error => {
+        triggerCommonErrors(error)
+      })
+      .finally(() => {
+        setLoading(false)
+        setOrderId('')
+        setContactNo('')
+        setTrackingInfo(mockTrackingData['OD453453454535'])
+      })
+    // if (orderId && mockTrackingData[orderId]) {
+    //   setTrackingInfo(mockTrackingData[orderId]);
+    // } else {
+    //   setTrackingInfo(null);
+    // }
   };
+
+  const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 9,
+      left: 'calc(-50% + 16px)',
+      right: 'calc(50% + 16px)',
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: theme.palette.primary.main,
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: theme.palette.primary.main,
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      background: `linear-gradient(to right, ${theme.palette.primary.main} 50%, #eaeaf0 50%)`, // Half primary color, half gray
+      borderTopWidth: 5,
+      borderRadius: 1,
+      ...theme.applyStyles('dark', {
+        borderColor: `linear-gradient(to right, ${theme.palette.primary.main} 50%, #eaeaf0 50%)`,
+      }),
+    },
+  }));
+  
+  const StepIconRoot = styled('div')(({ theme, ownerState }) => ({
+    backgroundColor: '#ccc',
+    zIndex: 1,
+    color: ownerState.active || ownerState.completed?'#fff':'black',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...(ownerState.active && {
+      backgroundColor: theme.palette.primary.main, // active background
+      boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.25)',
+    }),
+    ...(ownerState.completed && {
+      backgroundColor: theme.palette.primary.main, // completed background
+    }),
+  }));
+  
+  const icons = {
+    1: <CheckCircleIcon />,
+    2: <AddShoppingCartIcon />,
+    3: <LocalShippingIcon />,
+    4: <CheckCircleIcon />,
+  };
+  
+  function StepIcon(props) {
+    const { active, completed, icon } = props;
+  
+    return (
+      <StepIconRoot ownerState={{ completed, active }}>
+        {icons[String(icon)]}
+      </StepIconRoot>
+    );
+  }
+  
 
   return (
     <Box>
-      <Container maxWidth="lg">
+      <Container maxWidth="1300px" sx={{pr: 20, pl: 20, minHeight: '80dvh'}}>
         {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={7}>
             <br />
             <Header title={"Order Tracking"} subTitle={"Track your order"} />
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
-              Enter your order number or tracking number with one of your contact numbers that you used to place the order to get real-time status updates on your order. Stay informed about its current location and estimated delivery time.
+              Enter your order number or tracking number or waybill with one of your contact numbers that you used to place the order to get real-time status updates on your order. Stay informed about its current location and estimated delivery time.
               <br />
               <br />
               If you have any issues, feel free to contact our support team for assistance.
             </Typography>
-            <TextField
-              fullWidth
-              label="Order number / Tracking Number"
-              variant="outlined"
-              value={orderId}
-              onChange={(e) => setOrderId(e.target.value)}
-              sx={{ mt: 3 }}
-            />
-            <TextField
-              fullWidth
-              label="Contact number"
-              variant="outlined"
-              value={orderId}
-              onChange={(e) => setOrderId(e.target.value)}
-              sx={{ mt: 3 }}
-            />
-            <Button
+            <Box sx={{display: "flex", flexWrap: "wrap", gap: 2, mt: 3}}>
+              <TextField
+                fullWidth
+                label="Order number/Tracking number/Waybill *"
+                variant="outlined"
+                disabled={loading}
+                value={orderId}
+                onChange={(e) => setOrderId(e.target.value)}
+                sx={{ maxWidth: 330 }}
+              />
+              <TextField
+                fullWidth
+                label="Contact number *"
+                variant="outlined"
+                disabled={loading}
+                value={contactNo}
+                onChange={(e) => setContactNo(e.target.value)}
+                sx={{ maxWidth: 330 }}
+              />
+            </Box>
+            <LoadingButton
               variant="contained"
+              loading={loading}
               color="primary"
-              sx={{ mt: 3 }}
               onClick={handleTrackOrder}
+              loadingPosition="start"
+              startIcon={loading ? <CircularProgress size={20} /> : null}
+              sx={{ 
+                mt: 1.8,
+                // '& .MuiLoadingButton-loadingIndicator': {
+                //   marginRight: '10px', // Add space between spinner and text
+                // }, 
+              }}
+              disabled={!contactNo || !orderId}
             >
               Track Order
-            </Button>
+            </LoadingButton>
             
             {trackingInfo ? (
-              <Box sx={{ mt: 4 }}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">Order Status: {trackingInfo.status}</Typography>
-                    <Typography variant="body1">
-                      Estimated Delivery: {trackingInfo.estimatedDelivery}
-                    </Typography>
-                    <Typography variant="body1">
-                      Current Location: {trackingInfo.currentLocation}
-                    </Typography>
-
-                    <Typography variant="h6" sx={{ mt: 2 }}>Tracking History</Typography>
-                    <ul>
-                      {trackingInfo.history.map((event, index) => (
-                        <li key={index}>
-                          <Typography variant="body2">
-                            <strong>{event.date}:</strong> {event.description}
-                          </Typography>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </Box>
-            ) : orderId ? (
-              <Typography variant="body1" color="error" sx={{ mt: 4 }}>
-                No tracking information found for order ID: {orderId}
-              </Typography>
+              <SimpleCard2 
+                sx={{
+                  mt: 4, 
+                  borderRadius: "8px", 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'flex-start', 
+                  alignItems: 'flex-start', 
+                  width: '100%'
+                }}
+                // title={`Order number : ${trackingInfo.orderNo}`}
+                title={'Order Details'}
+                cardFullSize={true}
+              >
+                {/* <br></br>
+                <br></br>
+                <Typography variant="h6">Order number: {trackingInfo.orderNo}</Typography> */}
+                
+                <Grid spacing={2} display={'flex'} flexWrap={'wrap'} gap={1}>
+                  <DataField label={'Order number'} sx={{mr: 8}}>
+                    <Typography variant="body2">{trackingInfo.orderNo}</Typography>
+                  </DataField>
+                  <DataField label={'Estimated Delivery time'} sx={{mr: 8}}>
+                    <Typography variant="body2">{trackingInfo.estimatedDelivery}</Typography>
+                  </DataField>
+                  <DataField label={'Shipping by'} sx={{mr: 8}}>
+                    <Typography><a href={`tel:${trackingInfo.shippingBy}`} color={themeColors.red.palette.primary.main}>{trackingInfo.shippingBy}</a></Typography>
+                  </DataField>
+                  <DataField label={'Status'} sx={{mr: 8}}>
+                    <Typography variant="body2">{trackingInfo.status}</Typography>
+                  </DataField>
+                  <DataField label={'Tracking number/Waybill'} sx={{mr: 8}}>
+                    <Typography variant="body2">{trackingInfo.trackingNumber}</Typography>
+                  </DataField>
+                  
+                </Grid>
+        
+                {/* Stepper for progress */}
+                <Box sx={{ mt: 3.5 }}>
+                  <Stepper alternativeLabel activeStep={2} connector={<ColorlibConnector sx={{marginTop: '10px', borderTopWidth: '3px'}} />} sx={{maxWidth: '800px'}}>
+                    {steps.map((label, index) => (
+                      <Step key={label}>
+                        <StepLabel
+                          StepIconComponent={StepIcon}
+                          sx={{
+                            '& .MuiStepLabel-label': {
+                              fontWeight: 'bold', // Make step label bold
+                            },
+                          }}
+                        >
+                          <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '12px', mt: -1 }}>{label}</Typography>
+                        </StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </Box>
+            </SimpleCard2>
             ) : null}
           </Grid>
           {/* <Grid item xs={12} md={5}>
