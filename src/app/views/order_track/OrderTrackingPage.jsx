@@ -13,6 +13,7 @@ import styled from "@emotion/styled";
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { DataField, SimpleCard2 } from "app/components";
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import { useFormatter } from "app/hooks/useFormatter";
 
 const OrderTrackingPage = () => {
   const [orderId, setOrderId] = useState('');
@@ -22,6 +23,8 @@ const OrderTrackingPage = () => {
   const { apiNonAuth } = useAxios()
 
   const { triggerCommonErrors, triggerNotifications } = useNotistack()
+
+  const { TitleCaseWordFormat, DefaultWordFormat, DefaultDateFormat } = useFormatter()
 
   const [loading, setLoading] = useState(false)
 
@@ -34,8 +37,9 @@ const OrderTrackingPage = () => {
       estimatedDelivery: '29 Nov 2019',
       shippingBy: 'BLUEDART',
       contact: '+1598675986',
-      status: 'Picked by the courier',
+      status: 'picked_by the courier',
       trackingNumber: 'BD045903594059',
+      steps: 2
     },
     "67890": {
       status: "Delivered",
@@ -51,8 +55,10 @@ const OrderTrackingPage = () => {
   };
 
   const handleTrackOrder = async () => {
+    if(!orderId || !contactNo || loading) return
+
     setLoading(true)
-    orderId && contactNo && !loading && await apiNonAuth.get(`/order/track-order?orderId=${orderId}&contactNo=${contactNo}`)
+    await apiNonAuth.get(`/order/track-order?orderId=${orderId}&contactNo=${contactNo}`)
       .then(response => {
         if(response.status===200){
           setTrackingInfo(response.data)
@@ -107,7 +113,7 @@ const OrderTrackingPage = () => {
   const StepIconRoot = styled('div')(({ theme, ownerState }) => ({
     backgroundColor: '#ccc',
     zIndex: 1,
-    color: ownerState.active || ownerState.completed?'#fff':'black',
+    color: '#fff',
     width: 40,
     height: 40,
     display: 'flex',
@@ -143,11 +149,16 @@ const OrderTrackingPage = () => {
 
   return (
     <Box>
-      <Container maxWidth="1300px" sx={{pr: 20, pl: 20, minHeight: '80dvh'}}>
-        {/* <Grid container spacing={3}> */}
+      <Container 
+        maxWidth="1300px" 
+        sx={{
+          pr: { xs: 2, sm: 4, md: 6 },
+          pl: { xs: 2, sm: 4, md: 6 },
+          minHeight: '80dvh'
+        }}
+      >
+          <Header title={"Order Tracking"} subTitle={"Track your order"} />
           <Grid item xs={12} md={7}>
-            <br />
-            <Header title={"Order Tracking"} subTitle={"Track your order"} />
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
               Enter your order number or tracking number or waybill with one of your contact numbers that you used to place the order to get real-time status updates on your order. Stay informed about its current location and estimated delivery time.
               <br />
@@ -204,7 +215,7 @@ const OrderTrackingPage = () => {
                   width: '100%'
                 }}
                 // title={`Order number : ${trackingInfo.orderNo}`}
-                title={'Order Details'}
+                title={'Order Tracking Details'}
                 cardFullSize={true}
               >
                 {/* <br></br>
@@ -216,13 +227,13 @@ const OrderTrackingPage = () => {
                     <Typography variant="body2">{trackingInfo.orderNo}</Typography>
                   </DataField>
                   <DataField label={'Estimated Delivery time'} sx={{mr: 8}}>
-                    <Typography variant="body2">{trackingInfo.estimatedDelivery}</Typography>
+                    <Typography variant="body2">{DefaultDateFormat(new Date(trackingInfo.estimatedDelivery))}</Typography>
                   </DataField>
                   <DataField label={'Shipping by'} sx={{mr: 8}}>
                     <Typography><a href={`tel:${trackingInfo.shippingBy}`} color={themeColors.red.palette.primary.main}>{trackingInfo.shippingBy}</a></Typography>
                   </DataField>
                   <DataField label={'Status'} sx={{mr: 8}}>
-                    <Typography variant="body2">{trackingInfo.status}</Typography>
+                    <Typography variant="body2">{TitleCaseWordFormat(DefaultWordFormat(trackingInfo.status))}</Typography>
                   </DataField>
                   <DataField label={'Tracking number/Waybill'} sx={{mr: 8}}>
                     <Typography variant="body2">{trackingInfo.trackingNumber}</Typography>
@@ -232,7 +243,7 @@ const OrderTrackingPage = () => {
         
                 {/* Stepper for progress */}
                 <Box sx={{ mt: 3.5 }}>
-                  <Stepper alternativeLabel activeStep={2} connector={<ColorlibConnector sx={{marginTop: '10px', borderTopWidth: '3px'}} />} sx={{maxWidth: '800px'}}>
+                  <Stepper alternativeLabel activeStep={trackingInfo.steps} connector={<ColorlibConnector sx={{marginTop: '10px', borderTopWidth: '3px'}} />} sx={{maxWidth: '800px'}}>
                     {steps.map((label, index) => (
                       <Step key={label}>
                         <StepLabel

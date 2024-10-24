@@ -1,8 +1,13 @@
 import React from "react";
-import { Box, Typography, Grid, Container, Button, TextField } from "@mui/material";
+import { Box, Typography, Grid, Container, Button, TextField, CircularProgress } from "@mui/material";
 import Header from "app/components/Header";
 import Footer from "app/components/Footer";
 import { useRef } from "react";
+import { useState } from "react";
+import { useAxios } from "app/hooks/useAxios";
+import { LoadingButton } from "@mui/lab";
+import { useNotistack } from "app/hooks/useNotistack";
+import { bussinesName } from "config";
 // import BrandCars from "./component/BrandCars";
 // import PartnerLogos from "./component/PartnerLogos";
 
@@ -10,21 +15,61 @@ const ContactUsPage = () => {
 
   const contactUsForm = useRef(null);
 
+  const { apiNonAuth } = useAxios()
+
+  const { triggerCommonErrors, triggerNotifications } = useNotistack()
+
+  const [name, setName] = useState("") 
+  const [email, setEmail] = useState("") 
+  const [contactNo, setContactNo] = useState("") 
+  const [message, setMessage] = useState("") 
+  const [loading, setLoading] = useState(false) 
+
   // Function to scroll to a specific section
   const scrollToContactUsForm= (contactUsForm) => {
     contactUsForm.current.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleSubmit = async () => {
+
+    if(!name || !contactNo || !email || !message || loading) return
+
+    setLoading(true)
+    await apiNonAuth.post('/support/send-message', {name: name, email: email, contactNo: contactNo, message: message})
+      .then(response => {
+        if(response.status===200){
+          triggerNotifications([{text: 'Message sent successfully.', variant: 'success'}])
+          setName('')
+          setEmail('')
+          setMessage('')
+          setContactNo('')
+        }
+      })
+      .catch(error => {
+        triggerCommonErrors(error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
   return (
     <Box>
-      <Container maxWidth="1300px" sx={{width: '100%', pl: '10px', pr: '10px'}}>
-      <Header title={"Contact Us"} subTitle={"Get in Touch with Vivolk"} sx={{mt: 2}}/>
+      <Container 
+        maxWidth="1300px" 
+        sx={{
+          pr: { xs: 2, sm: 4, md: 6 },
+          pl: { xs: 2, sm: 4, md: 6 },
+          // minHeight: '80dvh'
+        }}
+      >
+      <Header title={"Contact Us"} subTitle={"Get in Touch with "+bussinesName}/>
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={7}>
             <br />
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
-              We are here to assist you with any inquiries, issues, or support you may need. At Vivolk, customer satisfaction is our priority, and we strive to make every interaction smooth and helpful.
+              {`We are here to assist you with any inquiries, issues, or support you may need. At ${bussinesName}, customer satisfaction is our priority, and we strive to make every interaction smooth and helpful.`}
               <br />
               <br />
               Whether you need assistance with your order, have questions about our products, or want to leave feedback, our team is ready to help. Feel free to reach out to us using any of the contact methods below or fill out the form to get in touch.
@@ -82,35 +127,63 @@ const ContactUsPage = () => {
               </Typography>
             </Box>
             <Box component="form">
-              <TextField
-                label="Name"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Contact number"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Message"
-                variant="outlined"
-                multiline
-                rows={4}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Button variant="contained" color="primary">
+              <Box sx={{display: "flex", flexDirection: "column", gap: 2, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                <TextField
+                  label="Name *"
+                  variant="outlined"
+                  fullWidth
+                  value={name}
+                  disabled={loading}
+                  onChange={(e) => setName(e.target.value)}
+                  sx={{ maxWidth: 600 }}
+                />
+                <TextField
+                  label="Email *"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  disabled={loading}
+                  onChange={(e) => setEmail(e.target.value)}
+                  sx={{ maxWidth: 600 }}
+                />
+                <TextField
+                  label="Contact number *"
+                  variant="outlined"
+                  fullWidth
+                  value={contactNo}
+                  disabled={loading}
+                  onChange={(e) => setContactNo(e.target.value)}
+                  sx={{ maxWidth: 600 }}
+                />
+                <TextField
+                  label="Message *"
+                  variant="outlined"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  value={message}
+                  disabled={loading}
+                  onChange={(e) => setMessage(e.target.value)}
+                  sx={{ maxWidth: 600 }}
+                />
+              </Box> 
+              {/* <Button variant="contained" color="primary" sx={{mt: 2}} onClick={handleSubmit} >
                 Submit
-              </Button>
+              </Button> */}
+              <LoadingButton
+                variant="contained"
+                loading={loading}
+                color="primary"
+                onClick={handleSubmit}
+                loadingPosition="start"
+                startIcon={loading ? <CircularProgress size={20} /> : null}
+                sx={{ 
+                  mt: 2,
+                }}
+                disabled={name==='' || message==='' || email==='' || contactNo===''}
+              >
+                Send Message
+              </LoadingButton>
             </Box>
           </Grid>
       </Container>

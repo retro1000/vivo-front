@@ -336,8 +336,15 @@ const ProductPage = () => {
   return (
       
     <Box>
-      <Container sx={{ display: 'flex', flexDirection: 'column' }} maxWidth={'1400px'}>
-        <br />
+      <Container 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          pr: { xs: 2, sm: 4, md: 6 },
+          pl: { xs: 2, sm: 4, md: 6 },
+        }} 
+        maxWidth={'1400px'}
+      >
         <Header title="Our Products" subTitle="Explore Our Products" />
         <Box
           sx={{

@@ -25,11 +25,17 @@ const InquiriesPage = () => {
 
   return (
     <Box>
-      <Container maxWidth="1300px" sx={{pr: 20, pl: 20}}>
+      <Container 
+        maxWidth="1300px" 
+        sx={{
+          pr: { xs: 2, sm: 4, md: 6 },
+          pl: { xs: 2, sm: 4, md: 6 },
+          // minHeight: '80dvh'
+        }}
+      >
+        <Header title={"Inquiries"} subTitle={"Submit your questions or concerns"} />
         {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={7}>
-            <br />
-            <Header title={"Inquiries"} subTitle={"Submit your questions or concerns"} />
             <Typography variant="body1" sx={{ mt: 4, color: "text.secondary" }}>
               Have a question about an order, a product, or anything else? Fill out the form below, and our customer support team will get back to you as soon as possible.
             </Typography>
