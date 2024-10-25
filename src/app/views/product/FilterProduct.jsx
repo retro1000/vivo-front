@@ -1,6 +1,6 @@
 // ProductPage.jsx
 import React, { useState } from "react";
-import { Box, Typography, Button, Grid, Container } from "@mui/material";
+import { useTheme, Box, Typography, Button, Grid, Container, useMediaQuery, IconButton, Slide } from "@mui/material";
 import { Header, Footer } from "app/components";
 import SortButton from "./component/SortButton";
 import SearchBar from "./component/SearchBar";
@@ -11,7 +11,9 @@ import { useAxios } from "app/hooks/useAxios";
 import { useLocation } from "react-router-dom";
 import { useReducer } from "react";
 import { useNotistack } from "app/hooks/useNotistack";
-import { min } from "lodash";
+
+import FilterIcon from '@mui/icons-material/Tune'
+import { themeColors } from "app/components/MatxTheme/themeColors";
 
 
 const demoData = [
@@ -204,7 +206,6 @@ const filterReducer = (state, action) => {
       return {...state, page: page || 1, limit: limit || 100, selectedFilters: filters || {}, init: true, actionType: 'page', sort: sort || state.sort, isPagingBlock: false };
     }case "PAGE": {
       const { filteredProducts, totalResults, filters, isPagingBlock } = action.payload
-      console.log(isPagingBlock)
       return {...state, filteredProducts: [...state.filteredProducts, ...filteredProducts], totalResults: totalResults, actionType: 'page', filters: filters?[...state.filters, ...filters]:state.filters, isPagingBlock: isPagingBlock };
     }case "SET_PAGE": {
       return {...state, page: state.isPagingBlock?state.page:(parseInt(state.page, 10)+1), actionType: 'page' };
@@ -220,6 +221,12 @@ const filterReducer = (state, action) => {
 const ProductPage = () => {
 
   const [state, dispatch] = useReducer(filterReducer, initialState)
+
+  const theme = useTheme();
+
+  const isXs = useMediaQuery(theme.breakpoints.only('xs')); 
+
+  const [showFilters, setShowFilters] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
@@ -247,7 +254,7 @@ const ProductPage = () => {
       return () => pageEl.removeEventListener("scroll", handleScroll);
     }
   }, [])
-
+console.log(isXs)
   const handleFilterChange = (value) => {
     dispatch({ type: "SELECT_FILTER", payload: {selectedFilters: value} })
   };
@@ -259,6 +266,10 @@ const ProductPage = () => {
   const handleSort = (value) => {
     dispatch({ type: "SORT", payload: { sort: value } })
   } 
+
+  const handleShowFilters = () => {
+    setShowFilters(!showFilters)
+  }
 
   const handleScroll = () => {
     const pageEl = document.getElementById("@content_box")
@@ -307,7 +318,7 @@ const ProductPage = () => {
         if(response.status===204) dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .catch(error => {
-        triggerCommonErrors(error)
+        // triggerCommonErrors(error)
         dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       })
       .finally(() => {
@@ -338,8 +349,80 @@ const ProductPage = () => {
             flexWrap: 'wrap',
           }}
         >
+          {
+            isXs && 
+            <IconButton
+              variant="outlined"
+              color="primary"
+              onClick={handleShowFilters}
+              sx={{
+                border: `1px solid ${themeColors.red.palette.primary.main}`,  // Simulating outlined variant
+                borderRadius: 2,
+                color: "#000",
+                width: '125px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: 'flex',  // Flex layout for alignment
+                justifyContent: 'space-between',  // Ensures space between text and end icon
+                alignItems: 'center',  // Vertically centers the content
+                backgroundColor: '#fff',
+              }}
+            >
+              {/* Start Icon */}
+              <FilterIcon sx={{ mr: 1 }} />  {/* Add margin-right to give space from text */}
+
+              {/* Text */}
+              <Typography variant="body2" fontSize={'13px'} sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {showFilters?'Hide filters':'Show filters'}
+              </Typography>
+            </IconButton>
+          }
           <SortButton sort={state.sort} handleSort={handleSort} />
         </Box>
+        {
+          isXs && (
+              <Slide direction="right" in={showFilters} mountOnEnter unmountOnExit>
+                {/* Wrap with a single parent element */}
+                <Box
+                  sx={{
+                    mt: 5,
+                    position: 'sticky',
+                    overflowY: 'auto',   // Make the slide fixed in place
+                    top: 0,               // Start at the top of the viewport
+                    left: 0,             // Slide in from the right side
+                    width: '300px',       // Define the width of the slide
+                    maxHeight: '100dvh',
+                    height: '100dvh',      // Full viewport height
+                    zIndex: 1200,         // Ensure it appears above other content
+                    backgroundColor: 'white', // Optional: Set background color
+                    // boxShadow: 3,         // Optional: Add shadow for depth
+                    // padding: 2,           // Add padding inside the box
+                  }}
+                >
+                  <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                    <Typography variant="h5" gutterBottom>
+                      Filters
+                    </Typography>
+                    <Button
+                      variant="text"
+                      color="primary"
+                      onClick={handleClearAll}
+                      disabled={Object.keys(state.selectedFilters).length === 0}
+                    >
+                      Clear All
+                    </Button>
+                  </Box>
+
+                  <FilterBar
+                    filters={state.filters}
+                    handleFilterChange={handleFilterChange}
+                    selectedFilters={state.selectedFilters}
+                  />
+                </Box>
+              </Slide>
+            )
+        }
         <Grid
           sx={{
             display: 'flex',
@@ -351,22 +434,35 @@ const ProductPage = () => {
             minHeight: '100dvh',
           }}
         >
-          {/* Filters section */}
-          <Box sx={{ position: 'sticky', top: 0, width: '20%', maxHeight: '100vh', overflowY: 'auto'}}>
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <Typography variant="h5" gutterBottom>
-                Filters
-              </Typography>
-              <Button variant="text" color="primary" onClick={handleClearAll} disabled={Object.keys(state.selectedFilters).length===0}>
-                Clear All
-              </Button>
-            </Box>
-            {/* update filter details for type of enums(eg.ACTIVE_NOW) for support to backend */}
-            <FilterBar filters={state.filters} handleFilterChange={handleFilterChange} selectedFilters={state.selectedFilters} />
-          </Box>
+          {
+            !isXs && (
+              <Box
+                sx={{ position: 'sticky', top: 0, width: '20%', maxHeight: '100vh', overflowY: 'auto' }}
+              >
+                <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                  <Typography variant="h5" gutterBottom>
+                    Filters
+                  </Typography>
+                  <Button
+                    variant="text"
+                    color="primary"
+                    onClick={handleClearAll}
+                    disabled={Object.keys(state.selectedFilters).length === 0}
+                  >
+                    Clear All
+                  </Button>
+                </Box>
 
+                <FilterBar
+                  filters={state.filters}
+                  handleFilterChange={handleFilterChange}
+                  selectedFilters={state.selectedFilters}
+                />
+              </Box>
+            )
+          }
           {/* Products section */}
-          <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'}>
+          <Box position={'relative'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'}>
             <ProductGrid products={state.filteredProducts} sx={{ maxWidth: '100%' }} maxWidth={'100%'}/>
           </Box>
         </Grid>
