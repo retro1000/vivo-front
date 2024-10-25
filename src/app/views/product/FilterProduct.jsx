@@ -342,6 +342,8 @@ const ProductPage = () => {
           flexDirection: 'column',
           pr: { xs: 2, sm: 4, md: 6 },
           pl: { xs: 2, sm: 4, md: 6 },
+          // width: '100%',
+          // maxWidth: '100%',
         }} 
         maxWidth={'1400px'}
       >
@@ -366,12 +368,12 @@ const ProductPage = () => {
             alignItems: 'flex-start',
             gap: '1em',
             marginTop: '2em',
-            width: '100dvw',
+            // width: '100dvw',
             minHeight: '100dvh',
           }}
         >
           {/* Filters section */}
-          <Box sx={{ position: 'sticky', top: 0, width: '350px', maxHeight: '100vh', overflowY: 'auto'}}>
+          <Box sx={{ position: 'sticky', top: 0, width: '250px', minWidth: '250px', maxWidth: '250px', maxHeight: '100vh', overflowY: 'auto'}}>
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
               <Typography variant="h5" gutterBottom>
                 Filters
@@ -385,8 +387,8 @@ const ProductPage = () => {
           </Box>
 
           {/* Products section */}
-          <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'}>
-            <ProductGrid products={state.filteredProducts} sx={{ maxWidth: '100%' }} maxWidth={'100%'}/>
+          <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={3}>
+            <ProductGrid products={state.filteredProducts}/>
           </Box>
         </Grid>
       </Container>

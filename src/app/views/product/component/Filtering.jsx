@@ -126,7 +126,7 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
 
 const FilterList = ({ key, filter, handleFilterChange, selectedFilters }) => (
   <Accordion defaultExpanded key={key} sx={{ boxShadow: 'none', border: 'none', borderBottom: '1px solid silver', margin: '1px !important'}}>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{p: 0}}>
       <Typography variant="body1">{filter.category}</Typography>
     </AccordionSummary>
     <AccordionDetails sx={{mt: -2, pb: 1}}>
