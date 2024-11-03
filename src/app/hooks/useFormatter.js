@@ -35,6 +35,10 @@ const useFormatter = () => {
         return (word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     }
 
+    const CamelCaseWordFormat = (word) => {
+        return (word.charAt(0).toUpperCase() + word.slice(1).split(/(?=[A-Z])/).map(w => w.charAt(0).toLowerCase() + w.slice(1)).join(' '))
+    }
+
     const PaymentMethod = (method) => {
         switch(method){
             case 'COD':
@@ -50,7 +54,7 @@ const useFormatter = () => {
         }
     }
   
-    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat }
+    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
   }
   
   export {useFormatter}

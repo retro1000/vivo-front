@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import { Box, Typography, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary, AccordionDetails, Radio } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { NumSliderFilter } from 'app/components';
+import { forwardRef } from 'react';
+import { useFormatter } from 'app/hooks/useFormatter';
 
 const handleCheckChange = (e, filter, selectedFilters, setSelectedFilters) => {
   const { name, checked } = e.target;
-  const category = filter.category.toLowerCase().replace(/ /g, '');
+  const category = filter.category;
 
   // Extract the selected options for the category
   const selectedOptions = selectedFilters[category] || [];
-console.log(selectedOptions)
+
   if (checked) {
     // Add the option to the selected array
     setSelectedFilters({
@@ -35,7 +37,7 @@ console.log(selectedOptions)
 
 const handleRadioChange = (e, filter, selectedFilters, setSelectedFilters) => {
   const { value } = e.target;
-  const category = filter.category.toLowerCase().replace(/ /g, '');
+  const category = filter.category;
 
   // Update the selected radio option for the category
   setSelectedFilters({
@@ -45,7 +47,7 @@ const handleRadioChange = (e, filter, selectedFilters, setSelectedFilters) => {
 };
 
 const handleNumSliderChange = (newRange, filter, selectedFilters, setSelectedFilters) => {
-  const category = filter.category.toLowerCase().replace(/ /g, '');
+  const category = filter.category;
 
   // Update the slider range in the selected filters
   setSelectedFilters({
@@ -54,7 +56,8 @@ const handleNumSliderChange = (newRange, filter, selectedFilters, setSelectedFil
   });
 };
 
-const createFilterOption = (filter, filters, handleFilterChange) => {
+const createFilterOption = (filter, filters, handleFilterChange, DefaultWordFormat) => {
+
   switch(filter.type){
     case 'check':
       return (
@@ -65,12 +68,12 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
                 control={
                   <Checkbox
                     size="small"
-                    checked={Array.isArray(filters[`${filter.category.toLowerCase().replace(/ /g, '')}`]) && filters[`${filter.category.toLowerCase().replace(/ /g, '')}`].includes(option.replace(/ /g, ''))}
+                    checked={Array.isArray(filters[`${filter.category}`]) && filters[`${filter.category}`].includes(option)}
                     onChange={(e) => handleCheckChange(e, filter, filters, handleFilterChange)}
-                    name={option.replace(/ /g, '')}
+                    name={option}
                   />
                 }
-                label={option}
+                label={DefaultWordFormat(option)}
                 sx={{
                   marginBottom: '-10px',
                   marginLeft: '1px',
@@ -89,13 +92,13 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
               control={
                 <Radio
                   size='small'
-                  checked={filters[`${filter.category.toLowerCase().replace(/ /g, '')}`] === option}
+                  checked={filters[`${filter.category}`] === option}
                   onChange={(e) => handleRadioChange(e, filter, filters, handleFilterChange)}
                   value={option}
-                  name={filter.category.toLowerCase().replace(/ /g, '')} // Ensure name is the same for grouping
+                  name={filter.category} // Ensure name is the same for grouping
                 />
               }
-              label={option}
+              label={DefaultWordFormat(option)}
               sx={{
                 marginLeft: '1px',
                 marginBottom: '-10px',
@@ -110,7 +113,7 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
     case 'num_slider':
       return (
         <NumSliderFilter 
-          range={filters[`${filter.category.toLowerCase().replace(/ /g, '')}`]} 
+          range={filters[`${filter.category}`]} 
           curr={'LKR'} 
           setRange={(newRange) => handleNumSliderChange(newRange, filter, filters, handleFilterChange)}
           min={10} 
@@ -123,26 +126,31 @@ const createFilterOption = (filter, filters, handleFilterChange) => {
   }
 }
 
-const FilterList = ({ key, filter, handleFilterChange, selectedFilters }) => (
-  <Accordion defaultExpanded key={key} sx={{ boxShadow: 'none', border: 'none', borderBottom: '1px solid silver', margin: '1px !important'}}>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      <Typography variant="body1">{filter.category}</Typography>
-    </AccordionSummary>
-    <AccordionDetails sx={{mt: -2, pb: 1}}>
-      {createFilterOption(filter, selectedFilters, handleFilterChange)}
-      <br></br>
-    </AccordionDetails>
-  </Accordion>
-);
+const FilterList = ({ key, filter, handleFilterChange, selectedFilters }) => {
 
-const FilterBar = ({ filters, handleFilterChange, selectedFilters }) => {
+  const { CamelCaseWordFormat, DefaultWordFormat } = useFormatter()
+
   return (
-    <>
+    <Accordion defaultExpanded key={key} sx={{ boxShadow: 'none', border: 'none', borderBottom: '1px solid silver', margin: '1px !important'}}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="body1">{CamelCaseWordFormat(filter.category)}</Typography>
+      </AccordionSummary>
+      <AccordionDetails sx={{mt: -2, pb: 1}}>
+        {createFilterOption(filter, selectedFilters, handleFilterChange, DefaultWordFormat)}
+        <br></br>
+      </AccordionDetails>
+    </Accordion>
+  )
+};
+
+const FilterBar = forwardRef(({ filters, handleFilterChange, selectedFilters }, ref) => {
+  return (
+    <Box ref={ref}>
       {filters.map((filter, index) => (
         <FilterList key={index} filter={filter} handleFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
       ))}
-    </>
+    </Box>
   );
-};
+});
 
 export default FilterBar;

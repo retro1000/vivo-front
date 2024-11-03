@@ -4,6 +4,7 @@ import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SortIcon from "@mui/icons-material/Sort";
 import { themeColors } from "app/components/MatxTheme/themeColors";
+import { forwardRef } from "react";
 
 const options = [
   { value: 'POPULAR', label: 'Popularity' },
@@ -12,7 +13,7 @@ const options = [
   { value: 'NEWEST', label: 'Newest' },
 ];
 
-const SortButton = ({ sort, handleSort }) => {
+const SortButton = forwardRef(({ sort, handleSort }, ref) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -32,6 +33,7 @@ const SortButton = ({ sort, handleSort }) => {
   return (
     <>
       <IconButton
+        ref={ref}
         variant="outlined"
         color="primary"
         onClick={handleClick}
@@ -87,6 +89,6 @@ const SortButton = ({ sort, handleSort }) => {
       </Menu>
     </>
   );
-};
+});
 
 export default SortButton;

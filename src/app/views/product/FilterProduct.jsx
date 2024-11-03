@@ -14,6 +14,7 @@ import { useNotistack } from "app/hooks/useNotistack";
 
 import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
+import { useRef } from "react";
 
 
 const demoData = [
@@ -161,17 +162,17 @@ const demoData = [
 const filterConfig = [
   
   {
-    category: 'Delivery options and offers',
-    options: ['Free delivery', 'Sale', 'Discount'],
+    category: 'deliveryOptionsAndOffers',
+    options: ['FREE_DELIVERY', 'SALE', 'DISCOUNT'],
     type: 'check'
   },
   {
-    category: 'Order types',
-    options: ['All', 'Backend orders'],
+    category: 'orderTypes',
+    options: ['ALL', 'BACKEND_ORDER'],
     type: 'radio'
   },
   {
-    category: 'Price',
+    category: 'price',
     config: {label: 'Price', min: 50, max: 15000},
     type: 'num_slider'
   }
@@ -224,7 +225,9 @@ const ProductPage = () => {
 
   const theme = useTheme();
 
-  const isXs = useMediaQuery(theme.breakpoints.only('xs')); 
+  const isXs = useMediaQuery('(max-width:900px)');
+
+  const [productGridPositionWhenIsXs, setProductGridPositionWhenIsXs] = useState()
 
   const [showFilters, setShowFilters] = useState(false)
 
@@ -233,6 +236,8 @@ const ProductPage = () => {
   const { api } = useAxios()
 
   const { triggerCommonErrors } = useNotistack()
+
+  // const sortBtnRef = useRef(null)
 
   const getUrlParams = () => {
     const params = {}
@@ -252,9 +257,16 @@ const ProductPage = () => {
     if(pageEl){
       pageEl.addEventListener("scroll", handleScroll);
       return () => pageEl.removeEventListener("scroll", handleScroll);
-    }
+    } 
   }, [])
-console.log(isXs)
+
+  // useEffect(() => {
+  //   if(sortBtnRef.current && isXs) {
+  //     const rect = sortBtnRef.current.getBoundingClientRect();
+  //     setProductGridPositionWhenIsXs({ top: rect.top }); // Set any boundary or position property as needed
+  //   } 
+  // }, [sortBtnRef])
+
   const handleFilterChange = (value) => {
     dispatch({ type: "SELECT_FILTER", payload: {selectedFilters: value} })
   };
@@ -334,7 +346,7 @@ console.log(isXs)
 
   return (
       
-    <Box>
+    <Box sx={isXs && showFilters ? {pointerEvents: "none", overflowY: 'hidden'}:{}}>
       <Container sx={{ display: 'flex', flexDirection: 'column' }} maxWidth={'1400px'}>
         <br />
         <Header title="Our Products" subTitle="Explore Our Products" />
@@ -351,47 +363,49 @@ console.log(isXs)
         >
           {
             isXs && 
-            <IconButton
-              variant="outlined"
-              color="primary"
-              onClick={handleShowFilters}
-              sx={{
-                border: `1px solid ${themeColors.red.palette.primary.main}`,  // Simulating outlined variant
-                borderRadius: 2,
-                color: "#000",
-                width: '125px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: 'flex',  // Flex layout for alignment
-                justifyContent: 'space-between',  // Ensures space between text and end icon
-                alignItems: 'center',  // Vertically centers the content
-                backgroundColor: '#fff',
-              }}
-            >
-              {/* Start Icon */}
-              <FilterIcon sx={{ mr: 1 }} />  {/* Add margin-right to give space from text */}
+              <IconButton
+                variant="outlined"
+                color="primary"
+                onClick={handleShowFilters}
+                sx={{
+                  border: `1px solid ${themeColors.red.palette.primary.main}`,  // Simulating outlined variant
+                  borderRadius: 2,
+                  color: "#000",
+                  width: '125px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: 'flex',  // Flex layout for alignment
+                  justifyContent: 'space-between',  // Ensures space between text and end icon
+                  alignItems: 'center',  // Vertically centers the content
+                  backgroundColor: '#fff',
+                }}
+              >
+                {/* Start Icon */}
+                <FilterIcon sx={{ mr: 1 }} />  {/* Add margin-right to give space from text */}
 
-              {/* Text */}
-              <Typography variant="body2" fontSize={'13px'} sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {showFilters?'Hide filters':'Show filters'}
-              </Typography>
-            </IconButton>
+                {/* Text */}
+                <Typography variant="body2" fontSize={'13px'} sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {showFilters?'Hide filters':'Show filters'}
+                </Typography>
+              </IconButton>
           }
           <SortButton sort={state.sort} handleSort={handleSort} />
         </Box>
         {
           isXs && (
-              <Slide direction="right" in={showFilters} mountOnEnter unmountOnExit>
+              <Slide direction="right" in={showFilters} mountOnEnter unmountOnExit style={{mt: 0}}>
                 {/* Wrap with a single parent element */}
                 <Box
                   sx={{
-                    mt: 5,
-                    position: 'sticky',
+                    // mt: 5,
+                    position: 'absolute',
                     overflowY: 'auto',   // Make the slide fixed in place
-                    top: 0,               // Start at the top of the viewport
+                    top: 75,               // Start at the top of the viewport
                     left: 0,             // Slide in from the right side
-                    width: '300px',       // Define the width of the slide
+                    width: '250px',       // Define the width of the slide
+                    minWidth: '250px',       // Define the width of the slide
+                    maxWidth: '250px',       // Define the width of the slide
                     maxHeight: '100dvh',
                     height: '100dvh',      // Full viewport height
                     zIndex: 1200,         // Ensure it appears above other content
@@ -462,8 +476,8 @@ console.log(isXs)
             )
           }
           {/* Products section */}
-          <Box position={'relative'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'}>
-            <ProductGrid products={state.filteredProducts} sx={{ maxWidth: '100%' }} maxWidth={'100%'}/>
+          <Box position={'relative'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'} >
+            <ProductGrid products={state.filteredProducts} sx={{ maxWidth: '100%'}} maxWidth={'100%'}/>
           </Box>
         </Grid>
       </Container>
