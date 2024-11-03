@@ -15,4 +15,5 @@ export const auth0Config = {
 };
 
 // export const backendApi = 'http://localhost:8080'
-export const backendApi = 'https://gazelle-winning-remotely.ngrok-free.app'
+// export const backendApi = 'https://gazelle-winning-remotely.ngrok-free.app'
+export const backendApi = 'https://vivo-production.up.railway.app'
