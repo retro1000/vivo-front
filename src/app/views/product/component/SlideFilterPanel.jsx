@@ -21,7 +21,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filters, handleFilterChange, handleShowFilters }) => {
   return (
-    // <React.Fragment>
     <Box>
       <Dialog
         sx={{
@@ -30,21 +29,20 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
               width: '320px',
               maxHeight: '100vh',
               position: 'fixed',
-              top: topBarHeight,
-              left: 0,                    // Anchors to the left side
+              top: topBarHeight+4,
+              left: 0,                    
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-start',
+              borderTopLeftRadius: 0
             },
         }}
         BackdropProps={{
             sx: {
               position: 'absolute',
-              top: topBarHeight,         // Set overlay (backdrop) to start 75px from the top
+              top: topBarHeight+4,         // Set overlay (backdrop) to start 75px from the top
               left: 0,
-            //   width: '100%',
-            //   height: 'calc(100% - 75px)',  // Adjust height to fill the screen from 75px down
-              backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust backdrop color and opacity as needed
+              backgroundColor: 'rgba(0, 0, 0, 0.2)', // Adjust backdrop color and opacity as needed
             },
         }}
         open={showFilters}
@@ -61,9 +59,7 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
               overflowY: 'auto',
               top: 0,
               left: 0,
-            //   width: '250px',
               minWidth: '250px',
-            //   maxWidth: '250px',
               maxHeight: '100dvh',
               height: '100dvh',
               zIndex: 1200,
@@ -93,7 +89,6 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
         </DialogContent>
       </Dialog>
     </Box>
-    // </React.Fragment>
   );
 };
 

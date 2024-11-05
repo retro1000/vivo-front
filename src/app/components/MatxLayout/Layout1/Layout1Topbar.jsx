@@ -1,10 +1,9 @@
 import { memo, useState } from "react";
-import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   styled,
   Avatar,
-  Hidden,
   useTheme,
   MenuItem,
   IconButton,
@@ -29,9 +28,6 @@ import {
   Menu,
   Person,
   Settings,
-  WebAsset,
-  MailOutline,
-  StarOutline,
   PowerSettingsNew
 } from "@mui/icons-material";
 import React from "react";
@@ -202,20 +198,6 @@ const Layout1Topbar = () => {
                 <StyledIconButton onClick={handleSidebarToggle}>
                   <Menu />
                 </StyledIconButton>
-
-                {/* <IconBox>
-                  <StyledIconButton>
-                    <MailOutline />
-                  </StyledIconButton>
-
-                  <StyledIconButton>
-                    <WebAsset />
-                  </StyledIconButton>
-
-                  <StyledIconButton>
-                    <StarOutline />
-                  </StyledIconButton>
-                </IconBox> */}
               </React.Fragment>
           }
         </Box>
@@ -268,11 +250,6 @@ const Layout1Topbar = () => {
             <MatxMenu
               menuButton={
                 <UserMenu>
-                  {/* <Hidden xsDown>
-                    <Span>
-                      Hi <strong>{user?user.username:''}</strong>
-                    </Span>
-                  </Hidden> */}
                   <Avatar src={user?user.avatar:''} sx={{ cursor: "pointer" }} />
                 </UserMenu>
               }>
