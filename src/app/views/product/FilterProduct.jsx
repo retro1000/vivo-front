@@ -126,40 +126,6 @@ const demoData = [
   },
 ]
 
-// const filters = {
-//   positionExterior: false,
-//   positionInterior: false,
-//   positionInteriorandExterior: false,
-//   producttypeCleaner: false,
-//   producttypePaint: false,
-//   producttypeUndercoat: false,
-//   producttypeVarnish: false,
-//   producttypeWaterproofing: false,
-//   roomtypesBathroom: false,
-//   roomtypesBedroom: false,
-//   roomtypesChildrensRoom: false,
-//   roomtypesDiningRoom: false,
-//   roomtypesHallway: false,
-//   roomtypesHomeOffice: false,
-//   roomtypesKitchen: false,
-//   roomtypesLivingRoom: false,
-//   surfaceBluestone: false,
-//   surfaceDoors: false,
-//   surfaceFurniture: false,
-//   surfaceMetal: false,
-//   surfaceWalls: false,
-//   surfaceWindows: false,
-//   surfaceWood: false,
-//   finishGloss: false,
-//   finishGlossSemiGlossMatt: false,
-//   finishHighGloss: false,
-//   finishLowSheen: false,
-//   finishMatt: false,
-//   finishMidSheen: false,
-//   finishNA: false,
-//   finishSemiGloss: false,
-// }
-
 const filterConfig = [
   
   {
