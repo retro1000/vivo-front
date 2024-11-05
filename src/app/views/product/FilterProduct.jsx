@@ -15,6 +15,7 @@ import { useNotistack } from "app/hooks/useNotistack";
 import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
+import SlideFilterPanel from "./component/SlideFilterPanel";
 
 
 const demoData = [
@@ -371,7 +372,7 @@ const ProductPage = () => {
                   border: `1px solid ${themeColors.red.palette.primary.main}`,  // Simulating outlined variant
                   borderRadius: 2,
                   color: "#000",
-                  width: '125px',
+                  width: 'max-width',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -386,56 +387,15 @@ const ProductPage = () => {
 
                 {/* Text */}
                 <Typography variant="body2" fontSize={'13px'} sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {showFilters?'Hide filters':'Show filters'}
+                  {/* {showFilters?'Hide filters':'Show filters'} */}
+                  Filters
                 </Typography>
               </IconButton>
           }
           <SortButton sort={state.sort} handleSort={handleSort} />
         </Box>
         {
-          isXs && (
-              <Slide direction="right" in={showFilters} mountOnEnter unmountOnExit style={{mt: 0}}>
-                {/* Wrap with a single parent element */}
-                <Box
-                  sx={{
-                    // mt: 5,
-                    position: 'absolute',
-                    overflowY: 'auto',   // Make the slide fixed in place
-                    top: 75,               // Start at the top of the viewport
-                    left: 0,             // Slide in from the right side
-                    width: '250px',       // Define the width of the slide
-                    minWidth: '250px',       // Define the width of the slide
-                    maxWidth: '250px',       // Define the width of the slide
-                    maxHeight: '100dvh',
-                    height: '100dvh',      // Full viewport height
-                    zIndex: 1200,         // Ensure it appears above other content
-                    backgroundColor: 'white', // Optional: Set background color
-                    // boxShadow: 3,         // Optional: Add shadow for depth
-                    // padding: 2,           // Add padding inside the box
-                  }}
-                >
-                  <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                    <Typography variant="h5" gutterBottom>
-                      Filters
-                    </Typography>
-                    <Button
-                      variant="text"
-                      color="primary"
-                      onClick={handleClearAll}
-                      disabled={Object.keys(state.selectedFilters).length === 0}
-                    >
-                      Clear All
-                    </Button>
-                  </Box>
-
-                  <FilterBar
-                    filters={state.filters}
-                    handleFilterChange={handleFilterChange}
-                    selectedFilters={state.selectedFilters}
-                  />
-                </Box>
-              </Slide>
-            )
+          isXs && <SlideFilterPanel showFilters={showFilters} handleClearAll={handleClearAll} selectedFilters={state.selectedFilters} filters={state.filters} handleFilterChange={handleFilterChange} handleShowFilters={handleShowFilters} />
         }
         <Grid
           sx={{
