@@ -1,35 +1,185 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import { Box, Slide, Typography } from '@mui/material'
+import { accordionActionsClasses, Box, Slide, Typography } from '@mui/material'
 import { SearchPane, MuiTable, TButton } from '..';
 
 import ViewIcon from '@mui/icons-material/RemoveRedEye'
-import { useRef } from 'react';
 import { useAxios } from 'app/hooks/useAxios';
+import { useReducer } from 'react';
 
-const FilterTable = ({ title, table, children, dataTableData, setDataTableData, selectedRows, selectableRows, filters, setFilters }) => {
+const initialState = {
+  data: [],
+  totalRecords: 0,
+  selectedRows: [],
+  page: 1,
+  rowsPerPage: 10,
+  searchOptions: {},
+  selectedAction: '',
+  searchText: '',
+  columns: [],
+  path: '',
+  serverSide: true,
+  loading: false
+}
+
+const reducer = (state, action) => {
+  switch(action.type){
+    case 'INIT': {
+      const {table, data} = action.payload
+
+      switch(table){
+        case 'orders':
+          return({
+            ...state,
+            data: data,
+            path: '/order',
+            selectedAction: 'STATUS',
+            searchOptions: {
+              menuActions: [
+                {value:'STATUS', label: 'Seach by order status'},
+                {value:'WAYBILL', label: 'Seach by order waybill'},
+                {value:'ORDER_NO', label: 'Seach by order number'},
+                {value:'ORDER_ID', label: 'Seach by order id'},
+                {value:'CUSTOMER_NAME', label: 'Seach by customer name'},
+                {value:'ALL', label: 'Seach by anything'},
+              ], 
+              // search: , 
+              placeholder: 'Search orders'
+            },
+            columns: [
+              {name: 'Order Id', options: {display: 'exclude'}},
+              {name:'orderNo', label:'Order No'},
+              {name:'waybill', label:'Waybill'},
+              {name:'customerName', label:'Customer Name'},
+              {name:'address', label:'Address'},
+              {name:'contactNos', label:'Contact Numbers'},
+              {name:'status', label:'Status'},
+              {
+                name: "Actions",
+                label: "Actions",
+                options: {
+                  sort: false,
+                  buttonsConfig: [
+                    {
+                      type: "icon",
+                      title: "View item",
+                      icon: ViewIcon,
+                      color: "primary",
+                      size: "small",
+                      onClick: (index) => {
+                        window.location.href = `/order/view/${state.data[index][0]}`
+                      },
+                      onMouseDown: (index) => {
+                        window.open(`/order/view/${state.data[index][0]}`, '_blank')
+                      }, 
+                    },
+                  ]
+                }
+              }   
+            ],
+          })  
+        case 'purchase-orders':
+          return({
+            ...state,
+            data: data,
+            path: '/purchase-order',
+            selectedAction: 'STATUS',
+            searchOptions: {
+              menuActions: [
+                {value:'STATUS', label: 'Seach by order status'},
+                {value:'WAYBILL', label: 'Seach by order waybill'},
+                {value:'ORDER_NO', label: 'Seach by order number'},
+                {value:'ORDER_ID', label: 'Seach by order id'},
+                {value:'CUSTOMER_NAME', label: 'Seach by customer name'},
+                {value:'ALL', label: 'Seach by anything'},
+              ], 
+              // search: , 
+              placeholder: 'Search orders'
+            },
+            columns: [
+              {name: 'Order Id', options: {display: 'exclude'}},
+              {name:'orderNo', label:'Order No'},
+              {name:'waybill', label:'Waybill'},
+              {name:'customerName', label:'Customer Name'},
+              {name:'address', label:'Address'},
+              {name:'contactNos', label:'Contact Numbers'},
+              {name:'status', label:'Status'},
+              {
+                name: "Actions",
+                label: "Actions",
+                options: {
+                  sort: false,
+                  buttonsConfig: [
+                    {
+                      type: "icon",
+                      title: "View item",
+                      icon: ViewIcon,
+                      color: "primary",
+                      size: "small",
+                      onClick: (index) => {
+                        window.location.href = `/purchase-order/view/${state.data[index][0]}`
+                      },
+                      onMouseDown: (index) => {
+                        window.open(`/purchase-order/view/${state.data[index][0]}`, '_blank')
+                      }, 
+                    },
+                  ]
+                }
+              }   
+            ],
+          })
+        default:
+          break;
+      }
+      break;
+    }
+    case 'FILTER': {
+
+    }
+    case 'SET_TABLE': {
+      const {data, totalRecords} = action.payload
+
+      return {...state, data: data, totalRecords: totalRecords, selectedRows: []}
+    }
+    case 'SEARCH': {
+      const {searchText} = action.payload
+
+      return {...state, searchText: searchText}
+    }
+    case 'SET_SEARCH_OPTIONS': {
+      const {selectedAction} = action.payload
+
+      return {...state, selectedAction: selectedAction}
+    }
+    case 'SORT': {
+
+    }
+    case 'SET_PAGE': {
+      const {page} = action.payload
+
+      return {...state, page: page, serverSide: true}
+    }
+    case 'SET_ROWS_PER_PAGE': {
+      const {rowsPerPage} = action.payload
+
+      return {...state, rowsPerPage: rowsPerPage, serverSide: true, page: 1}
+    }
+    case 'SET_SERVER_SIDE': {
+      const {serverSide} = action.payload
+
+      return {...state, serverSide: serverSide}
+    }
+    default: {}
+  }
+}
+
+const FilterTable = ({ title, table, children, dataTableData, setDataTableData, selectableRows, filters, setFilters }) => {
+
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const { api } = useAxios()
 
-  const [data, setData] = useState([]);
-
-  const [totalRecords, setTotalRecords] = useState(56);
-
-  const [page, setPage] = useState(1);
-
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const [searchOptions, setSearchOptions] = useState({})
-
-  const [selectedAction, setSelectedAction] = useState('')
-
-  const [searchText, setSearchText] = useState('')
-
-  const [columns, setColumns] = useState([])
-
   const [showBox, setShowBox] = useState(false);
-
-  const [path, setPath] = useState('') 
 
   const [serverSide, setServerSide] = useState(true) 
 
@@ -37,26 +187,36 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
     setShowBox((prev) => !prev);
   };
 
+  const setSelectedAction = (value) => {
+    dispatch({ type: 'SET_SEARCH_OPTIONS', payload: {selectedAction: value}})
+  }
+
+  const setSearchText = (value) => {
+    dispatch({ type: 'SEARCH', payload: {searchText: value}})
+  }
+
   const options = {
-    serverSide: serverSide,
-    count: totalRecords,
-    page: page,
-    rowsPerPage: rowsPerPage,
+    serverSide: state.serverSide,
+    count: state.totalRecords,
+    page: state.page,
+    rowsPerPage: state.rowsPerPage,
     onTableChange: (action, tableState) => {
       switch (action) {
         case 'changePage':
-          setServerSide(true)
-          setPage(tableState.page);
+          dispatch({ tyep: 'SET_PAGE', payload: {page: tableState.page} })
+          // setServerSide(true)
+          // setPage(tableState.page);
           break;
         case 'changeRowsPerPage':
-          setServerSide(true)
-          setRowsPerPage(tableState.rowsPerPage);
-          setPage(1); // Reset to the first page when changing rows per page
+          dispatch({ tyep: 'SET_ROWS_PER_PAGE', payload: {rowsPerPage: tableState.rowsPerPage} })
+          // setServerSide(true)
+          // setRowsPerPage(tableState.rowsPerPage);
+          // setPage(1); // Reset to the first page when changing rows per page
           break;
         case 'search':
         case 'filterChange':
         case 'sort':
-          setServerSide(false); // Switch to client-side processing
+          dispatch({type: 'SET_SERVER_SIDE', payload: {serverSide: false}}) // Switch to client-side processing
           break;
         default:
           break;
@@ -67,122 +227,53 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
   }
 
   useEffect(() => {
-    switch(table){
-      case 'orders':
-        setPath('/order')
-        setSelectedAction('STATUS')
-        setSearchOptions({
-          menuActions: [
-            {value:'STATUS', label: 'Seach by order status'},
-            {value:'WAYBILL', label: 'Seach by order waybill'},
-            {value:'ORDER_NO', label: 'Seach by order number'},
-            {value:'ORDER_ID', label: 'Seach by order id'},
-            {value:'CUSTOMER_NAME', label: 'Seach by customer name'},
-            {value:'ALL', label: 'Seach by anything'},
-          ], 
-          // search: , 
-          placeholder: 'Search orders'
-        })
-        setColumns([
-          {name: 'Order Id', options: {display: 'exclude'}},
-          {name:'orderNo', label:'Order No'},
-          {name:'waybill', label:'Waybill'},
-          {name:'customerName', label:'Customer Name'},
-          {name:'address', label:'Address'},
-          {name:'contactNos', label:'Contact Numbers'},
-          {name:'status', label:'Status'},
-          {
-            name: "Actions",
-            label: "Actions",
-            options: {
-              sort: false,
-              buttonsConfig: [
-                {
-                  type: "icon",
-                  title: "View item",
-                  icon: ViewIcon,
-                  color: "primary",
-                  size: "small",
-                  onClick: (index) => {
-                    window.location.href = `/order/view/${dataTableData[index][0]}`
-                  },
-                  onMouseDown: (index) => {
-                    window.open(`/order/view/${dataTableData[index][0]}`, '_blank')
-                  }, 
-                },
-              ]
-            }
-          }   
-        ])
-        break;
-      case 'purchase-orders':
-        setPath('/purchase-order')
-        setSelectedAction('STATUS')
-        setSearchOptions({
-          menuActions: [
-            {value:'STATUS', label: 'Seach by order status'},
-            {value:'WAYBILL', label: 'Seach by order waybill'},
-            {value:'ORDER_NO', label: 'Seach by order number'},
-            {value:'ORDER_ID', label: 'Seach by order id'},
-            {value:'CUSTOMER_NAME', label: 'Seach by customer name'},
-            {value:'ALL', label: 'Seach by anything'},
-          ], 
-          // search: , 
-          placeholder: 'Search orders'
-        })
-        setColumns([
-          {name: 'Order Id', options: {display: 'exclude'}},
-          {name:'orderNo', label:'Order No'},
-          {name:'waybill', label:'Waybill'},
-          {name:'customerName', label:'Customer Name'},
-          {name:'address', label:'Address'},
-          {name:'contactNos', label:'Contact Numbers'},
-          {name:'status', label:'Status'},
-          {
-            name: "Actions",
-            label: "Actions",
-            options: {
-              sort: false,
-              buttonsConfig: [
-                {
-                  type: "icon",
-                  title: "View item",
-                  icon: ViewIcon,
-                  color: "primary",
-                  size: "small",
-                  onClick: (index) => {
-                    window.location.href = `/purchase-order/view/${dataTableData[index][0]}`
-                  },
-                  onMouseDown: (index) => {
-                    window.open(`/purchase-order/view/${dataTableData[index][0]}`, '_blank')
-                  }, 
-                },
-              ]
-            }
-          }   
-        ])
-        break;
-      default:
-        console.log(searchOptions)
-        break;
-    }
+    dispatch({ type: 'INIT', payload: {table: table, data: dataTableData} })
   }, [])
 
   useEffect(() => {
     fetchData();
-  }, [page, rowsPerPage]);
+  }, [state.page, state.rowsPerPage]);
+
+  const serachData = async () => {
+    state.searchText && state.searchText!=='' && await api.get(`/${state.path}/search?option=${state.selectedAction}&value=${state.searchText}`)
+      .then(response => {
+        if(response.status===200){
+          dispatch({  type: 'SET_TABLE', payload: {data: response.data.results, totalRecords: response.data.total}})
+          // setData(response.data.results);
+          // setTotalRecords(response.data.total);
+        }
+        if(response.status===204){
+          dispatch({  type: 'SET_TABLE', payload: {data: [], totalRecords: 0}})
+          // setData([]);
+          // setTotalRecords(0);
+        }
+        setSearchText('')
+      })
+      .catch(error => {
+
+      })
+      .finally(() => {
+
+      })
+  }
 
   const fetchData = async () => {
-    const filterUrl = `/${path}/filter?
-        page=${page}
-        &limit=${rowsPerPage}
-        ${filters && Object.keys(filters).length>0 && '&'+Object.keys(filters).map(key => key+'='+(Array.isArray(filters[key])?filters[key].join(','):filters[key])).join('&')}`;
+    const filterUrl = `/${state.path}/filter?
+        page=${state.page}
+        &limit=${state.rowsPerPage}
+        ${state.filters && Object.keys(state.filters).length>0 && '&'+Object.keys(state.filters).map(key => key+'='+(Array.isArray(state.filters[key])?state.filters[key].join(','):state.filters[key])).join('&')}`;
     window.history.pushState({}, '', filterUrl)
     await api.get(filterUrl)
       .then(response => {
         if(response.status===200){
-          setData(response.data.results);
-          setTotalRecords(response.data.total);
+          dispatch({  type: 'SET_TABLE', payload: {data: response.data.results, totalRecords: response.data.total}})
+          // setData(response.data.results);
+          // setTotalRecords(response.data.total);
+        }
+        if(response.status===204){
+          dispatch({  type: 'SET_TABLE', payload: {data: [], totalRecords: 0}})
+          // setData([]);
+          // setTotalRecords(0);
         }
       })
       .catch(error => {
@@ -196,19 +287,19 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
   return (
     <Box sx={{ width: "100%", top: "-3em" }}>
         <SearchPane
-          {...searchOptions}
-          selectedAction={selectedAction}
+          {...state.searchOptions}
+          selectedAction={state.selectedAction}
           setSelectedAction={setSelectedAction}
-          searchText={searchText}
+          searchText={state.searchText}
           setSearchText={setSearchText}
           setFilterToggle={handleToggle}
           showBox={showBox}
           fieldSearch={false}
+          searchFunc={serachData}
         >
           {children?true:false}
         </SearchPane>
         <br></br>
-        {/* <Box ref={childRef}></Box> */}
         {
           children && (
             <Slide direction="up" in={showBox} mountOnEnter unmountOnExit>
@@ -225,8 +316,8 @@ const FilterTable = ({ title, table, children, dataTableData, setDataTableData, 
         }
         <MuiTable
           newOptions={options}
-          columns={columns}
-          dataTableData={dataTableData}
+          columns={state.columns}
+          dataTableData={state.data}
         >
         </MuiTable>
     </Box>    

@@ -134,9 +134,9 @@ const Layout1Topbar = () => {
   };
 
   const TopbarRoot = styled("div")({
+    zIndex: 1301,
     top: 0,
     padding: !user || role==='USER' ? '0 3%' : '0',
-    zIndex: 96,
     // borderBottom: '0.1em solid gray',
     height: !user || role==='USER' ? 80 : topBarHeight,
     // boxShadow: themeShadows[8],

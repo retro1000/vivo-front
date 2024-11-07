@@ -1,3 +1,4 @@
+import { topBarHeight } from 'app/utils/constant'
 import { useSnackbar } from 'notistack'
 
 const useNotistack = () => {
@@ -12,12 +13,18 @@ const useNotistack = () => {
           message.text,
           {
             variant: message.variant,
-            // SnackbarContentProps: {
-            //   style: {width: '10%', maxWidth: '300px', minWidth: '180px', height: 'auto'}
-            // },
             anchorOrigin: {
               vertical: 'top',
               horizontal: 'right',
+            },
+            SnackbarContentProps: {
+              style: {
+                top: topBarHeight+4,
+                width: '10%', 
+                maxWidth: '300px', 
+                minWidth: '180px', 
+                height: 'auto'
+              },
             }
           }
         )

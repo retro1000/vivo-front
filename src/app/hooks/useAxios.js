@@ -90,7 +90,7 @@ const useAxios = () => {
       } else if (error.request) {
           // Network error or no response received from the server
           console.error("Network error:", "No response received from the server.");
-          triggerNotifications([{ text: "Network error: Please check your internet connection.", variant: 'error' }]);
+          triggerNotifications([{ text: "Network error: Please check your internet connection.", variant: 'warning' }]);
       } else {
           // Error setting up the request
           console.error("Request setup error:", error.message);

@@ -9,13 +9,16 @@ import App from "./app/App";
 
 // third party style
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import { topBarHeight } from "app/utils/constant";
 
 
 const root = createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <SnackbarProvider maxSnack={10}>
+    <SnackbarProvider 
+      maxSnack={10}
+    >
       <App />
     </SnackbarProvider>
   </BrowserRouter>

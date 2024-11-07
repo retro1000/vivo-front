@@ -190,6 +190,8 @@ const ProductPage = () => {
 
   const [state, dispatch] = useReducer(filterReducer, initialState)
 
+  const filterBtnRef = useRef(null)
+
   const theme = useTheme();
 
   const isXs = useMediaQuery('(max-width:900px)');
@@ -331,6 +333,7 @@ const ProductPage = () => {
           {
             isXs && 
               <IconButton
+                ref={filterBtnRef}
                 variant="outlined"
                 color="primary"
                 onClick={handleShowFilters}
@@ -361,7 +364,7 @@ const ProductPage = () => {
           <SortButton sort={state.sort} handleSort={handleSort} />
         </Box>
         {
-          isXs && <SlideFilterPanel showFilters={showFilters} handleClearAll={handleClearAll} selectedFilters={state.selectedFilters} filters={state.filters} handleFilterChange={handleFilterChange} handleShowFilters={handleShowFilters} />
+          isXs && <SlideFilterPanel filterBtnRef={filterBtnRef} showFilters={showFilters} handleClearAll={handleClearAll} selectedFilters={state.selectedFilters} filters={state.filters} handleFilterChange={handleFilterChange} handleShowFilters={handleShowFilters} />
         }
         <Grid
           sx={{
