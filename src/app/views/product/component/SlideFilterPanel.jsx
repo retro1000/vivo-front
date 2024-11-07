@@ -62,8 +62,8 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
         PaperProps={{
           sx: {
             margin: 0,
-            width: '320px',
-            maxHeight: '100vh',
+            // width: '320px',
+            maxHeight: `calc(100dvh - ${topBarHeight+9.1})`,
             position: 'fixed',
             top: topBarHeight + 9.1,
             left: 0,
