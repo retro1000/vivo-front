@@ -31,23 +31,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filters, handleFilterChange, handleShowFilters, filterBtnRef }) => {
   const dialogRef = React.useRef(null);
 
-  // UseEffect to handle click outside of dialog to close it
   React.useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the click is outside the dialog and the filter button
       if (
         filterBtnRef && filterBtnRef.current && !filterBtnRef.current.contains(event.target) &&
         dialogRef.current && !dialogRef.current.contains(event.target) &&
-        !event.target.closest('.MuiDialog-root') // Ensure the backdrop is also included
+        !event.target.closest('.MuiDialog-root')
       ) {
-        handleShowFilters(); // Close dialog if clicked outside
+        handleShowFilters();
       }
     };
 
-    // Add event listener when the component is mounted
     document.addEventListener('click', handleClickOutside);
 
-    // Cleanup event listener when the component is unmounted
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -56,29 +52,25 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
   return (
     <Box>
       <CustomDialog
-        sx={{
-          '& .MuiDialog-paper': {},
-        }}
         PaperProps={{
           sx: {
             margin: 0,
-            // width: '320px',
-            maxHeight: `calc(100dvh - ${topBarHeight+9.1})`,
+            maxHeight: `calc(100dvh - ${topBarHeight + 9.1})`,
             position: 'fixed',
             top: topBarHeight + 9.1,
             left: 0,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            borderTopLeftRadius: 0
+            borderTopLeftRadius: 0,
           }
         }}
         BackdropProps={{
           sx: {
             position: 'absolute',
-            top: topBarHeight + 4, // Set overlay (backdrop) to start 75px from the top
+            top: topBarHeight + 4,
             left: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.2)', // Adjust backdrop color and opacity as needed
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
           },
         }}
         open={showFilters}
@@ -88,20 +80,16 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogContent 
-          sx={{ height: '100dvh', width: '300px' }}
-          ref={dialogRef} // Attach ref to the dialog content
+          sx={{ padding: 0 }}
+          ref={dialogRef}
         >
           <Box
             sx={{
               p: 2,
-              position: 'absolute',
-              overflowY: 'auto',
-              top: 0,
-              left: 0,
+              // overflowY: 'auto', // Make this box the only scrollable element
               minWidth: '250px',
-              maxHeight: '100dvh',
-              height: '100dvh',
-              zIndex: 1200,
+              // maxHeight: '100dvh',
+              // height: '100dvh',
               backgroundColor: 'white',
             }}
           >
