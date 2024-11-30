@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { backendApi } from 'config'
-import jwtDecode from 'jwt-decode';
 import { useNotistack } from './useNotistack';
 import useAuth from './useAuth';
 

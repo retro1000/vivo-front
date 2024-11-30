@@ -301,6 +301,7 @@ const ProductPage = () => {
   } 
 
   const fetchData = async (controller, retries=5, delay=1000) => {
+    // controller.abort()
     if(retries===0){
       dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
       setLoading(false)
@@ -317,6 +318,8 @@ const ProductPage = () => {
           setLoading(false)
         }
         if(response.status===204) dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
+        controller.abort()  
+        return;  
       })
       .catch(error => {
         // triggerCommonErrors(error)
