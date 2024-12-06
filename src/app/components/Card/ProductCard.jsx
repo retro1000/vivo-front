@@ -9,6 +9,7 @@ import {
   Rating,
   Box,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import WichListIcon from "@mui/icons-material/FavoriteBorder";
@@ -103,12 +104,14 @@ const ProductCard = ({ product }) => {
                     </Box>
                 </Box>
                 <CardContent
-                sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
                 >
-                <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
-                    {product.name}
-                </Typography>
-                <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating}></ReviewStatsCard>
+                    <Tooltip title={product.name}>
+                        <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                            {product.name}
+                        </Typography>
+                    </Tooltip>
+                    <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating}></ReviewStatsCard>
                     <Box
                         sx={{
                             display: "flex",

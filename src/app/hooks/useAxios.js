@@ -11,6 +11,8 @@ const useAxios = () => {
 //   customData: {
 //       retry: true,               // Automatically retry on 401 errors
 //       silentError: false,        // Log the error but don’t display a notification
+//       silentResponse: false,
+//       responseCallback: (response) => {}
 //       errorCallback: (error) => {  // Custom error callback if further handling is needed
 //           console.log("Error callback triggered:", error.message);
 //       }
@@ -96,7 +98,49 @@ const useAxios = () => {
       }
   
       return Promise.reject(error);  // Pass the error down for further handling if needed
-  }
+    }
+
+
+    const handleResponse = (response) => {
+        if (response.config && response.config.customData) {
+            const { silentResponse, responseCallback } = response.config.customData;
+
+            if (silentResponse) {
+                // console.warn("Error silenced:", error.message);
+                return Promise.resolve(null);  // Return null to prevent further handling
+            }
+
+            if (responseCallback && typeof errorCallback === 'function') {
+                responseCallback(response);  // Pass the error to the callback
+            }
+        }
+
+        if (response) {
+
+            switch (response.status) {
+                case 200:
+                    console.error(response.data || "Successfully executed.");
+                    response.data && triggerNotifications([{ text: response.data || "Successfully executed.", variant: 'success' }]);
+                    break;
+                case 201:
+                    console.error(response.data || "Successfully created.");
+                    triggerNotifications([{ text: response.data || "Successfully created.", variant: 'success' }]);
+                    break;
+                case 204:
+                    console.error(response.data || "Couldn't find any record, Try again.");
+                    triggerNotifications([{ text: response.data || "Couldn't find any record, Try again.", variant: 'warning' }]);
+                    break;
+                default:
+                    // console.error(`Error ${error.response.status}:`, error.response.data.message || "An unknown error occurred.");
+                    // triggerNotifications([{ text: `Error ${error.response.status}:` + error.response.data.message || "An unknown error occurred.", variant: 'error' }]);
+            }
+        }else{
+            console.error("No response received from the server.");
+            triggerNotifications([{ text: "No response received from the server.", variant: 'warning' }]);
+        }
+
+        return Promise.resolve(response)
+    }
 
     const api = axios.create({baseURL: backendApi})
     const apiNonAuth = axios.create({baseURL: backendApi})
@@ -116,12 +160,12 @@ const useAxios = () => {
 
       // Response interceptor to handle errors
       api.interceptors.response.use(
-        response => response,  // Pass through successful responses
+        response => handleResponse(response),  // Pass through successful responses
         error => handleError(error)
       );
 
       apiNonAuth.interceptors.response.use(
-        response => response,  // Pass through successful responses
+        response => handleResponse(response),  // Pass through successful responses
         error => handleError(error)
       );
 

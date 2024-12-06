@@ -241,9 +241,9 @@ const HomePage = () => {
               ))}
           </Grid>
         </Box>
-        <Banner />
-        <PaintStories/>
-        <ColorOfTheYear/>
+        {/* <Banner /> */}
+        {/* <PaintStories/> */}
+        {/* <ColorOfTheYear/> */}
       </Box>
       <LetsPaintHero/>
       <Footer />

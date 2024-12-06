@@ -6,6 +6,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { QuantitySelector, TButton, TIconButton } from '..';
 
 import MUIDataTable from 'mui-datatables'
+import { useReducer } from 'react';
+import { useFormatter } from 'app/hooks/useFormatter';
+import { useAxios } from 'app/hooks/useAxios';
 // import { makeStyles } from '@mui/styles';
 // import { makeStyles } from '@mui/styles';
 
@@ -80,7 +83,7 @@ const theme = () => createTheme({
 })
 
 
-const renderButtons = (buttonsConfig, rowIndex) => {
+const renderButtons = (buttonsConfig, rowIndex, rowData, updateDataTable) => {
   return buttonsConfig.map((buttonConfig, index) => {
     const { title, type, label, color, size, icon, onClick, onMouseDown } = buttonConfig;
     
@@ -91,8 +94,8 @@ const renderButtons = (buttonsConfig, rowIndex) => {
           title={title}
           color={color}
           size={size}
-          fun={() => onClick(rowIndex)}
-          fun2={() => onMouseDown(rowIndex)}
+          fun={() => onClick(rowData, updateDataTable)}
+          fun2={() => onMouseDown(rowData, updateDataTable)}
           icon={icon}
         ></TIconButton>
       );
@@ -105,8 +108,8 @@ const renderButtons = (buttonsConfig, rowIndex) => {
           variant="outlined"
           color={color}
           size={size}
-          fun={() => onClick(rowIndex)}
-          fun2={() => onMouseDown(rowIndex)}
+          fun={() => onClick(rowData, updateDataTable)}
+          fun2={() => onMouseDown(rowData, updateDataTable)}
           style={{ marginLeft: 8 }}
           label={label}
         ></TButton>
@@ -191,15 +194,114 @@ const options = {
   viewColumns: true,
   filterType: true,
   pagination: true,
-  // rowsPerPage: true,
+  rowsPerPage: true,
+  serverSide: true,
   responsive: 'simple'
 }
 
-export default function MuiTable({ newOptions, dataTableData, columns, title }){
 
-  // const classes = useStyles();
+const initialTableState = {
+  dataTableData: [],
+  page: 0,
+  rowsPerPage: 10,
+  totalElements: 0,
+  filters: {},
+  sortOrder: '',
+  sortCol: '',
+  searchType: '',
+  searchVal: '' 
+}
+
+const reducer = (state, action) => {
+  switch(action.type){
+    case 'UPDATE_TABLE_DATA': {
+      const { dataTableData, totalElements } = action.payload
+      return {...state, dataTableData: dataTableData, totalElements: totalElements}
+    }
+    case 'CHANGE_PAGE': {
+      const { page } = action.payload
+      return {...state, page: page}
+    }
+    case 'CHANGE_ROWS_PER_PAGE': {
+      const { rowsPerPage } = action.payload
+      return {...state, rowsPerPage: rowsPerPage, page: 0}
+    }
+    case 'FILTER': {
+      const { CamelCaseWordFormat2, tableState } = action.payload
+      const newFilter={}
+      tableState.filterList.forEach((value, index) => {
+        if (value.length > 0) newFilter[CamelCaseWordFormat2(tableState.columns[index].name)] = value;  
+      });
+      return {...state, page: 0, filters: newFilter}
+    }
+    case 'SORT': {
+      const { sortOrder } = action.payload
+      return {...state, sortOrder: sortOrder.direction, sortCol: sortOrder.name, page: 0}
+    }
+    case 'CHNAGE_CUSTOM_SEARCH_TYPE': {
+      const { searchType } = action.payload
+      return {...state, searchType: searchType, searchVal: ''}
+    }
+    case 'CHANGE_CUSTOM_SEARCH': {
+      const { searchVal } = action.payload
+      return {...state, searchVal: searchVal, page: 0}
+    }
+    default: {
+
+    }
+  }
+}
+
+export default function MuiTable({ columnOrder, path, updateDataTable, newOptions, columns, title }){
+
+  const { CamelCaseWordFormat2 } = useFormatter()
+
+  const { api } = useAxios()
+
+  const [state, dispatch] = useReducer(reducer, initialTableState)
 
   const [updatedCols, setUpdatedCols] = useState([])
+
+  const [loading, setLoading] = useState(false) 
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const { page, rowsPerPage, searchVal, filters, sortOrder, sortCol, searchCol, totalElements } = state;
+      setLoading(true)
+      // Example API call
+      totalElements > page+1*rowsPerPage && await api.get(
+        `/${path}?page=${page}&limit=${rowsPerPage}${searchVal && searchVal!=='' && '&searchVal='+searchVal}${searchCol && searchCol!=='' && '&searchCol='+searchCol}${
+        filters && Object.keys(filters).length>0 ? '&'+Object.keys(filters).map(key => key+'='+(Array.isArray(filters[key]) ? filters[key].join(',') : filters[key])).join('&') : ''}${
+        sortCol && sortOrder ? '&sortCol='+CamelCaseWordFormat2(sortCol)+'&sortOrder='+sortOrder.toUpperCase() : ''}`
+      )
+        .then(response => {
+          if(response.status===200 && response.data){
+            // setDataTableData(response.data.content.map(i => columnOrder.map(key => i[key])));
+            // setTotalCount(response.data.totalElements);
+            dispatch(
+              { 
+                type: 'CHANGE_TABLE_DATA', 
+                payload: {
+                  dataTableData: response.data.content.map(i => columnOrder.map(key => i[key])), 
+                  totalElements: response.data.totalElements
+                } 
+              }
+            )  
+          }
+          if(response.status===204){
+            dispatch({ type: 'CHANGE_TABLE_DATA', payload: {dataTableData: [], totalElements: 0} })  
+          }
+        })
+        .catch(error => {})
+        .finally(() => {})
+  
+      // Update your data table with the fetched data
+       // For pagination
+    };
+  
+    fetchData();
+  }, [state.rowsPerPage, state.page, state.filters, state.searchVal, state.sortCol, state.SortOrder]);
 
   useEffect(() => {
     const newCols = columns.filter(val=>val.name!=='Actions'&&val.name!=='Status'&&val.name!=='Role')
@@ -234,7 +336,12 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
           sort: option.options.sort===undefined || option.options.sort,
           customBodyRender: (value, tableMeta) => {
             const rowIndex = tableMeta.rowIndex;
-            return <Grid sx={{display: 'flex', gap: '0.3em'}}>{renderButtons(option.options.buttonsConfig, rowIndex)}</Grid>;
+            const rowData = tableMeta.rowData;
+            return (
+              <Grid sx={{display: 'flex', gap: '0.3em'}}>
+                {renderButtons(option.options.buttonsConfig, rowIndex, rowData, updateDataTable)}
+              </Grid>
+            );
           }
         }
       })
@@ -260,10 +367,39 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
           <ThemeProvider theme={theme}>
                 <MUIDataTable
                     title={title}
-                    data={dataTableData}
+                    data={state.dataTableData}
                     columns={updatedCols}
-                    options={
-                      newOptions?{...options, ...newOptions}:options
+                    options={{
+                      ...(newOptions?{...options, ...newOptions} : options),
+                      onTableChange: (action, tableState) => {
+                        switch (action) {
+                          case 'changePage':
+                            dispatch({ type: 'CHANGE_PAGE', payload: {page: tableState.page} })
+                            break;
+                          case 'changeRowsPerPage':
+                            dispatch({ type: 'CHANGE_ROWS_PER_PAGE', payload: {rowsPerPage: tableState.rowsPerPage} })
+                            break;
+                          // case 'search':
+                          //   setTableOptions((prev) => ({ ...prev, search: tableState.searchText || '' }));
+                            // break;
+                          case 'filterChange':
+                            const newFilter = {};
+                            tableState.filterList.forEach((value, index) => {
+                              if (value.length > 0) newFilter[CamelCaseWordFormat2(tableState.columns[index].name)] = value;  
+                            });
+                            dispatch({ type: 'FILTER', payload: {tableState: tableState, CamelCaseWordFormat2: CamelCaseWordFormat2} })
+                            break;
+                          case 'sort':
+                            dispatch({ type: 'SORT', payload: {sort: tableState.sortOrder} })
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                      page: state.page,
+                      rowsPerPage: state.rowsPerPage,
+                      // searchText: initialTableState.search,
+                      count: state.totalElements,
                       // selectableRows: selectableRows,
                       // // customRowRender: (data, dataIndex, rowIndex) => {
                       // //   const rowColor = rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'; // Alternating colors
@@ -280,17 +416,7 @@ export default function MuiTable({ newOptions, dataTableData, columns, title }){
                       // //       className: rowIndex % 2 === 0 ? 'evenRow' : 'oddRow',
                       // //   };
                       // // },
-                      // sort: true,
-                      // print: print,
-                      // download: download,
-                      // search: search,
-                      // filter: filter,
-                      // viewColumns: cols,
-                      // filterType: filterType,
-                      // pagination: pagination,
-                      // rowsPerPage: rowsPerPage,
-                      // responsive: 'simple'
-                    }
+                    }}
                     // classes={{
                     //   row: classes.tableRow,
                     // }}

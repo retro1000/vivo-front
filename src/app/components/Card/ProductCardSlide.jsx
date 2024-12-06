@@ -8,6 +8,7 @@ import {
   Box,
   IconButton,
   GlobalStyles,
+  Tooltip,
 } from "@mui/material";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -188,9 +189,11 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                 <CardContent
                     sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '1em 1em 0.2em 1em' }}
                 >
-                    <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
-                        {product.name}
-                    </Typography>
+                    <Tooltip title={product.name}>
+                        <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                            {product.name}
+                        </Typography>
+                    </Tooltip>
                     {/* <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Rating value={product.rating} readOnly size="small" />
                         <Typography variant="caption" sx={{ ml: 0.5 }}>
