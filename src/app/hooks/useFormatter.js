@@ -31,6 +31,10 @@ const useFormatter = () => {
         return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
     }
 
+    const DefaultWordFormat2 = (word) => {
+        return word.toUpperCase().replace(/ /g, '_')
+    }
+
     const TitleCaseWordFormat = (word) => {
         return (word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     }
@@ -58,7 +62,7 @@ const useFormatter = () => {
         }
     }
   
-    return { PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
+    return { DefaultWordFormat2, PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
   }
   
   export {useFormatter}

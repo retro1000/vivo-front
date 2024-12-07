@@ -16,12 +16,12 @@ const SearchPane = forwardRef(({ selectedAction, menuActions, setSelectedAction,
         >
             <Select
                 sx={{ width: 'max-content' }}
-                value={selectedAction}
+                value={selectedAction || (menuActions && menuActions.length>0) ? menuActions[0]?.value : ''}
                 size="small"
                 onChange={(event) => setSelectedAction(event.target.value)}
             >
                 {
-                    menuActions && menuActions && menuActions.map((action, index) => (
+                    menuActions && menuActions.length>0 && menuActions.map((action, index) => (
                         <MenuItem key={index} value={action.value}>{action.label}</MenuItem>
                     ))
                 }
