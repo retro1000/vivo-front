@@ -1,6 +1,7 @@
 
 import React from "react";
 import {
+  Box,
   Grid
 } from "@mui/material";
 import ProductCardSlide from "app/components/Card/ProductCardSlide";
@@ -10,7 +11,12 @@ const ProductGrid = ({ removeWishList, products, maxWidth }) => {
     <Grid
       container
       spacing={2}
-      sx={{ maxWidth: '100%', display: 'flex', gap: 2, flexWrap: 'wrap', mt: '1em'}}
+      alignItems="stretch"
+      sx={{
+        width: "100%",
+        margin: 0,
+        padding: 2,
+      }}
     >
       {products.map((product) => (
           <ProductCardSlide removeWishList={removeWishList} key={product.id} product={product} />
@@ -19,4 +25,4 @@ const ProductGrid = ({ removeWishList, products, maxWidth }) => {
   );
 };
 
-export default ProductGrid;
+export default ProductGrid; 

@@ -173,6 +173,36 @@ const filterConfig = [
     category: 'Price',
     config: {label: 'Price', min: 50, max: 15000},
     type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
   }
 ]
 

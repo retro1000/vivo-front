@@ -8,6 +8,7 @@ import {
   Box,
   IconButton,
   GlobalStyles,
+  Grid,
 } from "@mui/material";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -37,7 +38,14 @@ const ProductCardSlide = ({ product, removeWishList }) => {
     }
 
     return (
-        <>
+        <Grid
+            item
+            xs={12} // Full-width on extra-small screens
+            sm={6}  // 2 cards per row on small screens
+            md={4}  // 3 cards per row on medium screens
+            lg={3}  // 4 cards per row on large screens
+            key={product.id}
+        >
             <GlobalStyles
                 styles={{
                 ".swiper-pagination-bullet-active": {
@@ -47,21 +55,18 @@ const ProductCardSlide = ({ product, removeWishList }) => {
             />
             <Card
                 ref={cardRef}
-                sx={{ 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    cursor: 'pointer', 
-                    boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    aspectRatio: 0.65,
-                    // height: 'calc(25% - 16px)',
-                    // width: 250,
-                    flexShrink: 1, // Make the card grow to fill the available space
-                    // flex: '1 1 calc(25% - 16px)',
-                    flexBasis: 'calc(25% - 16px)', // Base width for 4 cards per row (adjust as needed)
-                    maxWidth: 280, // Maximum width so that it maintains balance
-                    minWidth: 210, // Minimum width for small screens or when space is limited
-                    boxSizing: 'border-box'
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.2)",
+                    borderRadius: "8px",
+                    width: "100%", // Fill the width of the parent container
+                    // aspectRatio: "3 / 4", // Maintain consistent aspect ratio
+                    boxSizing: "border-box",
+                    overflow: "hidden",
+                    // minWidth: "210px", // Ensure the card doesn’t shrink too much
+                    maxWidth: "280px", // Limit the maximum width
                 }}
             >
                 <Box 
@@ -197,7 +202,7 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                 </Box>
 
                 <CardContent
-                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '1em 1em 0.2em 1em' }}
+                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '0em 0.5em 0em 0.5em', paddingBottom: '0px !important' }}
                 >
                     <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                         {product.name}
@@ -213,24 +218,25 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            alignItems: "flex-start",
+                            alignItems: "center",
+                            flexWrap: 'wrap',
                             mt: 1,
                             gap: 1
                         }}
                     >
-                        <Typography variant="subtitle2" color="error">
+                        <Typography variant="subtitle1" color="error">
                             {product.price}
                         </Typography>
                         {
                             product.realPrice ?
-                                <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through'}}>
+                                <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through', fontSize: '0.8rem'}}>
                                     {product.realPrice}
                                 </Typography> : ''
                         }
                     </Box>
                 </CardContent>
             </Card>
-         </>
+         </Grid>
     );
 };
 
