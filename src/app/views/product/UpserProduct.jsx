@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
-import { CircularProgress, Checkbox, MenuItem, InputLabel, Select, FormControl, Stack, Box, styled, Tabs, Tab, Typography, TextField, Button, Grid, IconButton, Icon } from "@mui/material";
+import { CircularProgress, Checkbox, MenuItem, InputLabel, Select, FormControl, Stack, Box, styled, Tabs, Tab, Typography, TextField, Button, Grid, Icon } from "@mui/material";
 import { LoadingButton } from '@mui/lab';
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 import { ReactQuillEditior, FileUpload, MultiFileUpload, FormDialog, Breadcrumb, SimpleCard, CustomExpansionPanel, SearchableSelectMultiple, CustomVariationExpansionPanel } from "app/components";
 // import { CustomExpansionPanel } from "app/components";
@@ -817,7 +816,7 @@ function UpsertProduct({ update, id }) {
       setProductErrors(newObj)
       return true
     }
-console.log(variationIds)
+
     return (
         <Container>
         <Box className="breadcrumb">

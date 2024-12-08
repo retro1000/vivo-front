@@ -22,7 +22,7 @@ import ViewIcon from "@mui/icons-material/RemoveRedEye";
 import { ReviewStatsCard } from "..";
 import { themeColors } from "../MatxTheme/themeColors";
 
-const ProductCardSlide = ({ product, removeWishList }) => {
+const ProductCardSlide = ({ product, removeWishList, key }) => {
 
     const navigate = useNavigate();
 
@@ -39,9 +39,9 @@ const ProductCardSlide = ({ product, removeWishList }) => {
         <>
             <GlobalStyles
                 styles={{
-                ".swiper-pagination-bullet-active": {
-                    backgroundColor: themeColors.red.palette.primary.main,
-                },
+                    ".swiper-pagination-bullet-active": {
+                        backgroundColor: themeColors.red.palette.primary.main,
+                    },
                 }}
             />
             <Card
@@ -51,7 +51,8 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                     cursor: 'pointer', 
                     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
                     borderRadius: '8px', 
-                    width: 250, 
+                    width: 250,
+                    height: '374px' 
                     // maxWidth: 350
                 }}
             >
@@ -132,75 +133,81 @@ const ProductCardSlide = ({ product, removeWishList }) => {
                         </Typography>
                     )}   
                     <Box
-                    sx={{
-                        position: "absolute",
-                        top: 10,
-                        right: 10,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        zIndex: '10'
-                    }}
+                        sx={{
+                            position: "absolute",
+                            top: 10,
+                            right: 10,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            zIndex: '10'
+                        }}
                     >
-                    {
-                        removeWishList ? (
-                            <IconButton
-                                sx={{
-                                    backgroundColor: "rgba(255, 255, 255, 0.6)",
-                                    "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                                }}
-                            >
-                                <BinIcon />
-                            </IconButton>
-                        ) :
-                            (!product.wishList ? (
+                        {
+                            removeWishList ? (
                                 <IconButton
                                     sx={{
                                         backgroundColor: "rgba(255, 255, 255, 0.6)",
                                         "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
                                     }}
                                 >
-                                    <WichListIcon />
+                                    <BinIcon />
                                 </IconButton>
-                            ) : (
-                                <IconButton
-                                sx={{
-                                    backgroundColor: "rgba(255, 255, 255, 0.6)",
-                                    "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                                }}
-                                >
-                                    <WichListIconActive sx={{ color: themeColors.red.palette.primary.main }} />
-                                </IconButton>
+                            ) :
+                                (!product.wishList ? (
+                                    <IconButton
+                                        sx={{
+                                            backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                            "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                                        }}
+                                    >
+                                        <WichListIcon />
+                                    </IconButton>
+                                ) : (
+                                    <IconButton
+                                    sx={{
+                                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                        "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                                    }}
+                                    >
+                                        <WichListIconActive sx={{ color: themeColors.red.palette.primary.main }} />
+                                    </IconButton>
+                                )
                             )
-                        )
-                    }
-                    <IconButton
-                        sx={{
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
-                        }}
-                        onClick={() => navigate(`/product/view/${product.id}`)}
-                    >
-                        <ViewIcon />
-                    </IconButton>
+                        }
+                        <IconButton
+                            sx={{
+                                backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+                            }}
+                            onClick={() => navigate(`/product/view/${product.id}`)}
+                        >
+                            <ViewIcon />
+                        </IconButton>
                     </Box>
                 </Box>
 
                 <CardContent
-                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '1em 1em 0.2em 1em' }}
+                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '0.5em 0.5em 0.2em 0.5em' }}
                 >
                     <Tooltip title={product.name}>
-                        <Typography variant="h6" component="div" sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                        <Typography 
+                            variant="body1" 
+                            component="div" 
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'normal', // Allows text to wrap to multiple lines
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,  // Limit the text to 2 lines
+                                fontSize: '14px'
+                            }}
+                            >
                             {product.name}
                         </Typography>
                     </Tooltip>
-                    {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Rating value={product.rating} readOnly size="small" />
-                        <Typography variant="caption" sx={{ ml: 0.5 }}>
-                            ({product.reviews})
-                        </Typography>
-                    </Box> */}
-                    <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating}></ReviewStatsCard>
+                    <ReviewStatsCard size={'small'} reviewCount={product.reviews} rating={product.rating} id={product.id}></ReviewStatsCard>
                     <Box
                         sx={{
                             display: "flex",

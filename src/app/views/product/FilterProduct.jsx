@@ -1,10 +1,10 @@
 // ProductPage.jsx
 import React, { useState } from "react";
 import { useTheme, Box, Typography, Button, Grid, Container, useMediaQuery, IconButton, Slide } from "@mui/material";
-import { Header, Footer } from "app/components";
+import { Header, Footer, ProductGrid } from "app/components";
 import SortButton from "./component/SortButton";
 import SearchBar from "./component/SearchBar";
-import ProductGrid from "./component/ProductGrid";
+// import ProductGrid from "./component/ProductGrid";
 import FilterBar from "./component/Filtering";
 import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
@@ -16,6 +16,7 @@ import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
 import SlideFilterPanel from "./component/SlideFilterPanel";
+import { scrollBarThin } from "app/utils/constant";
 
 
 const demoData = [
@@ -404,7 +405,7 @@ const ProductPage = () => {
           {
             !isXs && (
               <Box
-                sx={{ position: 'sticky', top: 0, width: '20%', maxHeight: '100vh', overflowY: 'auto' }}
+                sx={{ position: 'sticky', top: 0, width: '350px', maxHeight: '100vh', overflowY: 'auto', ...scrollBarThin }}
               >
                 <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                   <Typography variant="h5" gutterBottom>

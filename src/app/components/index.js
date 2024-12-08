@@ -48,4 +48,6 @@ export { default as SearchPane } from "./SearchPane";
 export { default as CheckBoxPane } from "./CheckBoxPane";
 export { default as TimeLine } from "./TimeLine";
 export { default as CheckBoxGroup } from "./InputField/CheckBoxGroup";
+export { default as MenuList } from "./Menu/MenuList";
+export { default as ProductGrid } from "./ProductGrid";
 

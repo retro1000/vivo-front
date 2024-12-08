@@ -5,14 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 import { Box, Typography } from '@mui/material';
 import FilterBar from './Filtering';
-import { topBarHeight } from "app/utils/constant";
+import { scrollBarThin, topBarHeight } from "app/utils/constant";
 import styled from '@emotion/styled';
 
 const CustomDialog = styled(Dialog)({
   "& .MuiDialog-root": {
     position: "fixed",
     background: 'red',
-    top: `${topBarHeight} !important`, // Adjust positioning as needed
+    top: `${136.41} !important`, // Adjust positioning as needed
   },
 });
 
@@ -55,9 +55,9 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
         PaperProps={{
           sx: {
             margin: 0,
-            maxHeight: `calc(100dvh - ${topBarHeight + 9.1})`,
+            maxHeight: `calc(100dvh - ${136.41+9.1})`,//+9.1
             position: 'fixed',
-            top: topBarHeight + 9.1,
+            top: 136.41, //+9.1
             left: 0,
             display: 'flex',
             justifyContent: 'center',
@@ -91,6 +91,7 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
               // maxHeight: '100dvh',
               // height: '100dvh',
               backgroundColor: 'white',
+              ...scrollBarThin
             }}
           >
             <Box display="flex" justifyContent="space-between" alignItems="center">
