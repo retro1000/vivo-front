@@ -1,10 +1,11 @@
 // FilterBar.jsx
-import React, { useState } from 'react';
-import { Box, Typography, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary, AccordionDetails, Radio } from '@mui/material';
+import React from 'react';
+import { Typography, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary, AccordionDetails, Radio, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { NumSliderFilter } from 'app/components';
 import { forwardRef } from 'react';
 import { useFormatter } from 'app/hooks/useFormatter';
+import { scrollBarThin } from 'app/utils/constant';
 
 const handleCheckChange = (e, filter, selectedFilters, setSelectedFilters) => {
   const { name, checked } = e.target;
@@ -120,6 +121,7 @@ const createFilterOption = (filter, filters, handleFilterChange, DefaultWordForm
           max={30000} 
           {...filter.config}
           minWidth={100}
+          submitBtn={true}
         />
       )
     default: return ''
@@ -143,9 +145,10 @@ const FilterList = ({ key, filter, handleFilterChange, selectedFilters }) => {
   )
 };
 
-const FilterBar = forwardRef(({ filters, handleFilterChange, selectedFilters }, ref) => {
+const FilterBar = forwardRef(({ filters, handleFilterChange, selectedFilters, maxHeight }, ref) => {
+
   return (
-    <Box ref={ref}>
+    <Box ref={ref} sx={{overflowY: 'auto', maxHeight: maxHeight, ...scrollBarThin}}>
       {filters.map((filter, index) => (
         <FilterList key={index} filter={filter} handleFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
       ))}

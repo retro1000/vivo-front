@@ -1,17 +1,24 @@
 import React from 'react';
-import { Box, Slider, Typography } from '@mui/material';
+import { Box, Button, Slider, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange, minWidth }) => {
-//   const [range, setrange] = useState([800, 156940]);
+const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange, minWidth, submitBtn, numFormatter }) => {
+  const [tmpRange, setTmpRange] = useState([]);
 
   const handleChange = (event, newValue) => {
-    setRange(newValue);
+    if(submitBtn) setTmpRange(newValue)
+    else setRange(newValue);
   };
 
-  if (!range || range.length !== 2) {
-    range = [min, max]; // Fallback to default range if `range` is not properly initialized
-  }
+  const handleSubmit = () => {
+    submitBtn && setRange(tmpRange)
+  };
 
+  useEffect(() => {
+    submitBtn && setTmpRange(range);
+  }, [range]);
+  
   return (
     <Box sx={{ width: '100%', padding: 2, minWidth: minWidth || 250 }}>
       {
@@ -21,7 +28,7 @@ const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange, 
         </Typography>
       }
       <Slider
-        value={range}
+        value={range || tmpRange || [min, max]}
         onChange={handleChange}
         valueLabelDisplay="auto"
         min={min}
@@ -30,8 +37,21 @@ const NumSliderFilter = ({ label, curr, heading, sx, min, max, range, setRange, 
         size='small'
       />
       <Typography variant='body2'>
-        {`${label?label+':':''} ${curr} ${range && range.length!==0 && range[0] ? range[0].toLocaleString() : min} – ${curr} ${range && range.length!==0 && range[1] ? range[1].toLocaleString() : max}`}
+        {`${label?label+':':''} ${range && range.length!==0 && range[0] ? (numFormatter ? numFormatter(range[0]) : range[0].toLocaleString()) : submitBtn && tmpRange && tmpRange.length!==0 && tmpRange[0] ? (numFormatter ? numFormatter(tmpRange[0]) : tmpRange[0]) : (numFormatter ? numFormatter(min) : min)} – ${range && range.length!==0 && range[1] ? (numFormatter ? numFormatter(range[1]) : range[1].toLocaleString()) : submitBtn && tmpRange && tmpRange.length!==0 && tmpRange[1] ? (numFormatter ? numFormatter(tmpRange[1]) : tmpRange[1]) : (numFormatter ? numFormatter(max) : max)}`}
       </Typography>
+      {
+        submitBtn && 
+        <Button 
+          sx={{mt: 1, ml: -0.2, mb: -2, width: '50px'}}
+          size='small' 
+          variant="contained" 
+          color="primary" 
+          onClick={handleSubmit} 
+          disabled={submitBtn && range===tmpRange}
+        >
+          Ok
+        </Button>
+      }
     </Box>
   );
 };

@@ -34,25 +34,26 @@ const useAxios = () => {
     const handleError = async (error) => {
         if (error.config && error.config.customData) {
             const { retry, retryCycles=5, delay=1000, silentError, errorCallback, prevError } = error.config.customData;
-    
+
             // Handle custom retry logic for 401 status
-            if (retry && retryCycles > 0 && error.response && error.response.status === 401) {
+            if (retry && retryCycles > 0 && error.response && error.response.status===401) {
                 console.log("Retrying request due to 401 status...");
 
                 await new Promise(resolve => setTimeout(resolve, delay));
 
-                return api.request({
+                return (error.config?.headers['Authorization'] ? api : apiNonAuth).request({
                     ...error.config,
                     customData: {
                         ...error.config.customData,
-                        retryCycles: retryCycles - 1,  // Decrement retryCycles correctly
+                        retryCycles: retryCycles - 1,    // Decrement retryCycles correctly
+                        delay: delay * 2,
                         prevError: error
                     },
                 });
                 
             }
 
-            if(error===prevError) return;
+            if(error===prevError || error.name === 'AbortError') return;
 
             // If an error callback is provided, execute it
             if (errorCallback && typeof errorCallback === 'function') {

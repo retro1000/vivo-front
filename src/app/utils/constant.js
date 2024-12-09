@@ -1,4 +1,5 @@
 export const topBarHeight = 64;
+export const topBarHeightNewBar = 136.41;
 export const sideNavWidth = 260;
 export const navbarHeight = 60;
 export const sidenavCompactWidth = 80;
@@ -21,4 +22,9 @@ export const scrollBarThin = {
     '&::-webkit-scrollbar-thumb:hover': {
       backgroundColor: '#777', // Thumb color on hover
     }
-  }
+}
+
+export const containerPadding = {
+  pr: { xs: 2, sm: 3, md: 3 },
+  pl: { xs: 2, sm: 3, md: 3 },
+} 

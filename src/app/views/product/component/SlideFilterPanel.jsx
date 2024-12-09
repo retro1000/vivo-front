@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 import { Box, Typography } from '@mui/material';
 import FilterBar from './Filtering';
-import { scrollBarThin, topBarHeight } from "app/utils/constant";
+import { scrollBarThin, topBarHeight, topBarHeightNewBar } from "app/utils/constant";
 import styled from '@emotion/styled';
 
 const CustomDialog = styled(Dialog)({
@@ -57,18 +57,19 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
             margin: 0,
             maxHeight: `calc(100dvh - ${136.41+9.1})`,//+9.1
             position: 'fixed',
-            top: 136.41, //+9.1
+            top: 136.41,
             left: 0,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-start',
             borderTopLeftRadius: 0,
+            overflow: 'hidden', // Prevent scrolling inside the dialog
           }
         }}
         BackdropProps={{
           sx: {
             position: 'absolute',
-            top: topBarHeight + 4,
+            top: topBarHeightNewBar,
             left: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.2)',
           },
@@ -80,18 +81,19 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogContent 
-          sx={{ padding: 0 }}
+          sx={{ padding: 0, overflow: 'hidden' }}
           ref={dialogRef}
         >
           <Box
             sx={{
-              p: 2,
+              p: 0.5,
+              pr: '0.1px !important', 
               // overflowY: 'auto', // Make this box the only scrollable element
-              minWidth: '250px',
+              minWidth: '350px',
               // maxHeight: '100dvh',
+              // overflowY: 'hidden',
               // height: '100dvh',
               backgroundColor: 'white',
-              ...scrollBarThin
             }}
           >
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -112,6 +114,7 @@ const SlideFilterPanel = ({ showFilters, handleClearAll, selectedFilters, filter
               filters={filters}
               handleFilterChange={handleFilterChange}
               selectedFilters={selectedFilters}
+              maxHeight={`calc(100dvh - ${topBarHeightNewBar+40}px)`}
             />
           </Box>
         </DialogContent>

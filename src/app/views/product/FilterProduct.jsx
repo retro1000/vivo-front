@@ -1,22 +1,19 @@
 // ProductPage.jsx
 import React, { useState } from "react";
-import { useTheme, Box, Typography, Button, Grid, Container, useMediaQuery, IconButton, Slide } from "@mui/material";
+import { Box, Typography, Button, Grid, Container, useMediaQuery, IconButton, Slide } from "@mui/material";
 import { Header, Footer, ProductGrid } from "app/components";
 import SortButton from "./component/SortButton";
-import SearchBar from "./component/SearchBar";
 // import ProductGrid from "./component/ProductGrid";
 import FilterBar from "./component/Filtering";
 import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
-import { useLocation } from "react-router-dom";
 import { useReducer } from "react";
-import { useNotistack } from "app/hooks/useNotistack";
 
 import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
 import SlideFilterPanel from "./component/SlideFilterPanel";
-import { scrollBarThin } from "app/utils/constant";
+import { containerPadding, topBarHeightNewBar } from "app/utils/constant";
 
 
 const demoData = [
@@ -163,6 +160,56 @@ const filterConfig = [
     category: 'price',
     config: {label: 'Price', min: 50, max: 15000},
     type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'Price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
+  },
+  {
+    category: 'price',
+    config: {label: 'Price', min: 50, max: 15000},
+    type: 'num_slider'
   }
 ]
 
@@ -207,17 +254,19 @@ const filterReducer = (state, action) => {
   }
 }
 
+const filterCustomDataConfig = {
+  retry: true
+} 
+
 const ProductPage = () => {
 
   const [state, dispatch] = useReducer(filterReducer, initialState)
 
   const filterBtnRef = useRef(null)
 
-  const theme = useTheme();
-
   const isXs = useMediaQuery('(max-width:900px)');
 
-  const [productGridPositionWhenIsXs, setProductGridPositionWhenIsXs] = useState()
+  // const [productGridPositionWhenIsXs, setProductGridPositionWhenIsXs] = useState()
 
   const [showFilters, setShowFilters] = useState(false)
 
@@ -299,17 +348,22 @@ const ProductPage = () => {
     }`;
   } 
 
-  const fetchData = async (controller, retries=5, delay=1000) => {
-    // controller.abort()
-    if(retries===0){
-      dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
-      setLoading(false)
-      //Add manual realoading button for user here
+  const fetchData = async (controller) => {
+
+    if(!window.location.href.match('/product/filter-product')){
+      controller.abort()
+      return;
     }
+
+    // if(retries===0){
+    //   dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {filteredProducts: [], totalResults: state.totalResults, isPagingBlock: true} })
+    //   setLoading(false)
+    //   //Add manual realoading button for user here
+    // }
     setLoading(true) // create a loading effect for this loading
     const filterUrl = generateFilterUrl();
     window.history.pushState({}, '', filterUrl)
-    await api.get(filterUrl, {signal: controller.signal})
+    await api.get(filterUrl, {signal: controller.signal, customData: filterCustomDataConfig})
       .then(response => {
         if(response.status===200){
           // dispatch({ type: state.actionType==='filter' ? "FILTER" : state.actionType==='page' ? "PAGE" : "SORT", payload: {...response.data, isPagingBlock: state.actionType!=='page'} })
@@ -330,19 +384,21 @@ const ProductPage = () => {
       .finally(() => {
 
       })
-
-    // Wait for the delay (increasing with each retry) before trying again
-    await new Promise(resolve => setTimeout(resolve, delay));
-
-    // Retry again, with an increased delay (exponential backoff)
-    return fetchData(controller, retries - 1, delay * 2);
   };
 
   return (
       
-    <Box sx={isXs && showFilters ? {pointerEvents: "none", overflowY: 'hidden'}:{}}>
-      <Container sx={{ display: 'flex', flexDirection: 'column' }} maxWidth={'1400px'}>
-        <br />
+    <Box>
+      <Container 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          ...containerPadding
+          // width: '100%',
+          // maxWidth: '100%',
+        }} 
+        maxWidth={'1400px'}
+      >
         <Header title="Our Products" subTitle="Explore Our Products" />
         <Box
           sx={{
@@ -397,15 +453,15 @@ const ProductPage = () => {
             justifyContent: 'center',
             alignItems: 'flex-start',
             gap: '1em',
-            marginTop: '2em',
-            width: '100dvw',
+            // marginTop: '2em',
+              // width: '100dvw', 
             minHeight: '100dvh',
           }}
         >
           {
             !isXs && (
               <Box
-                sx={{ position: 'sticky', top: 0, width: '350px', maxHeight: '100vh', overflowY: 'auto', ...scrollBarThin }}
+                sx={{ position: 'sticky', top: 0, width: '350px'}}
               >
                 <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                   <Typography variant="h5" gutterBottom>
@@ -425,13 +481,14 @@ const ProductPage = () => {
                   filters={state.filters}
                   handleFilterChange={handleFilterChange}
                   selectedFilters={state.selectedFilters}
+                  maxHeight={`calc(100dvh - ${topBarHeightNewBar+9.1}px)`}
                 />
               </Box>
             )
           }
           {/* Products section */}
-          <Box position={'relative'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={5} width={'100%'} >
-            <ProductGrid products={state.filteredProducts} sx={{ maxWidth: '100%'}} maxWidth={'100%'}/>
+          <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} padding={3} width={'100%'}>
+            <ProductGrid products={state.filteredProducts}/>
           </Box>
         </Grid>
       </Container>

@@ -32,8 +32,20 @@ const useNotistack = () => {
     })
   }
 
-  const triggerCommonErrors = (error) => {
-    if(error===undefined || error.response===undefined){
+  const triggerCommonErrors = (error, errors) => {
+    console.log(error, errors)
+    if(errors && (JSON.stringify(errors)===JSON.stringify(error))) return
+
+    if (error===undefined) {
+      triggerNotifications([{text: 'Internal server error!!! please try again.', variant: 'error'}])
+      return
+    }else if (error.code === 'ECONNABORTED') {
+      triggerNotifications([{text: 'Request timeout!!! Please try again.', variant: 'warning'}])
+      return
+    }else if (error.message === 'Network Error') {
+      triggerNotifications([{text: 'Network error!!! Please try again.', variant: 'warning'}])
+      return
+    }else if(error.response===undefined){
       triggerNotifications([{text: 'Internal server error!!! please try again.', variant: 'error'}])
       return
     }

@@ -9,6 +9,7 @@ import {
   IconButton,
   GlobalStyles,
   Tooltip,
+  Grid,
 } from "@mui/material";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -26,6 +27,8 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
 
     const navigate = useNavigate();
 
+    const cardRef = useRef(null)
+
     const swiperRef = useRef(null)
 
     const handleMouseMove = (e) => {
@@ -36,7 +39,14 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
     }
 
     return (
-        <>
+        <Grid
+            item
+            xs={12} // Full-width on extra-small screens
+            sm={6}  // 2 cards per row on small screens
+            md={4}  // 3 cards per row on medium screens
+            lg={3}  // 4 cards per row on large screens
+            key={product.id}
+        >
             <GlobalStyles
                 styles={{
                     ".swiper-pagination-bullet-active": {
@@ -45,15 +55,19 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
                 }}
             />
             <Card
-                sx={{ 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    cursor: 'pointer', 
-                    boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    width: 250,
-                    height: '374px' 
-                    // maxWidth: 350
+                ref={cardRef}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.2)",
+                    borderRadius: "8px",
+                    width: "100%", // Fill the width of the parent container
+                    aspectRatio: "3 / 4", // Maintain consistent aspect ratio
+                    boxSizing: "border-box",
+                    overflow: "hidden",
+                    // minWidth: "210px", // Ensure the card doesn’t shrink too much
+                    maxWidth: "280px", // Limit the maximum width
                 }}
             >
                 <Box 
@@ -82,7 +96,8 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
                                     backgroundImage: "url(" + slide + ")",
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
-                                    height: 250,
+                                    aspectRatio: "1 / 1",
+                                    // height: 250,
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: 'center',
@@ -188,7 +203,7 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
                 </Box>
 
                 <CardContent
-                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '0.5em 0.5em 0.2em 0.5em' }}
+                    sx={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: '0em 0.5em 0em 0.5em', paddingBottom: '0px !important', minHeight: '90.81px !important' }}
                 >
                     <Tooltip title={product.name}>
                         <Typography 
@@ -212,24 +227,25 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            alignItems: "flex-start",
-                            mt: 1,
-                            gap: 1
+                            alignItems: "center",
+                            flexWrap: 'wrap',
+                            // mt: 0.1,
+                            // gap: 1
                         }}
                     >
-                        <Typography variant="subtitle2" color="error">
+                        <Typography variant="subtitle1" color="error" mt={0.1} mr={1}>
                             {product.price}
                         </Typography>
                         {
                             product.realPrice ?
-                                <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through'}}>
+                                <Typography variant="subtitle2" color="textSecondary" sx={{textDecoration: 'line-through', fontSize: '0.8rem'}} mt={0.1}>
                                     {product.realPrice}
                                 </Typography> : ''
                         }
                     </Box>
                 </CardContent>
             </Card>
-         </>
+         </Grid>
     );
 };
 

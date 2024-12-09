@@ -9,6 +9,9 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { bussinesEmail } from "config";
+import { bussinesContact } from "config";
+import { startYear } from "config";
 
 const faqs = [
   {
@@ -17,7 +20,7 @@ const faqs = [
   },
   {
     question: "How long have you been in business?",
-    answer: "We have been proudly serving our customers for nearly 4 years.",
+    answer: "We have been proudly serving our customers for nearly "+(new Date().getFullYear()-startYear)+" years.",
   },
   {
     question: "Do you offer international shipping?",
@@ -37,7 +40,7 @@ const faqs = [
   },
   {
     question: "How do I initiate a return or exchange?",
-    answer: "To initiate a return or exchange, please contact our customer service team at vivolk@support.gmail.com with your order details.",
+    answer: "To initiate a return or exchange, please contact our customer service team at "+bussinesEmail+" with your order details.",
   },
   {
     question: "What payment methods do you accept?",
@@ -49,7 +52,7 @@ const faqs = [
   },
   {
     question: "How can I contact customer support?",
-    answer: "You can reach our customer support team via email at vivolk@support.gmail.com or call us at +94 705 274 871. Our support hours are 8.00 am to 6.00 pm.",
+    answer: "You can reach our customer support team via email at "+bussinesEmail+" or call us at "+bussinesContact+". Our support hours are 8.00 am to 6.00 pm.",
   },
   {
     question: "Do you offer gift wrapping services?",
@@ -81,7 +84,7 @@ const FAQSection = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#fdfdfd", py: 8 }}>
+    <Box sx={{ py: 8 }}>
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
