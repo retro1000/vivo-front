@@ -24,6 +24,23 @@ export const scrollBarThin = {
     }
 }
 
+export const scrollBar = {
+  '&::-webkit-scrollbar': {
+    width: '4px', // Adjust the width of the scrollbar
+  },
+  '&::-webkit-scrollbar-track': {
+    background: '#333', // Background of the scrollbar track
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'white', // Color of the scrollbar thumb
+    borderRadius: '8px', // Rounded corners
+    border: '2px solid transparent', // Adds a little padding between the thumb and track
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#777', // Thumb color on hover
+  }
+}
+
 export const containerPadding = {
   pr: { xs: 2, sm: 3, md: 3 },
   pl: { xs: 2, sm: 3, md: 3 },
