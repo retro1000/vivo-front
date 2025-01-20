@@ -1,12 +1,11 @@
-import { Box, ListItemButton, ListItemText, MenuList, Slide, Tab, Tabs } from "@mui/material";
+import { Box, List, ListItemButton, ListItemText, MenuList, Slide, Tab, Tabs } from "@mui/material";
 import { themeColors } from "app/components/MatxTheme/themeColors";
-import { List } from "echarts";
 import { memo } from "react";
 import TabPanel from "./TabPanel";
 import useLayoutTopBar from "app/hooks/useLayoutTopBar";
 import { useState } from "react";
 
-const categories = [
+const categorie = [
   {
     id: 1,
     name: "Electronics",
@@ -66,6 +65,7 @@ const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading 
     const { sideMenuOn } = useLayoutTopBar();
 
     const [tab, setTabs] = useState(0)
+    const [categories, setCategories] = useState(categorie)
 
     return (
       <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
@@ -126,7 +126,7 @@ const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading 
             </Tabs>
   
           <TabPanel value={tab} index={0}>
-            {/* <List
+            <List
               sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
               component="nav"
               aria-labelledby="nested-list-subheader"
@@ -221,7 +221,7 @@ const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading 
                   >
                       <ListItemText primary={'Inquiries'} />
                   </ListItemButton>
-            </List> */}
+            </List>
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <MenuList menuItems={categories}/>
