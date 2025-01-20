@@ -23,7 +23,7 @@ const SearchBar = memo(
 
     const hiddenFIleInputRef = useRef(null);
 
-    const {apiNonAuth} = useAxios()
+    const { apiNonAuth } = useAxios()
 
     // useEffect(() => {
     //     const search = async () => {

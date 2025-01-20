@@ -1,19 +1,13 @@
 import { useTheme } from "@emotion/react";
 import { Box, MenuList, Slide, useMediaQuery } from "@mui/material";
-import { useAxios } from "app/hooks/useAxios";
 import { scrollBar } from "app/utils/constant";
 import { memo } from "react";
 import { forwardRef } from "react";
 
-const AllCategoryDropDown = memo(forwardRef(({ dropDownOn, allCategories, setAllCategories, loading, setLoading, menuPosition, getAllCategories }, ref) => {
+const AllCategoryDropDown = memo(forwardRef(({ dropDownOn, allCategories, loading,  menuPosition }, ref) => {
 
-    const { api } = useAxios();
     const theme = useTheme();
     const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
-  
-    if(!loading && (!allCategories || allCategories.length===0)){
-      getAllCategories(setAllCategories, setLoading, api)
-    }
   
     return (
       <div style={{display: {sx: 'none', md: 'flex'}}} ref={ref}>

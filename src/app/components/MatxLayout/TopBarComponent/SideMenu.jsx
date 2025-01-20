@@ -1,18 +1,72 @@
 import { Box, ListItemButton, ListItemText, MenuList, Slide, Tab, Tabs } from "@mui/material";
 import { themeColors } from "app/components/MatxTheme/themeColors";
-import { useAxios } from "app/hooks/useAxios";
 import { List } from "echarts";
 import { memo } from "react";
 import TabPanel from "./TabPanel";
+import useLayoutTopBar from "app/hooks/useLayoutTopBar";
+import { useState } from "react";
 
-const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, activeNav, navigate, setAllCategories, loading, setLoading, getAllCategories }) => {
+const categories = [
+  {
+    id: 1,
+    name: "Electronics",
+    subCategories: [
+      {
+        id: 11,
+        name: "Mobile Phones",
+        subCategories: [
+          { id: 111, name: "Smartphones", subCategories: [] },
+          { id: 112, name: "Feature Phones", subCategories: [] },
+        ],
+      },
+      {
+        id: 12,
+        name: "Laptops",
+        subCategories: [
+          { id: 121, name: "Gaming Laptops", subCategories: [] },
+          { id: 122, name: "Ultrabooks", subCategories: [] },
+        ],
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Clothing",
+    subCategories: [
+      {
+        id: 21,
+        name: "Men",
+        subCategories: [
+          { id: 211, name: "Shirts", subCategories: [] },
+          { id: 212, name: "Jeans", subCategories: [] },
+        ],
+      },
+      {
+        id: 22,
+        name: "Women",
+        subCategories: [
+          { id: 221, name: "Dresses", subCategories: [] },
+          { id: 222, name: "Tops", subCategories: [] },
+        ],
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Accessories",
+    subCategories: [
+      { id: 31, name: "Watches", subCategories: [] },
+      { id: 32, name: "Bags", subCategories: [] },
+    ],
+  },
+];
 
-    const { api } = useAxios();
-  
-    if(!loading && (!allCategories || allCategories.length===0)){
-      getAllCategories(setAllCategories, setLoading)
-    }
-  
+const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading }) => {
+
+    const { sideMenuOn } = useLayoutTopBar();
+
+    const [tab, setTabs] = useState(0)
+
     return (
       <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
         <Box sx={{
@@ -72,7 +126,7 @@ const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, act
             </Tabs>
   
           <TabPanel value={tab} index={0}>
-            <List
+            {/* <List
               sx={{ width: '100%', maxWidth: 360, bgcolor: '#191919', color: 'white' }}
               component="nav"
               aria-labelledby="nested-list-subheader"
@@ -105,7 +159,7 @@ const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, act
                       })
                     }}
                   >
-                      <ListItemText primary={'Products'} />
+                      <ListItemText primary={'Shop'} />
                   </ListItemButton>
                   <ListItemButton 
                     onClick={()=>navigate('track')}
@@ -167,10 +221,10 @@ const SideMenu = memo(({ allCategories, sideMenuOn, tab, setTabs, navigates, act
                   >
                       <ListItemText primary={'Inquiries'} />
                   </ListItemButton>
-            </List>
+            </List> */}
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <MenuList menuItems={allCategories}/>
+            <MenuList menuItems={categories}/>
           </TabPanel>
         </Box>
       </Slide>

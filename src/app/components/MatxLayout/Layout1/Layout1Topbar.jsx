@@ -44,7 +44,7 @@ import SearchBar from "../TopBarComponent/SearchBar";
 import SideMenu from "../TopBarComponent/SideMenu";
 import AllCategoryDropDown from "../TopBarComponent/AllCategoryDropDown";
 import SearchBarDropDown from "../TopBarComponent/SearchBarDropDown";
-import { useContext } from "react";
+import useLayoutTopBar from "app/hooks/useLayoutTopBar";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -200,21 +200,37 @@ const searchResult = [
   },
 ];
 
+const LogoImage = memo(({navigate, logo}) => (
+    <Box
+      onClick={() => navigate("home")}
+      component="img"
+      src={logo}
+      alt="Logo"
+      sx={{
+        width: "120px",
+        height: "auto",
+        borderRadius: 1,
+        cursor: "pointer",
+      }}
+    ></Box>
+))
+
 const Layout1Topbar = () => {
   const theme = useTheme();
-  const { settings, updateSettings } = useSettings();
-  const { logout, user, role } = useAuth();
-  const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [sideMenuOn, setSideMenuOn] = useState(false);
+  const { settings, updateSettings } = useSettings();
+
+  const { categories, getAllCategories, getNotifications, sideMenuToggle, sideMenuOn, logo } = useLayoutTopBar();
+
+  const { logout, user, role } = useAuth();
+
+  const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dropDownOn, setDropDownOn] = useState(false);
 
   const [searchBarOn, setSearchBarOn] = useState(false);
 
   const [allCategories, setAllCategories] = useState(categories);
-
-  const [categoryLoading, setCategoryLoading] = useState(false);
 
   const [searchLoading, setSearchLoading] = useState(false);
 
@@ -224,8 +240,6 @@ const Layout1Topbar = () => {
 
   const [initialSearchVal, setInitialSearchVal] = useState("");
   // const { initialSearchVal, setInitialSearchVal } = useContext(LayoutContext);
-
-  const [tab, setTabs] = useState(0);
 
   const [allCategoryDropDownMenuPosition, setAllCategoryDropDownMenuPosition] =
     useState({ top: 0, left: 0 });
@@ -243,19 +257,6 @@ const Layout1Topbar = () => {
   const location = useLocation();
 
   const { api, apiNonAuth } = useAxios();
-
-  const getAllCategories = async (setAllCategories, setLoading) => {
-    setLoading(true);
-    await api
-      .get("/category/view")
-      .then((response) => {
-        if (response.status === 200) {
-          setAllCategories(response.data);
-        }
-      })
-      .catch((error) => {})
-      .finally(() => setLoading(false));
-  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -355,25 +356,27 @@ const Layout1Topbar = () => {
         searchBarRef1.current.contains(event.target) ||
         searchBarRef2.current.contains(event.target)
       ) {
-        setSideMenuOn(false);
+        sideMenuToggle(false);
         setDropDownOn(false);
       } else setSearchBarOn(false);
-      console.log(
-        event.target,
-        categoryButtonRef.current,
-        categoryDropDownContainerRef.current.contains(event.target),
-        categoryButtonRef.current.contains(event.target)
-      );
+      // console.log(
+      //   event.target,
+      //   categoryButtonRef.current,
+      //   categoryDropDownContainerRef.current.contains(event.target),
+      //   categoryButtonRef.current.contains(event.target)
+      // );
       if (
         categoryDropDownContainerRef.current.contains(event.target) ||
         categoryButtonRef.current.contains(event.target)
       ) {
-        setSideMenuOn(false);
+        sideMenuToggle(false);
         setSearchBarOn(false);
       } else setDropDownOn(false);
 
-      if (sideMenuOn && (searchBarOn || dropDownOn)) setSideMenuOn(false);
+      if (sideMenuOn && (searchBarOn || dropDownOn)) sideMenuToggle(false);
     };
+
+    getAllCategories();
 
     // Add event listener for window resize
     document.addEventListener("click", handleClick);
@@ -468,19 +471,8 @@ const Layout1Topbar = () => {
                 >
                   {
                     <React.Fragment>
-                      <Box
-                        onClick={() => navigate("home")}
-                        component="img"
-                        src="/assets/images/logos/HH01.jpg"
-                        alt="Logo"
-                        sx={{
-                          width: "120px",
-                          height: "auto",
-                          borderRadius: 1,
-                          cursor: "pointer",
-                        }}
-                      ></Box>
-
+                      <LogoImage navigate={navigate} logo={logo}/>
+                      
                       {/* for categery bar */}
                       <div ref={categoryButtonRef}>
                         <Box
@@ -727,7 +719,7 @@ const Layout1Topbar = () => {
                   <Box display={"flex"} gap={2}>
                     <Box sx={{ display: { xs: "block", md: "none" } }}>
                       <StyledIconButton
-                        onClick={() => setSideMenuOn(!sideMenuOn)}
+                        onClick={() => sideMenuToggle()}
                       >
                         <Menu sx={{ padding: 0 }} />
                       </StyledIconButton>
@@ -818,31 +810,22 @@ const Layout1Topbar = () => {
       </TopbarRoot>
       {(!user || user === "USER" || user === "GUEST") && (
         <SideMenu
-          getAllCategories={getAllCategories}
-          sideMenuOn={sideMenuOn}
-          tab={tab}
-          setTabs={setTabs}
           navigates={navigates}
           activeNav={activeNav}
           navigate={navigate}
           allCategories={allCategories}
-          setAllCategories={setAllCategories}
-          loading={categoryLoading}
-          setLoading={setCategoryLoading}
+          loading={categories.loading}
         />
       )}
       {(!user || user === "USER" || user === "GUEST") && (
         <AllCategoryDropDown
-          getAllCategories={getAllCategories}
           ref={categoryDropDownContainerRef}
           dropDownOn={dropDownOn}
           navigates={navigates}
           activeNav={activeNav}
           navigate={navigate}
-          allCategories={allCategories}
-          setAllCategories={setAllCategories}
-          loading={categoryLoading}
-          setLoading={setCategoryLoading}
+          allCategories={categories.values || allCategories}
+          loading={categories.loading}
           menuPosition={allCategoryDropDownMenuPosition}
         />
       )}
