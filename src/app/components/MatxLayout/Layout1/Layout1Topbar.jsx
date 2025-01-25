@@ -44,7 +44,7 @@ import SearchBar from "../TopBarComponent/SearchBar";
 import SideMenu from "../TopBarComponent/SideMenu";
 import AllCategoryDropDown from "../TopBarComponent/AllCategoryDropDown";
 import SearchBarDropDown from "../TopBarComponent/SearchBarDropDown";
-import useLayoutTopBar from "app/hooks/useLayoutTopBar";
+import useLayout from "app/hooks/useLayout";
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -213,14 +213,14 @@ const LogoImage = memo(({navigate, logo}) => (
         cursor: "pointer",
       }}
     ></Box>
-))
+));
 
 const Layout1Topbar = () => {
   const theme = useTheme();
 
   const { settings, updateSettings } = useSettings();
 
-  const { categories, getAllCategories, getNotifications, sideMenuToggle, sideMenuOn, logo } = useLayoutTopBar();
+  const { search, categories, getAllCategories, searchBarDropDownToggle, getNotifications, sideMenuToggle, sideMenuOn, logo } = useLayout();
 
   const { logout, user, role } = useAuth();
 
@@ -228,15 +228,7 @@ const Layout1Topbar = () => {
 
   const [dropDownOn, setDropDownOn] = useState(false);
 
-  const [searchBarOn, setSearchBarOn] = useState(false);
-
   const [allCategories, setAllCategories] = useState(categories);
-
-  const [searchLoading, setSearchLoading] = useState(false);
-
-  const [loading, setLoading] = useState(false);
-
-  const [searchRes, setSearchRes] = useState([]);
 
   const [initialSearchVal, setInitialSearchVal] = useState("");
   // const { initialSearchVal, setInitialSearchVal } = useContext(LayoutContext);
@@ -313,7 +305,7 @@ const Layout1Topbar = () => {
         window.removeEventListener("resize", handleResize);
       };
     }
-  }, [searchRes]);
+  }, [search.values]);
 
   useEffect(() => {
     switch (location.pathname) {
@@ -358,7 +350,7 @@ const Layout1Topbar = () => {
       ) {
         sideMenuToggle(false);
         setDropDownOn(false);
-      } else setSearchBarOn(false);
+      } else searchBarDropDownToggle(false);
       // console.log(
       //   event.target,
       //   categoryButtonRef.current,
@@ -370,17 +362,17 @@ const Layout1Topbar = () => {
         categoryButtonRef.current.contains(event.target)
       ) {
         sideMenuToggle(false);
-        setSearchBarOn(false);
+        searchBarDropDownToggle(false);
       } else setDropDownOn(false);
 
-      if (sideMenuOn && (searchBarOn || dropDownOn)) sideMenuToggle(false);
+      if (sideMenuOn && (search.searchBarOn || dropDownOn)) sideMenuToggle(false);
     };
 
     getAllCategories();
 
     // Add event listener for window resize
-    document.addEventListener("click", handleClick);
-    document.addEventListener("keydown", handleClick);
+    // document.addEventListener("click", handleClick);
+    // document.addEventListener("keydown", handleClick);
 
     // Clean up the event listener when the component unmounts
     return () => {
@@ -831,11 +823,7 @@ const Layout1Topbar = () => {
       )}
       <SearchBarDropDown
         ref={searchBarContainerRef}
-        searchBarOn={searchBarOn}
         navigates={navigates}
-        searchRes={searchRes}
-        loading={searchLoading}
-        setLoading={setSearchLoading}
         searchBarMenuPosition={searchBarDropDownMenuPosition}
       />
     </React.Fragment>

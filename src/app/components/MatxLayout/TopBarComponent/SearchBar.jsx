@@ -10,20 +10,51 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
+import useLayout from "app/hooks/useLayout";
+
+const SearchField = () => {
+
+  const { search, handleSearch } = useLayout();
+
+  return (
+    <TextField
+      placeholder="Find your perfect match today!"
+      sx={{
+        background: "white",
+        borderRadius: 1,
+        flex: 1,
+        height: "39.5px",
+        width: "100%",
+      }}
+      type="search"
+      value={search.searchText.trim()}
+      focused
+      size="small"
+      onChange={handleSearch}
+    />
+  );
+}
 
 const SearchBar = memo(
-  forwardRef(({ initialSearchVal, setInitialSearchVal, sx }, ref) => {
-    const [loading, setLoading] = useState(false);
+  forwardRef(({ sx }, ref) => {
 
-    const [searchLoading, setSearchLoading] = useState(false);
+    const { search, handleFileChange, handleSearch } = useLayout();
 
-    const [searchVal, setSearchVal] = useState(initialSearchVal || '');
+    const {loading, searchText, searchImg} = search
 
-    const [searchImg, setSearchImg] = useState(null);
+    // const [loading, setLoading] = useState(false);
+
+    // const [searchLoading, setSearchLoading] = useState(false);
+
+    // const [searchVal, setSearchVal] = useState(initialSearchVal || '');
+
+    // const [searchImg, setSearchImg] = useState(null);
 
     const hiddenFIleInputRef = useRef(null);
 
-    const { apiNonAuth } = useAxios()
+    const searchFormRef = useRef(null);
+
+    const { apiNonAuth } = useAxios();
 
     // useEffect(() => {
     //     const search = async () => {
@@ -73,50 +104,35 @@ const SearchBar = memo(
     //     search();
     //   }, [searchVal, searchImg]);
 
-    const search = (event) => {
-      switch (event.type) {
-        case "submit":
-          setLoading(true);
-          setSearchVal(searchVal + " ");
-          setInitialSearchVal(searchVal + " ");
-          break;
-        case "change":
-          setSearchVal(event.target.value);
-          setInitialSearchVal(event.target.value);
-        //   if (searchBarRef1.current) {
-        //     searchBarRef1.current.children[0].children[0].focus();
-        //   }
-          setSearchLoading(true);
-          break;
-        case "click":
-          setLoading(true);
-          if (
-            event.target.name === "search" ||
-            event.target.parentNode.name === "search" ||
-            event.target.parentNode.parentNode.name === "search"
-          ) {
-            setSearchVal(searchVal + " ");
-            setInitialSearchVal(searchVal + " ");
-          }
-          if (
-            event.target.name === "img" ||
-            event.target.parentNode.name === "img" ||
-            event.target.parentNode.parentNode.name === "img"
-          ) {
-            hiddenFIleInputRef.current.click();
-          }
-          break;
-        default:
+    useEffect(() => {
+      if (searchFormRef && searchFormRef.current) {
+        // Find the input element inside the form
+        const inputElement = searchFormRef.current.querySelector("input");
+        if (inputElement) {
+          inputElement.focus(); // Programmatically focus the input
+        }
       }
-    };
+    }, [search.loading]);
 
-    
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSearchImg(file);
+    const onSearchImgClick = (event) => {
+      if (
+        event.target.name === "img" ||
+        event.target.parentNode.name === "img" ||
+        event.target.parentNode.parentNode.name === "img"
+      ) {
+        hiddenFIleInputRef && hiddenFIleInputRef.current && hiddenFIleInputRef.current.click();
+      }
     }
-  };
+
+    const onSearchIconClick = (event) => {
+      if (
+        event.target.name === "search" ||
+        event.target.parentNode.name === "search" ||
+        event.target.parentNode.parentNode.name === "search"
+      ) {
+        searchFormRef && searchFormRef.current && searchFormRef.current.submit();
+      }
+    }
 
     return (
       <>
@@ -133,22 +149,8 @@ const SearchBar = memo(
             ...sx,
           }}
         >
-          <form onSubmit={search} style={{ width: "100%" }}>
-            <TextField
-              placeholder="Find your perfect match today!"
-              sx={{
-                background: "white",
-                borderRadius: 1,
-                flex: 1,
-                height: "39.5px",
-                width: "100%",
-              }}
-              type="search"
-              value={searchVal.trim()}
-              focused
-              size="small"
-              onChange={search}
-            />
+          <form onSubmit={handleSearch} style={{ width: "100%" }} ref={searchFormRef}>
+            <SearchField />
           </form>
           <Box
             display={"flex"}
@@ -159,17 +161,19 @@ const SearchBar = memo(
             <TIconButton
               icon={SearchIcon}
               title={"Search"}
-              fun={search}
+              fun={(event) => onSearchIconClick(event)}
               color={themeColors.red.palette.secondary.main}
               name={"search"}
-              disabled={searchVal === undefined || searchVal.trim() === ""}
+              disabled={searchText === undefined || searchText.trim() === ""}
+              loading={loading}
             ></TIconButton>
             <TIconButton
               icon={PhotoCamera}
               title={"Search by image"}
-              fun={search}
+              fun={(event) => onSearchImgClick(event)}
               color={themeColors.red.palette.secondary.main}
               name={"img"}
+              disabled={loading}
             ></TIconButton>
           </Box>
         </Box>

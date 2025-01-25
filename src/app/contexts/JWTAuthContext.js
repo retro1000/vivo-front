@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     (async () => {
         const token = localStorage.getItem('token');
         if(token){
-          await api.get(`/login/profile`)
+          await api.get(`/login/profile`, {customData: {silentError: true}})
             .then((res) => {
               if(res.status===200){
                 const { user, role } = res.data

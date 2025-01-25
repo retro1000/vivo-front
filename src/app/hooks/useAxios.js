@@ -32,6 +32,7 @@ const useAxios = () => {
     const { logout } = useAuth()
 
     const handleError = async (error) => {
+        console.log(error.config)
         if (error.config && error.config.customData) {
             const { retry, retryCycles=5, delay=1000, silentError, errorCallback, prevError } = error.config.customData;
 

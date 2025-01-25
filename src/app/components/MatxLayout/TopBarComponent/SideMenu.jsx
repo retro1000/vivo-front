@@ -1,9 +1,10 @@
-import { Box, List, ListItemButton, ListItemText, MenuList, Slide, Tab, Tabs } from "@mui/material";
+import { Box, List, ListItemButton, ListItemText, Slide, Tab, Tabs } from "@mui/material";
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { memo } from "react";
 import TabPanel from "./TabPanel";
-import useLayoutTopBar from "app/hooks/useLayoutTopBar";
+import useLayout from "app/hooks/useLayout";
 import { useState } from "react";
+import { MenuList } from "app/components";
 
 const categorie = [
   {
@@ -62,10 +63,9 @@ const categorie = [
 
 const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading }) => {
 
-    const { sideMenuOn } = useLayoutTopBar();
-
+    const { categories, sideMenuOn } = useLayout();
+console.log(categories)
     const [tab, setTabs] = useState(0)
-    const [categories, setCategories] = useState(categorie)
 
     return (
       <Slide direction={'right'} in={sideMenuOn} mountOnEnter unmountOnExit>
@@ -224,7 +224,7 @@ const SideMenu = memo(({ allCategories, navigates, activeNav, navigate, loading 
             </List>
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <MenuList menuItems={categories}/>
+            <MenuList menuItems={categories.values}/>
           </TabPanel>
         </Box>
       </Slide>

@@ -8,7 +8,7 @@ import routes from "./routes";
 
 
 import {loadStripe} from '@stripe/stripe-js';
-import { LayoutTopBarProvider } from "./contexts/LayoutTopBarContext";
+import { LayoutProvider } from "./contexts/LayoutContext";
 
 const stripePromise = loadStripe('pk_test_51PRMeRH2QbTEXrdk32yYITCtMpdg9kPum4oFoZKnTn2oO9NW7xin0xdB3HHhMpCMqutF2dXWpAHBqjCE9EDjRkH100Qnx435JO');
 
@@ -20,12 +20,12 @@ export default function App() {
   return (
     <SettingsProvider>
       <AuthProvider>
-        <LayoutTopBarProvider>
+        <LayoutProvider>
           <MatxTheme>
             <CssBaseline />
             {content}
           </MatxTheme>
-        </LayoutTopBarProvider>
+        </LayoutProvider>
       </AuthProvider>
     </SettingsProvider>
   );
