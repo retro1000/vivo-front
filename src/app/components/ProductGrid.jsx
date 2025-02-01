@@ -1,13 +1,12 @@
 
 import React from "react";
 import {
-  Box,
   Grid
 } from "@mui/material";
 import ProductCardSlide from "./Card/ProductCardSlide";
 
 const ProductGrid = ({ removeWishList, products, sx }) => {
-  return (
+  return products && products.length > 0 && (
     <Grid
       container
       spacing={2}

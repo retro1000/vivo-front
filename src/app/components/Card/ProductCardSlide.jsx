@@ -89,7 +89,7 @@ const ProductCardSlide = ({ product, removeWishList, key }) => {
                         modules={[Pagination]}
                         className="mySwiper"
                     >
-                        {product.imgs.map((slide, index) => (
+                        {product && product.imgs && product.imgs.length > 0 && product.imgs.map((slide, index) => (
                             <SwiperSlide key={index}>
                                 <Box
                                     sx={{

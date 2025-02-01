@@ -1,12 +1,8 @@
 import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import CategorySec from "./component/CategorySec";
-import PopularProducts from "./component/PopularProducts";
-import Banner from "./component/NewProduct";
-import ColorOfTheYear from "./component/UnderUnderHero";
-import PaintStories from "./component/UnderHero";
 import LetsPaintHero from "./component/BottomHero";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   Footer,
   ProductCard,
@@ -16,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProductSlider from "app/components/SwiperSlider/ProductSlider";
-import ProductCardSlide from "app/components/Card/ProductCardSlide";
+import ProductGallery from "./component/ProductGallery";
 
 const styles = {
   padding: { xs: 3, md: 5, lg: 10 },
@@ -275,6 +271,7 @@ const HomePage = () => {
   return (
     <>
       <CssBaseline />
+
       <SwiperSliderHeroAuto
         slides={[
           {
@@ -292,20 +289,25 @@ const HomePage = () => {
           },
         ]}
       ></SwiperSliderHeroAuto>
-      <CategorySec />
+
       <Box sx={styles}>
+        <ProductGallery />
+
+        <CategorySec />
+
         <ProductSlider title={"Popular Products"}>
           {popularProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </ProductSlider>
+
         <Box
           display={"flex"}
           flexDirection={"column"}
           gap="1em"
           alignItems={"center"}
         >
-          <Typography variant="h4">More to Love</Typography>
+          <Typography variant={'h4'} textAlign={'center'} width={'100%'} sx={{ fontWeight: "bold", fontStyle: "italic" }}>MORE TO LOVE</Typography>
           <ProductGrid
             products={showProducts}
             sx={{ justifyContent: "center", alignItems: "center", mt: 4 }}
@@ -319,8 +321,16 @@ const HomePage = () => {
         {/* <Banner /> */}
         {/* <PaintStories/> */}
         {/* <ColorOfTheYear/> */}
+
+        <ProductSlider title={"Popular Products"}>
+          {popularProducts.map((product, index) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </ProductSlider>
       </Box>
+
       <LetsPaintHero />
+
       <Footer />
     </>
   );

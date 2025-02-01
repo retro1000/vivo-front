@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Grid, Container } from "@mui/material";
+import { Grid, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
 import { FeaturedCategoryCard } from "app/components";
@@ -74,6 +74,8 @@ export default function CategorySec() {
         }}
         maxWidth={false}
       >
+        <Typography variant={'h4'} textAlign={'center'} width={'100%'} sx={{ fontWeight: "bold", fontStyle: "italic" }}>SHOP BY CATEGORIES</Typography>
+        <br></br>
         <Grid container spacing={3} justifyContent="center">
           {categories.map((category, index) => (
             <Grid item key={index}>
