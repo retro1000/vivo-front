@@ -51,4 +51,5 @@ export { default as TimeLine } from "./TimeLine";
 export { default as CheckBoxGroup } from "./InputField/CheckBoxGroup";
 export { default as MenuList } from "./Menu/MenuList";
 export { default as ProductGrid } from "./ProductGrid";
+export { default as FeaturedCategoryCard } from "./Card/FeaturedCategoryCard";
 

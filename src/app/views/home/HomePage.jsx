@@ -1,4 +1,3 @@
-
 import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import CategorySec from "./component/CategorySec";
@@ -8,232 +7,309 @@ import ColorOfTheYear from "./component/UnderUnderHero";
 import PaintStories from "./component/UnderHero";
 import LetsPaintHero from "./component/BottomHero";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { Footer, ProductCard, ProductGrid, SwiperSliderHeroAuto } from "app/components";
+import {
+  Footer,
+  ProductCard,
+  ProductGrid,
+  SwiperSliderHeroAuto,
+} from "app/components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProductSlider from "app/components/SwiperSlider/ProductSlider";
 import ProductCardSlide from "app/components/Card/ProductCardSlide";
 
 const styles = {
-  padding: {xs: 3, md: 5, lg: 10},
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 10
+  padding: { xs: 3, md: 5, lg: 10 },
+  display: "flex",
+  flexDirection: "column",
+  gap: 10,
 };
 
-
 const HomePage = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const [showProducts, setShowProducts] = useState([
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: true,
+    },
+    {
+      id: 2,
+      name: "Dummy Paint",
+      price: "$700",
+      rating: 4.8,
+      reviews: 325,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 3,
+      name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
+      price: "LKR 5990.00",
+      rating: 4.7,
+      reviews: 145,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: true,
+      isNew: true,
+      isSale: true,
+      realPrice: "LKR 6990.00",
+    },
+    {
+      id: 4,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 5,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 6,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 7,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 8,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 9,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 10,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+    {
+      id: 11,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: [
+        "/assets/images/2099.jpg",
+        "/assets/images/8735.jpg",
+        "/assets/images/amazon-2.png",
+        "/assets/images/demo_home_two.jpg",
+      ],
+      wishList: false,
+    },
+  ]);
 
-  const [showProducts, setShowProducts] = useState(
-    [
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: true
-      },
-      {
-        id: 2,
-        name: "Dummy Paint",
-        price: "$700",
-        rating: 4.8,
-        reviews: 325,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      },
-      {
-        id: 3,
-        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
-        price: "LKR 5990.00",
-        rating: 4.7,
-        reviews: 145,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: true,
-        isNew: true,
-        isSale: true,
-        realPrice: 'LKR 6990.00'
-    
-      },
-      {
-        id: 4,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      },
-      {
-        id: 5,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 6,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 7,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 8,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 9,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 10,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      }, {
-        id: 11,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-        wishList: false
-    
-      },
-    ]
-  )
-
-  const [popularProducts, setPopularProducts] = useState(
-    [
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true
-      },
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true
-      },
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true
-      },
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true
-      },
-      {
-        id: 1,
-        name: "Dummy Paint",
-        price: "$360",
-        rating: 4.5,
-        reviews: 95,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true
-      },
-      {
-        id: 2,
-        name: "Dummy Paint",
-        price: "$700",
-        rating: 4.8,
-        reviews: 325,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: false
-    
-      },
-      {
-        id: 3,
-        name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
-        price: "LKR 5990.00",
-        rating: 4.7,
-        reviews: 145,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: true,
-        isNew: true,
-        realPrice: 'LKR 6990.00'
-    
-      },
-      {
-        id: 4,
-        name: "dummy paint",
-        price: "$1160",
-        rating: 4.0,
-        reviews: 35,
-        imgs: '/assets/images/demo_home_two.jpg',
-        wishList: false
-      },
-    ]
-  )
+  const [popularProducts, setPopularProducts] = useState([
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+    },
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+    },
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+    },
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+    },
+    {
+      id: 1,
+      name: "Dummy Paint",
+      price: "$360",
+      rating: 4.5,
+      reviews: 95,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+    },
+    {
+      id: 2,
+      name: "Dummy Paint",
+      price: "$700",
+      rating: 4.8,
+      reviews: 325,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: false,
+    },
+    {
+      id: 3,
+      name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint Paint Dummy Paint",
+      price: "LKR 5990.00",
+      rating: 4.7,
+      reviews: 145,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: true,
+      isNew: true,
+      realPrice: "LKR 6990.00",
+    },
+    {
+      id: 4,
+      name: "dummy paint",
+      price: "$1160",
+      rating: 4.0,
+      reviews: 35,
+      imgs: "/assets/images/demo_home_two.jpg",
+      wishList: false,
+    },
+  ]);
 
   return (
     <>
       <CssBaseline />
-      <SwiperSliderHeroAuto slides={[{header: 'ELEVATE YOUR SPORTS PERFORMANCE', sub: "Get instant alerts for anyone who approaches, even they don't prsss the headphone.", act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/2099.jpg'}, {header: 'SHOP NOW', sub: '', act: 'Shop Now', fun: () => navigate('/product/filter-product'), img:'/assets/images/home_hero/2149321866.jpg'}]}></SwiperSliderHeroAuto>
-      <Box sx={( styles )}>
-        <ProductSlider title={"Popular Products"}>
+      <SwiperSliderHeroAuto
+        slides={[
           {
-            popularProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product}/>
-            ))
-          }
+            color: "white",
+            act: "Shop Now",
+            fun: () => navigate("/product/filter-product"),
+            img: "/assets/images/2099.jpg",
+          },
+          {
+            header: "SHOP NOW",
+            sub: "",
+            act: "Shop Now",
+            // fun: () => navigate("/product/filter-product"),
+            img: "/assets/images/home_hero/2149321866.jpg",
+          },
+        ]}
+      ></SwiperSliderHeroAuto>
+      <CategorySec />
+      <Box sx={styles}>
+        <ProductSlider title={"Popular Products"}>
+          {popularProducts.map((product, index) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </ProductSlider>
-        <CategorySec />
-        <Box display={'flex'} flexDirection={'column'} gap='1em' alignItems={'center'}>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap="1em"
+          alignItems={"center"}
+        >
           <Typography variant="h4">More to Love</Typography>
-          <ProductGrid products={showProducts} sx={{justifyContent: 'center', alignItems: 'center', mt: 4}}/>
+          <ProductGrid
+            products={showProducts}
+            sx={{ justifyContent: "center", alignItems: "center", mt: 4 }}
+          />
           {/* <Grid spacing={4.5} display={'flex'} gap={4.5} flexWrap={'wrap'} mt={4}>
               {showProducts.map((product) => (
                   <ProductCardSlide product={product} key={product.id}/>
@@ -244,7 +320,7 @@ const HomePage = () => {
         {/* <PaintStories/> */}
         {/* <ColorOfTheYear/> */}
       </Box>
-      <LetsPaintHero/>
+      <LetsPaintHero />
       <Footer />
     </>
   );

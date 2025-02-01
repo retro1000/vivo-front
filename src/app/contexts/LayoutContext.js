@@ -70,7 +70,7 @@ const initialState = {
     // values: [],
     values: searchResult,
     abortController: null,
-    searchBarOn: true
+    searchBarOn: false
   },
   categories: {
     loading: true,
