@@ -1,101 +1,122 @@
+import React, { useState } from "react";
+import { Typography, TextField, Button, Divider, Box, Grid } from "@mui/material";
+import { useFormatter } from "app/hooks/useFormatter";
 
-import React from "react";
-import { Typography, Grid, Divider, Button, TextField ,  FormControlLabel, 
-  Radio,
-  RadioGroup,
-  Box,} from "@mui/material";
+const OrderSummary = ({ products }) => {
+  const [promoCode, setPromoCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [appliedCode, setAppliedCode] = useState(null);
 
-  const formatToLKR = (number) => {
-    return new Intl.NumberFormat('en-LK', {
-        style: 'currency',
-        currency: 'LKR',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(number);
-  }
+  // Sample promo codes (You can replace with backend API validation)
+  const promoCodes = {
+    "SAVE10": 10,  // 10% discount
+    "FREESHIP": 5, // Flat 5 discount
+    "WELCOME20": 20 // 20% discount
+  };
 
-const OrderSummary = ({ orderList, subTotal, shipping }) => {
+  // Calculate subtotal from products
+  const subtotal = products && products.length>0 ? products.reduce((acc, item) => acc + item.price * item.quantity, 0) : 0;
+  const deliveryFee = subtotal > 50 ? 0 : 5.99;  // Free shipping for orders > 50
+  const handlingFee = 2.50;
+  const taxRate = 0.08; // 8% tax
+  const taxAmount = subtotal * taxRate;
+
+  // Apply Discount
+  const discountedAmount = (subtotal * discount) / 100;
+  const total = subtotal + taxAmount + deliveryFee + handlingFee - discountedAmount;
+
+  const applyPromoCode = () => {
+    if (promoCodes[promoCode]) {
+      setDiscount(promoCodes[promoCode]);
+      setAppliedCode(promoCode);
+    } else {
+      setDiscount(0);
+      setAppliedCode(null);
+    }
+  };
+
+  const { formatToLKR } = useFormatter()
+
   return (
-    <Grid container spacing={2}>
-      {
-        orderList.map((order, index) => (
-          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} width={'100%'} mb={1}>
-            <Grid item xs={12} sm={6} display={'flex'} justifyContent={'flex-start'} alignItems={'center'} flexDirection={'row'} gap={'0.5em'} ml={1.5}>
-              <img alt={order.name} src={order.img} style={{width: '70px', height: '70px', borderRadius: '5px'}}/>
-              <Typography>{order.name}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography align="right">{formatToLKR(order.amount)}</Typography>
-            </Grid>
-          </Box>
-        ))
-      }
-      <Grid item xs={12} mt={-1.5}>
-        <Divider />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography>Subtotal:</Typography>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography align="right">{formatToLKR(subTotal)}</Typography>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography>Shipping:</Typography>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography align="right">{shipping || shipping===0 ? 'Free' : formatToLKR(shipping)}</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Divider />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography variant="h6">Total:</Typography>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Typography variant="h6" align="right">
-          {formatToLKR(subTotal+(shipping || shipping===0?0:shipping))}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField fullWidth label="Coupon Code" variant="outlined" />
-      </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" fullWidth>
-          Apply Coupon
-        </Button>
-      </Grid>
+    // <Paper elevation={3} sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
+    <>
+      <Typography variant="h6" fontWeight="bold">Order Summary</Typography>
+      <br></br>  
+      {/* Subtotal */}
+      <Box display="flex" justifyContent="space-between" mb={1}>
+        <Typography variant="body1">Subtotal:</Typography>
+        <Typography variant="body1">{formatToLKR(subtotal)}</Typography>
+      </Box>
 
-      <Grid item xs={12}>
-        <Typography variant="h6" gutterBottom>
-          Payment Method
+      {/* Delivery Fee */}
+      <Box display="flex" justifyContent="space-between" mb={1}>
+        <Typography variant="body1">Delivery Fee:</Typography>
+        <Typography variant="body1" color={deliveryFee === 0 ? "green" : "black"}>
+          {deliveryFee === 0 ? "Free" : `${formatToLKR(deliveryFee)}`}
         </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <RadioGroup defaultValue="bank" name="payment-method" color="primary"        >
-          <FormControlLabel value="bank" control={<Radio />} label={
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} flexWrap={'wrap'} gap={'0.4em'}>
-              <Typography>Credit/Debit card</Typography>
-              <Box display={'flex'} gap={'0.2em'} flexWrap={'wrap'} justifyContent={'center'} alignItems={'center'}>
-                <img src="/assets/images/logos/mc_sym_debit_pos_46_1x.png" alt="master" />
-                <img src="/assets/images/logos/visa-logo-svgrepo-com.png" alt="visa" style={{width: '30px', height: '20px'}}/>
-                </Box>
-            </Box>
-            }
-          />
-          <FormControlLabel
-            value="cash"
-            control={<Radio />}
-            label="Cash on delivery"
-          />
-        </RadioGroup>
-      </Grid>
+      </Box>
 
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" fullWidth>
-          Place Order
-        </Button>
-      </Grid>
-    </Grid>
+      {/* Handling Fee */}
+      <Box display="flex" justifyContent="space-between" mb={1}>
+        <Typography variant="body1">Handling Fee:</Typography>
+        <Typography variant="body1">{formatToLKR(handlingFee)}</Typography>
+      </Box>
+
+      {/* Taxes */}
+      <Box display="flex" justifyContent="space-between" mb={1}>
+        <Typography variant="body1">Taxes (8%):</Typography>
+        <Typography variant="body1">{formatToLKR(taxAmount)}</Typography>
+      </Box>
+
+      {/* Discount (if applied) */}
+      {discount > 0 && (
+        <Box display="flex" justifyContent="space-between" mb={1} color="green">
+          <Typography variant="body1">Discount ({appliedCode}):</Typography>
+          <Typography variant="body1">- {formatToLKR(discountedAmount)}</Typography>
+        </Box>
+      )}
+
+      <Divider sx={{ my: 2 }} />
+
+      {/* Total */}
+      <Box display="flex" justifyContent="space-between" mb={2}>
+        <Typography variant="h6" fontWeight="bold">Total:</Typography>
+        <Typography variant="h6" fontWeight="bold" color="primary">{formatToLKR(total)}</Typography>
+      </Box>
+
+      {/* Offer Code Input */}
+      <Box mt={2} mb={4}>
+        <Typography variant="body2" fontWeight="bold">Apply Promo Code:</Typography>
+        <Grid container spacing={1} mt={1}>
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              placeholder="Enter promo code"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Button
+              variant="contained"
+              fullWidth
+              color="primary"
+              onClick={applyPromoCode}
+              disabled={!promoCode}
+            >
+              Apply
+            </Button>
+          </Grid>
+        </Grid>
+        {appliedCode && (
+          <Typography variant="body2" color="green" mt={1}>
+            "{appliedCode}" applied! {discount}% discount added.
+          </Typography>
+        )}
+      </Box>
+    </>
   );
 };
 

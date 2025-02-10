@@ -16,6 +16,14 @@ const MatxTheme = ({ children }) => {
     },
     components: {
       ...activeTheme.components,
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            textAlign: "left",  // Change position globally (right, left, center)
+            marginLeft: 1
+          },
+        },
+      },
       MuiTextField: {
         defaultProps: {
           size: 'small',
