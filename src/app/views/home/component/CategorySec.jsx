@@ -1,120 +1,93 @@
-import React from 'react';
-import { useState } from 'react';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import styled from '@emotion/styled';
-import { Box, Button, Typography } from '@mui/material';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import React from "react";
+import { useState } from "react";
+import { Grid, Container, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useAxios } from "app/hooks/useAxios";
+import { FeaturedCategoryCard } from "app/components";
 
-const srcset = (image, size, rows = 1, cols = 1) => {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
+const categorie = [
+  {
+    title: "Mobile Phone Accessories",
+    image:
+      "https://images.unsplash.com/photo-1565536421961-1f165e0c981e?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    link: "/category/mobile-accessories",
+  },
+  {
+    title: "Men's Shoes",
+    image:
+      "https://images.unsplash.com/photo-1612015670817-0127d21628d4?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    link: "/category/mens-shoes",
+  },
+  {
+    title: "Women's Shoes",
+    image:
+      "https://images.unsplash.com/photo-1519707574798-77140649cfe5?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    link: "/category/womens-shoes",
+  },
+  {
+    title: "Clothing & Apparel",
+    image:
+      "https://img.freepik.com/free-photo/flat-lay-composition-different-traveling-elements_23-2148884945.jpg?t=st=1738411776~exp=1738415376~hmac=e874ea67c60ae25dc3c233d49d1052dec7753c8a5e45783c6e1b2c5d85cae4cf&w=900",
+    link: "/category/clothes",
+  },
+  {
+    title: "Gift Items",
+    image:
+      "https://img.freepik.com/free-photo/fathers-day-composition-with-gift-box_23-2147790796.jpg?t=st=1738411825~exp=1738415425~hmac=6b4a55a07e4ea70427c1c43f2566b26ea4a5302ac413dc9c0d24a77e3ff223c2&w=1060",
+    link: "/category/gift-items",
+  },
+];
 
-const ZoomImg = styled('img')({
-    transition: 'transform 0.3s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.2)',
-    },
-});
+export default function CategorySec() {
+  const [categories, setCategories] = useState(categorie);
 
-export default function QuiltedImageList() {
-
-  const [srcsets, setSrcsets] = useState()
-
-  const imageListRef = useRef(null)
+  const { apiNonAuth } = useAxios();
 
   useEffect(() => {
-    
-  }, [])
+    const getFeturedCategories = async () => {
+      await apiNonAuth
+        .get("/categories?type=fetured", { customData: { silentError: true } })
+        .then((response) => {
+          if (response.status === 200 && response.data) {
+            setCategories(response.data);
+          }
+        })
+        .catch((error) => {})
+        .then(() => {});
+    };
 
-  const handleSrcsets = (item) => {
-    const listInstance = imageListRef.current?.swiper;
-    if (!listInstance) return;
-    const bool = listInstance.width<695
-    setSrcsets(...srcset(item.img, 121, bool?item.brRows:item.rows, bool?item.brCols:item.cols))
-  }
+    getFeturedCategories();
+  }, []);
 
   return (
-    <Box display={'flex'} gap={'1em'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} ref={imageListRef}>
-        <Typography variant='h4' textAlign={'center'}>FEATURED CATEGORIES</Typography>
-        <ImageList
-            sx={{ width: '80dvw', height: 'max-content', borderRadius: '8px' }}
-            variant="quilted"
-            cols={4}
-            rowHeight={121}
-        >
-        {itemData.map((item) => (
-            <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
-                <img
-                    onResize={(item) => handleSrcsets(item)}
-                    {...srcsets}
-                    alt={item.title}
-                    loading="lazy"
-                    style={{
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s ease-in-out',
-                        '&:hover': {
-                            transform: 'scale(1.2)',
-                        },
-                        zIndex: 99
-                    }}
-                />
-                <Box display='flex' flexDirection='column' gap={'0.4em'} justifyContent='flex-start' alignContent={'center'} position={'absolute'} top={'40%'} left={'20%'}>    
-                    <Typography variant='h5' color={'white'}>{item.title}</Typography>
-                    <Button sx={{width:'100px'}} color='primary' variant='contained'>See more</Button>
-                </Box>
-            </ImageListItem>
-        ))}
-        </ImageList>
-    </Box>
+    categories &&
+    categories.length > 0 && (
+      <Container
+        sx={{
+          py: 4,
+          pt: 4,
+          mt: 0,
+          position: "relative",
+          width: "100%",
+          display: "block",
+          flexShrink: 0,
+        }}
+        maxWidth={false}
+      >
+        <Typography variant={'h4'} textAlign={'center'} width={'100%'} sx={{ fontWeight: "bold", fontStyle: "italic" }}>SHOP BY CATEGORIES</Typography>
+        <br></br>
+        <Grid container spacing={3} justifyContent="center">
+          {categories.map((category, index) => (
+            <Grid item key={index}>
+              <FeaturedCategoryCard
+                title={category.title}
+                image={category.image}
+                link={category.link}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    )
   );
 }
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'MOBILE PHONES & ACCESSORIES',
-    rows: 4,
-    cols: 2,
-    brRows:4,
-    brCols: 4
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: "WOMEN'S SHOES",
-    rows: 2,
-    cols: 1,
-    brRows:2,
-    brCols: 2
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: "CLOTHING & APPAREL",
-    rows: 2,
-    cols: 1,
-    brRows:2,
-    brCols: 2
-  },
-  {
-    img: '/assets/images/6005.jpg',
-    title: "MEN'S SHOES",
-    rows: 2,
-    cols: 1,
-    brRows:2,
-    brCols: 2
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'GIFT ITMES',
-    rows: 2,
-    cols: 1,
-    brRows:2,
-    brCols: 2
-  }
-];
