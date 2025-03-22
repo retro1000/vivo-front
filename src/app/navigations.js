@@ -15,6 +15,13 @@ export const navigations = [
       { name: "Product list", iconText: "E", path: "/order/list" },
     ] 
   },
+  { 
+    name: "Discounts", 
+    icon: "attach_money",
+    children: [
+      { name: "Create Dicount", iconText: "E", path: "/discount/create" },
+    ] 
+  },
 
   // { label: "PAGES", type: "label" },
   {
