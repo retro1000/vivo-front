@@ -16,6 +16,8 @@ import orderRoutes from "./views/orders/order-routes";
 import profileRoutes from "./views/profile/profile-routes";
 import billingRoutes from "./views/billing/billing-routes";
 import purchaseOrderRoutes from "./views/purchase_order/purchase-order-routes";
+import orderTrackingRoutes from "./views/order_track/order-track-routes";
+import inquiriesRoutes from "./views/inquiries/inquiries-routes";
 
 // E-CHART PAGE
 const AppEchart = Loadable(lazy(() => import("app/views/charts/echarts/AppEchart")));
@@ -31,6 +33,8 @@ const routes = [
     ),
     children: [
       ...productRoutes,
+      ...orderTrackingRoutes,
+      ...inquiriesRoutes,
       ...homeRoutes,
       ...aboutRoutes,
       ...contactRoutes,

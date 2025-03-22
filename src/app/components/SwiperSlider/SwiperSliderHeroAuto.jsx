@@ -35,7 +35,7 @@ export default function SwiperSliderHeroAuto({ slides }) {
                                 "url("+slide.img+")",
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
-                                minHeight: "90dvh",
+                                minHeight: "85dvh",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: 'center',

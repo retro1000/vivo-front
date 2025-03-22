@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { Stack, Box, styled, Tabs, Tab, Typography, Select, Button, Grid, IconButton, Icon, Slide } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 import { Breadcrumb, SimpleCard, MuiTable, FilterTable, SearchableSelectMultiple, NumSliderFilter, CheckBoxPane} from "app/components";
 

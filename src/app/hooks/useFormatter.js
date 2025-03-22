@@ -31,8 +31,20 @@ const useFormatter = () => {
         return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
     }
 
+    const DefaultWordFormat2 = (word) => {
+        return word.toUpperCase().replace(/ /g, '_')
+    }
+
     const TitleCaseWordFormat = (word) => {
         return (word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    }
+
+    const CamelCaseWordFormat = (word) => {
+        return (word.charAt(0).toUpperCase() + word.slice(1).split(/(?=[A-Z])/).map(w => w.charAt(0).toLowerCase() + w.slice(1)).join(' '))
+    }
+
+    const CamelCaseWordFormat2 = (word) => {
+        return (word.charAt(0).toLowerCase() + word.slice(1).split(/ /).map((w, index) => (index!==0 ? w.charAt(0).toUpperCase() :  w.charAt(0)) + w.slice(1)).join(''))
     }
 
     const PaymentMethod = (method) => {
@@ -50,7 +62,7 @@ const useFormatter = () => {
         }
     }
   
-    return { PaymentMethod, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat }
+    return { DefaultWordFormat2, PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
   }
   
   export {useFormatter}

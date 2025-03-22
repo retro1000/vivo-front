@@ -19,6 +19,7 @@ import {
   TimeLine,
   TButton,
   PopupFormDialog,
+  DataField
 } from "app/components";
 
 import { useNotistack } from "app/hooks/useNotistack";
@@ -30,7 +31,6 @@ import { useAxios } from "app/hooks/useAxios";
 import { useTemplate } from "app/hooks/useTemplate";
 
 import OrderItem from "./component/OrderItem";
-import OrderDataField from "./component/OrderDataField";
 
 import { themeColors } from "app/components/MatxTheme/themeColors";
 
@@ -481,24 +481,24 @@ function OrderView() {
                     width={"max-content"}
                   >
                     <Typography variant="h6" mb={1}>General</Typography>
-                    <OrderDataField label={"Order id"}>
+                    <DataField label={"Order id"}>
                       <Typography variant="body2">{order.id || "-"}</Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Order number"}>
+                    </DataField>
+                    <DataField label={"Order number"}>
                       <Typography variant="body2">{order.orderNo || "-"}</Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Order status"}>
+                    </DataField>
+                    <DataField label={"Order status"}>
                       <Typography variant="body2">{order.status?DefaultWordFormat(order.status):"-"}</Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Date created"}>
+                    </DataField>
+                    <DataField label={"Date created"}>
                       <Typography variant="body2">
                         {order.createDate?DefaultDateTimeFormat(new Date(order.createDate)):"-"}
                       </Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Created by"}>
+                    </DataField>
+                    <DataField label={"Created by"}>
                       <Typography variant="body2">{order.createdBy || "-"}</Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Order completed date"}>
+                    </DataField>
+                    <DataField label={"Order completed date"}>
                       <Typography variant="body2">
                         {order.orderCompleteDate
                           ? DefaultDateTimeFormat(
@@ -506,7 +506,7 @@ function OrderView() {
                             )
                           : "-"}
                       </Typography>
-                    </OrderDataField>
+                    </DataField>
                   </Box>
                   <Box
                     display={"flex"}
@@ -519,7 +519,7 @@ function OrderView() {
                     <Typography variant="h6" mb={1}>Billing</Typography>
                     {
                       customer && order && customer.firstName && customer.lastName && order.billingAddress && (
-                        <OrderDataField>
+                        <DataField>
                         <Typography variant="body2">
                           {customer.firstName && customer.lastName?customer.firstName + " " + customer.lastName:"-"}
                         </Typography>
@@ -529,10 +529,10 @@ function OrderView() {
                         >
                           {order.billingAddress}
                         </Typography>
-                      </OrderDataField>
+                      </DataField>
                       )
                     }
-                    <OrderDataField label={"Email address"}>
+                    <DataField label={"Email address"}>
                       <Typography
                         color={themeColors.red.palette.primary.main}
                         component={order.email?"a":""}
@@ -541,8 +541,8 @@ function OrderView() {
                       >
                         {order.email || "-"}
                       </Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Contact numbers"}>
+                    </DataField>
+                    <DataField label={"Contact numbers"}>
                       {order && order.contactNos && order.contactNos.length>0 ? order.contactNos.map((contactNumber, index) => (
                         <Typography
                           key={index}
@@ -554,7 +554,7 @@ function OrderView() {
                           {contactNumber}
                         </Typography>
                       )) : "-"}
-                    </OrderDataField>
+                    </DataField>
                   </Box>
                   <Box
                     display={"flex"}
@@ -567,7 +567,7 @@ function OrderView() {
                     <Typography variant="h6" mb={1}>Shipping</Typography>
                     {
                       customer && order && customer.firstName && customer.lastName && order.shippingAddress && order.city && order.district && (
-                        <OrderDataField>
+                        <DataField>
                         <Typography variant="body2">
                           {customer.firstName && customer.lastName?customer.firstName + " " + customer.lastName:"-"}
                         </Typography>
@@ -579,7 +579,7 @@ function OrderView() {
                         </Typography>
                         <Typography variant="body2">{order.city}</Typography>
                         <Typography variant="body2">{order.district}</Typography>
-                      </OrderDataField>
+                      </DataField>
                       )
                     }
                   </Box>
@@ -593,18 +593,18 @@ function OrderView() {
                     width={"max-content"}
                   >
                     <Typography variant="h6" mb={1}>Payment</Typography>
-                    <OrderDataField label={"Payment completed date"}>
+                    <DataField label={"Payment completed date"}>
                       <Typography variant="body2">
                         {order.paymentDate
                           ? DefaultDateTimeFormat(new Date(order.paymentDate))
                           : "-"}
                       </Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Payment method"}>
+                    </DataField>
+                    <DataField label={"Payment method"}>
                       <Typography variant="body2">
                         {order.paymentMethod?PaymentMethod(order.paymentMethod):'-'}
                       </Typography>
-                    </OrderDataField>
+                    </DataField>
                   </Box>
                   <Box
                     display={"flex"}
@@ -615,7 +615,7 @@ function OrderView() {
                     width={"max-content"}
                   >
                     <Typography variant="h6" mb={1}>Delivery</Typography>
-                    <OrderDataField label={"Delivery service"}>
+                    <DataField label={"Delivery service"}>
                       <Typography variant="body2">
                         {order.deliveryService ? (
                           <Typography
@@ -632,17 +632,17 @@ function OrderView() {
                           "-"
                         )}
                       </Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"Waybill"}>
+                    </DataField>
+                    <DataField label={"Waybill"}>
                       <Typography variant="body2">
                         {order.waybill ? order.waybill : "-"}
                       </Typography>
-                    </OrderDataField>
-                    <OrderDataField label={"COD amount"}>
+                    </DataField>
+                    <DataField label={"COD amount"}>
                       <Typography variant="body2">
                         {order.cod ? formatToLKR(order.cod) : "-"}
                       </Typography>
-                    </OrderDataField>
+                    </DataField>
                   </Box>
                 </Grid>
                 <br></br>

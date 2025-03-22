@@ -10,12 +10,19 @@ import App from "./app/App";
 // third party style
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-
 const root = createRoot(document.getElementById("root"));
+
+const customStyle = {
+  top: "9em",
+  position: "relative",
+};
 
 root.render(
   <BrowserRouter>
-    <SnackbarProvider maxSnack={10}>
+    <SnackbarProvider 
+      maxSnack={10}
+      style={customStyle}
+    >
       <App />
     </SnackbarProvider>
   </BrowserRouter>

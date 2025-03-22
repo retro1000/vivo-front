@@ -39,29 +39,28 @@ const StyledIcon = styled(Home)({
 
 export default function Breadcrumb({ routeSegments }) {
   return (
-    <BreadcrumbRoot>
+    <BreadcrumbRoot sx={{mb: 2}}>
       {/* {routeSegments ? (
         <>
           <BreadcrumbName>{routeSegments[routeSegments.length - 1]["name"]}</BreadcrumbName>
           <Separator>|</Separator>
         </>
       ) : null} */}
-
       <Breadcrumbs
-        separator={<NavigateNext sx={{ color: "text.hint"}} />}
+        separator={<NavigateNext sx={{ color: "text.hint", fontSize: '18px', position: 'relative', top: 2}} />}
         sx={{ display: "flex", alignItems: "center", position: "relative" }}>
         <NavLink to="/">
-          <SubName sx={{fontSize: "14px"}}>Home</SubName>
+          <SubName sx={{fontSize: "12px"}}>Home</SubName>
         </NavLink>
 
         {routeSegments
           ? routeSegments.map((route, index) => {
               return index !== routeSegments.length - 1 ? (
                 <NavLink key={index} to={route.path}>
-                  <SubName sx={{fontSize: "14px"}}>{route.name}</SubName>
+                  <SubName sx={{fontSize: "12px"}}>{route.name}</SubName>
                 </NavLink>
               ) : (
-                <SubName key={index} sx={{fontSize: "14px"}}>{route.name}</SubName>
+                <SubName key={index} sx={{fontSize: "12px"}}>{route.name}</SubName>
               );
             })
           : null}

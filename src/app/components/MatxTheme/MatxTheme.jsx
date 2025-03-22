@@ -16,6 +16,21 @@ const MatxTheme = ({ children }) => {
     },
     components: {
       ...activeTheme.components,
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            textAlign: "left",  // Change position globally (right, left, center)
+            marginLeft: 1
+          },
+        },
+      },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            boxShadow: "none", // Removes the shadow
+          },
+        },
+      },
       MuiTextField: {
         defaultProps: {
           size: 'small',
@@ -43,6 +58,22 @@ const MatxTheme = ({ children }) => {
             },
           },
         }
+      },
+      MuiTabs: {
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Ensure Tabs use the font
+          },
+        },
+      },
+      MuiList: {
+        styleOverrides: {
+          root: {
+            fontSize: '14px',
+            fontFamily: 'Poppins, Arial, sans-serif', // Ensure Lists use the font
+          },
+        },
       },
       MuiMenuItem: {
         styleOverrides: {

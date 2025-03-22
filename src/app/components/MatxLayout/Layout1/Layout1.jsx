@@ -113,11 +113,15 @@ const Layout1 = () => {
                 <Layout1Topbar />
               </ThemeProvider>
             )}
-            <Box flexGrow={1} position="relative">
+            {/* <Box flexGrow={1} position="relative">
+            <SnackbarProvider 
+      maxSnack={10}
+    >
               <MatxSuspense>
                 <Outlet />
               </MatxSuspense>
-            </Box>
+              </SnackbarProvider>
+            </Box> */}
 
             {settings.footer.show && !settings.footer.fixed && <Footer />}
           </StyledScrollBar>
@@ -136,7 +140,6 @@ const Layout1 = () => {
                 <Outlet />
               </MatxSuspense>
             </Box>
-
             {settings.footer.show && !settings.footer.fixed && <Footer />}
           </ContentBox>
         )}

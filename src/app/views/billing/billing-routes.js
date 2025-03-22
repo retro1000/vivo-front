@@ -15,16 +15,16 @@ const billingRoutes = [
   {
     path: "/cart/:id",
     element: 
-      <AuthGuard auth={authRoles.user}>
+      // <AuthGuard auth={authRoles.user}>
         <Cart />
-      </AuthGuard>
+      // </AuthGuard>
   },
   {
     path: "/checkout",
     element: 
-      <AuthGuard auth={authRoles.user}>
+      // <AuthGuard auth={authRoles.user}>
         <Checkout />
-      </AuthGuard>
+      // </AuthGuard>
   },
   {
     path: "/wishlist/:id",

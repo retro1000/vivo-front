@@ -15,4 +15,10 @@ export const auth0Config = {
 };
 
 export const backendApi = 'http://localhost:8080'
+export const baseUrl = 'http://localhost:3000'
+export const bussinesEmail = ''
+export const bussinesContact = ''
+export const bussinesContactWhatsapp = ''
+export const bussinesName = 'Vivolk'
+export const startYear = 2020
 // export const backendApi = 'https://gazelle-winning-remotely.ngrok-free.app'
