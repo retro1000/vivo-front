@@ -135,7 +135,7 @@ const FilterList = ({ key, filter, handleFilterChange, selectedFilters }) => {
   return (
     <Accordion defaultExpanded key={key} sx={{ boxShadow: 'none', border: 'none', borderBottom: '1px solid silver', margin: '1px !important'}}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="body1">{CamelCaseWordFormat(filter.category)}</Typography>
+        <Typography variant="body1" sx={{fontWeight: 600}}>{CamelCaseWordFormat(filter.category)}</Typography>
       </AccordionSummary>
       <AccordionDetails sx={{mt: -2, pb: 1}}>
         {createFilterOption(filter, selectedFilters, handleFilterChange, DefaultWordFormat)}

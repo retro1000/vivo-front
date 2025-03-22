@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { Breadcrumb, Footer } from "app/components";
 import CartItem from "./component/CartItem";
-import CouponForm from "./component/CouponForm";
 import CartTotal from "./component/CartTotal";
 
 import { themeColors } from "app/components/MatxTheme/themeColors";
@@ -72,9 +71,6 @@ const CartPage = () => {
             justifyContent: "space-between",
           }}
         >
-          <Grid item xs={12} md={5}>
-            <CouponForm />
-          </Grid>
           <Grid item xs={12} md={5}>
             <CartTotal subtotal="$1750" shipping="Free" total="$1750" />
           </Grid>

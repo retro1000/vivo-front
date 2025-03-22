@@ -8,9 +8,6 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { SearchSelectAdd } from "app/components";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useAxios } from "app/hooks/useAxios";
 import { Controller } from "react-hook-form";
 
 const samples = [{ districtName: "Colombo", cities: ["Colombo-01"] }];
@@ -21,27 +18,10 @@ const BillingForm = ({
   clearErrors,
   control,
   errors,
+  deliveryServices
 }) => {
-  const [districts, setDistricts] = useState(samples);
 
-  const { apiNonAuth } = useAxios();
-
-  useEffect(() => {
-    const getDistrictList = async () => {
-      await apiNonAuth("/delivery-service/districts", {
-        customData: { silentError: true },
-      })
-        .then((response) => {
-          if (response.status === 200 && response.data) {
-            setDistricts(response.data);
-          }
-        })
-        .catch((error) => {})
-        .finally(() => {});
-    };
-
-    getDistrictList();
-  }, []);
+  const districts = orderDetails?.deliveryServiceId ? deliveryServices.find(ds => ds.deliveryServiceId === orderDetails?.deliveryServiceId)?.districts : [];
 
   return (
     <form>
@@ -154,8 +134,43 @@ const BillingForm = ({
           />
         </Grid>
 
+        {/* Delivery service (Autocomplete) */}
+        <Grid item xs={12} sm={4}>
+          <Controller
+            name="deliveryServiceId"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                options={deliveryServices.map((ds) => ds.deliveryServiceName)}
+                value={deliveryServices.find(ds => ds.deliveryServiceId === orderDetails.deliveryServiceId)?.deliveryServiceName || null}
+                onChange={(event, newValue) => {
+                  const deliveryServiceId = deliveryServices.find(ds => ds.deliveryServiceName === newValue)?.deliveryServiceId;
+                  field.onChange(deliveryServiceId);
+                  clearErrors("deliveryServiceId");
+                  setOrderDetails({ target: { name: "deliveryServiceId" } }, deliveryServiceId);
+                }}
+                onBlur={(event, newValue) => {
+                  field.onChange(orderDetails.deliveryServiceId);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Shipping Method"
+                    fullWidth
+                    required
+                    variant="outlined"
+                    placeholder="Select the shipping method"
+                    error={!!errors.deliveryServiceId}
+                    helperText={errors.deliveryServiceId?.message}
+                  />
+                )}
+              />
+            )}
+          />
+        </Grid>
+
         {/* District (Autocomplete) */}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <Controller
             name="district"
             control={control}
@@ -189,14 +204,14 @@ const BillingForm = ({
         </Grid>
 
         {/* City (Autocomplete) */}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <Controller
             name="city"
             control={control}
             render={({ field }) => (
               <Autocomplete
                 options={
-                  districts && orderDetails?.district
+                  districts && districts.length>0 && orderDetails?.district
                     ? districts.find(
                         (d) => d.districtName === orderDetails?.district
                       )?.cities || []

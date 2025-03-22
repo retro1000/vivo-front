@@ -24,6 +24,13 @@ const MatxTheme = ({ children }) => {
           },
         },
       },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            boxShadow: "none", // Removes the shadow
+          },
+        },
+      },
       MuiTextField: {
         defaultProps: {
           size: 'small',

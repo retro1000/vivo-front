@@ -233,7 +233,10 @@ const HomePage = () => {
         <CategorySec />
         <Box display={'flex'} flexDirection={'column'} gap='1em' alignItems={'center'}>
           <Typography variant="h4">More to Love</Typography>
-          <ProductGrid products={showProducts} sx={{justifyContent: 'center', alignItems: 'center', mt: 4}}/>
+          {/* <ProductGrid products={showProducts} sx={{justifyContent: 'center', alignItems: 'center', mt: 4}}/> */}
+          <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} pl={0} pr={0} pt={3} pb={3} width={'100%'}>
+            <ProductGrid products={showProducts} responsiveCardProps={{lg: 2}}/>
+          </Box>
           {/* <Grid spacing={4.5} display={'flex'} gap={4.5} flexWrap={'wrap'} mt={4}>
               {showProducts.map((product) => (
                   <ProductCardSlide product={product} key={product.id}/>

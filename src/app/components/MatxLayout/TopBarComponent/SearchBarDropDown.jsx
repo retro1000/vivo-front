@@ -339,7 +339,7 @@ const SearchBarDropDown = memo(
                           flexDirection: "column",
                           alignItems: "center",
                           p: 1,
-                          boxShadow: "none", // Proper way to remove box shadow
+                          boxShadow: "none !important", // Proper way to remove box shadow
                         }}
                       >
                         <CardMedia
