@@ -1,4 +1,4 @@
-import { Card, Box, styled } from "@mui/material";
+import { Card, Box, styled, Typography } from "@mui/material";
 
 // STYLED COMPONENTS
 const CardRoot = styled(Card)({
@@ -17,7 +17,7 @@ export default function SimpleCard({ sx, children, title, subtitle }) {
   return (
     <CardRoot sx={sx} elevation={6}>
       <CardTitle subtitle={subtitle}>{title}</CardTitle>
-      {subtitle && <Box mb={2}>{subtitle}</Box>}
+      {subtitle && <Typography mb={2} variant="subtitle2">{subtitle}</Typography>}
       {children}
     </CardRoot>
   );

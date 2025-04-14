@@ -243,6 +243,76 @@ export const themeColors = {
       text: textLight,
     },
   },
+  // New Brand-Based Themes
+  brandLightTheme: {
+    palette: {
+      type: 'light',
+      primary: {
+        main: '#D32F2F', // Primary Red
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#000000', // Black
+        contrastText: '#ffffff',
+      },
+      error: errorColor,
+      background: {
+        paper: '#FFFFFF',
+        default: '#FFFFFF',
+      },
+      text: {
+        primary: '#333333', // Dark Gray
+        secondary: '#9E9E9E', // Medium Gray
+      },
+    },
+  },
+
+  brandDarkTheme: {
+    palette: {
+      type: 'dark',
+      primary: {
+        main: '#D32F2F', // Primary Red
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#FFFFFF', // White
+        contrastText: '#000000',
+      },
+      error: errorColor,
+      background: {
+        paper: '#1E1E1E',
+        default: '#121212',
+      },
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#BDBDBD',
+      },
+    },
+  },
+
+  // Minimal Brand Dark Theme Variant
+  brandDarkMinimal: {
+    palette: {
+      type: 'dark',
+      primary: {
+        main: '#D32F2F', // Primary Red
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#000000', // Black
+        contrastText: '#ffffff',
+      },
+      error: errorColor,
+      background: {
+        paper: '#121212',
+        default: '#0A0A0A',
+      },
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#9E9E9E',
+      },
+    },
+  },
 };
 
 export const themeShadows = [
