@@ -9,7 +9,7 @@ import "swiper/css/effect-fade";
 // import required modules
 import { EffectFade, Autoplay, Pagination } from "swiper/modules";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 export default function SwiperSliderHeroAuto({ slides }) {
   return (
     <Swiper
@@ -38,65 +38,41 @@ export default function SwiperSliderHeroAuto({ slides }) {
               backgroundImage: "url(" + slide.img + ")",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              minHeight: "85dvh",
+              minHeight: "50dvh",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              alignContent: "center",
+              alignItems: "end",
+              justifyContent: "left",
+              alignContent: "left",
               width: "100%",
-              cursor: 'pointer'
+              cursor: "pointer",
+              borderRadius: 1,
             }}
           >
-            <Container
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              {/* <Stack
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                flexDirection={"column"}
+            <Box>
+              <Typography variant="h6" gutterBottom>
+                {slide?.title}
+              </Typography>
+              {/* <Button
+                variant="text"
+                onClick={slide?.fun}
+                sx={{
+                  color: slide?.btnClr || "white",
+                  textTransform: "none", // Prevent uppercase text
+                  textDecoration: "underline", // Add underline
+                  fontSize: "1.3rem", // Match font size (approximate)
+                  fontWeight: 600, // Regular weight
+                  "&:hover": {
+                    textDecoration: "underline", // Keep underline on hover
+                    backgroundColor: "transparent", // No background on hover
+                  },
+                }}
+                endIcon={
+                  <ArrowForwardIcon sx={{ color: slide?.btnClr || "white" }} />
+                }
               >
-                <Typography
-                  variant="h3"
-                  color="white"
-                  gutterBottom
-                  textAlign={"center"}
-                  width={"80%"}
-                  noWrap={false}
-                >
-                  {slide.header}
-                </Typography>
-                <Typography
-                  variant="span"
-                  color="white"
-                  gutterBottom
-                  textAlign={"center"}
-                  width={"85%"}
-                >
-                  {slide.sub}
-                </Typography>
-                <Button
-                  size="large"
-                  variant="outlined"
-                //   color={slide.color && slide.color!==undefined ? "" : "primary"}
-                  onClick={slide.fun}
-                  sx={{
-                    width: "200px",
-                    height: "60px",
-                    fontSize: "20px",
-                    mt: 2,
-                    // ...(slide.color ? { background: slide.color } : {}),
-                  }}
-                >
-                  {slide.act}
-                </Button>
-              </Stack> */}
-            </Container>
+                {slide?.act || "Shop Now"}
+              </Button> */}
+            </Box>
           </Box>
         </SwiperSlide>
       ))}
