@@ -1,246 +1,346 @@
+// Centralized system colors with meaningful names
+const systemColors = {
+  // Whites and Grays
+  white: '#ffffff',
+  lightGrayBackground: '#fafafa',
+  paperGray: '#222A45',
+  darkSlate: '#1a2038',
+  mutedGray: '#6b7280',
+  darkGray: '#4b5563',
+  titleGray: '#1f2937',
+  black: '#000000',
+
+  // Reds
+  trendingRed: '#ef4444',
+  errorRed: '#FF3D57',
+  redDark: '#dd3333',
+  coralRed: '#FF4F30',
+
+  // Blues
+  primaryBlue: '#2563eb',
+  lightBlue: '#eff6ff',
+  blueMedium: '#1976d2',
+
+  // Purples
+  purpleLight: '#7467ef',
+  purpleMedium: '#6a75c9',
+
+  // Yellows and Oranges
+  amberYellow: '#eab308',
+  secondaryLightOrange: '#f9a352',
+  secondaryMainOrange: '#ff9e43',
+  secondaryDarkOrange: '#ff932e',
+  yellowOrange: '#FFAF38',
+
+  // Greens
+  shippingGreen: '#16a34a',
+
+  // Text Colors (Light Theme)
+  textPrimaryLight: 'rgba(52, 49, 76, 1)',
+  textSecondaryLight: 'rgba(52, 49, 76, 0.54)',
+  textDisabledLight: 'rgba(52, 49, 76, 0.38)',
+  textHintLight: 'rgba(52, 49, 76, 0.38)',
+
+  // Text Colors (Dark Theme)
+  textPrimaryDark: '#fff',
+  textSecondaryDark: 'rgba(255, 255, 255, 0.7)',
+  textDisabledDark: 'rgba(255, 255, 255, 0.64)',
+  textHintDark: 'rgba(255, 255, 255, 0.64)',
+};
+
+// Define tag colors using systemColors
+const tagColors = {
+  New: {
+    backgroundColor: systemColors.yellowOrange,
+    color: systemColors.white,
+  },
+  Sale: {
+    backgroundColor: systemColors.trendingRed,
+    color: systemColors.white,
+  },
+  Trending: {
+    backgroundColor: systemColors.primaryBlue,
+    color: systemColors.white,
+  },
+  'Limited Stock': {
+    backgroundColor: systemColors.amberYellow,
+    color: systemColors.white,
+  },
+  'Best Seller': {
+    backgroundColor: systemColors.purpleLight,
+    color: systemColors.white,
+  },
+  'Out of Stock': {
+    backgroundColor: systemColors.mutedGray,
+    color: systemColors.white,
+  },
+  Exclusive: {
+    backgroundColor: systemColors.shippingGreen,
+    color: systemColors.white,
+  },
+  'Pre-Order': {
+    backgroundColor: systemColors.purpleMedium,
+    color: systemColors.white,
+  },
+  Clearance: {
+    backgroundColor: systemColors.coralRed,
+    color: systemColors.white,
+  },
+  'Hot Deal': {
+    backgroundColor: systemColors.secondaryMainOrange,
+    color: systemColors.white,
+  },
+};
+
+// Text configurations using system colors
 const textLight = {
-  primary: 'rgba(52, 49, 76, 1)',
-  secondary: 'rgba(52, 49, 76, 0.54)',
-  disabled: 'rgba(52, 49, 76, 0.38)',
-  hint: 'rgba(52, 49, 76, 0.38)',
+  primary: systemColors.textPrimaryLight,
+  secondary: systemColors.textSecondaryLight,
+  disabled: systemColors.textDisabledLight,
+  hint: systemColors.textHintLight,
 };
 
 const textDark = {
-  primary: '#fff',
-  secondary: 'rgba(255, 255, 255, 0.7)',
-  disabled: 'rgba(255, 255, 255, 0.64)',
-  hint: 'rgba(255, 255, 255, 0.64)',
+  primary: systemColors.textPrimaryDark,
+  secondary: systemColors.textSecondaryDark,
+  disabled: systemColors.textDisabledDark,
+  hint: systemColors.textHintDark,
 };
 
+// Secondary and error color configurations using system colors
 const secondaryColor = {
-  light: '#f9a352',
-  main: '#ff9e43',
-  dark: '#ff932e',
-  contrastText: textLight.primary,
+  light: systemColors.secondaryLightOrange,
+  main: systemColors.secondaryMainOrange,
+  dark: systemColors.secondaryDarkOrange,
+  contrastText: systemColors.textPrimaryLight,
 };
+
 const errorColor = {
-  main: '#FF3D57',
+  main: systemColors.errorRed,
 };
 
 export const themeColors = {
-  // red: {
-  //   palette: {
-  //     type: 'light',
-  //     primary: {
-  //       main: '#dd3333',
-  //       contrastText: textLight.primary,
-  //     },
-  //     secondary: {
-  //       main: '#000000',
-  //       contrastText: '#ffffff',
-  //     },
-  //     background: {
-  //       paper: '#fff',
-  //       default: '#fafafa',
-  //     },
-  //     error: errorColor,
-  //     text: textLight,
-  //   },
-  // },
   whitePurple: {
     palette: {
       type: 'light',
       primary: {
-        main: '#ffffff',
-        contrastText: textLight.primary,
+        main: systemColors.white,
+        contrastText: systemColors.textPrimaryLight,
       },
       secondary: {
-        main: '#7467ef',
-        contrastText: '#ffffff',
+        main: systemColors.purpleLight,
+        contrastText: systemColors.white,
       },
       background: {
-        paper: '#fff',
-        default: '#fafafa',
+        paper: systemColors.white,
+        default: systemColors.lightGrayBackground,
       },
       error: errorColor,
       text: textLight,
+      custom: systemColors, // Make system colors accessible in theme
+      tagColors: tagColors, // Make tag colors accessible in theme
     },
   },
   whiteBlue: {
     palette: {
       type: 'light',
       primary: {
-        main: '#ffffff',
-        contrastText: textLight.primary,
+        main: systemColors.white,
+        contrastText: systemColors.textPrimaryLight,
       },
       secondary: {
-        main: '#1976d2',
-        contrastText: '#ffffff',
+        main: systemColors.blueMedium,
+        contrastText: systemColors.white,
       },
       background: {
-        paper: '#fff',
-        default: '#fafafa',
+        paper: systemColors.white,
+        default: systemColors.lightGrayBackground,
       },
       text: textLight,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   slateDark1: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#222A45',
-        contrastText: '#ffffff',
+        main: systemColors.paperGray,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#ff9e43',
-        contrastText: textLight.primary,
+        main: systemColors.secondaryMainOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#222A45',
-        default: '#1a2038',
+        paper: systemColors.paperGray,
+        default: systemColors.darkSlate,
       },
       text: textDark,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   slateDark2: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#1a2038',
-        contrastText: '#ffffff',
+        main: systemColors.darkSlate,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#ff9e43',
-        contrastText: textLight.primary,
+        main: systemColors.secondaryMainOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#222A45',
-        default: '#1a2038',
+        paper: systemColors.paperGray,
+        default: systemColors.darkSlate,
       },
       text: textDark,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   purple1: {
     palette: {
       type: 'light',
       primary: {
-        main: '#7467ef',
-        contrastText: '#ffffff',
+        main: systemColors.purpleLight,
+        contrastText: systemColors.white,
       },
       secondary: secondaryColor,
       error: errorColor,
       background: {
-        paper: '#fff',
-        default: '#fafafa',
+        paper: systemColors.white,
+        default: systemColors.lightGrayBackground,
       },
       text: textLight,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   purple2: {
     palette: {
       type: 'light',
       primary: {
-        main: '#6a75c9',
-        contrastText: '#ffffff',
+        main: systemColors.purpleMedium,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#ff9e43',
-        contrastText: textLight.primary,
+        main: systemColors.secondaryMainOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#fff',
-        default: '#fafafa',
+        paper: systemColors.white,
+        default: systemColors.lightGrayBackground,
       },
       text: textLight,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   purpleDark1: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#7467ef',
-        contrastText: '#ffffff',
+        main: systemColors.purpleLight,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#ff9e43',
-        contrastText: textLight.primary,
+        main: systemColors.secondaryMainOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#222A45',
-        default: '#1a2038',
+        paper: systemColors.paperGray,
+        default: systemColors.darkSlate,
       },
       text: textDark,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   purpleDark2: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#6a75c9',
-        contrastText: '#ffffff',
+        main: systemColors.purpleMedium,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#ff9e43',
-        contrastText: textLight.primary,
+        main: systemColors.secondaryMainOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#222A45',
-        default: '#1a2038',
+        paper: systemColors.paperGray,
+        default: systemColors.darkSlate,
       },
       text: textDark,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   blue: {
     palette: {
       type: 'light',
       primary: {
-        main: '#1976d2',
-        contrastText: '#ffffff',
+        main: systemColors.blueMedium,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#FFAF38',
-        contrastText: textLight.primary,
+        main: systemColors.yellowOrange,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#fff',
-        default: '#fafafa',
+        paper: systemColors.white,
+        default: systemColors.lightGrayBackground,
       },
       text: textLight,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   blueDark: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#1976d2',
-        contrastText: '#ffffff',
+        main: systemColors.blueMedium,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#FF4F30',
-        contrastText: textLight.primary,
+        main: systemColors.coralRed,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       background: {
-        paper: '#222A45',
-        default: '#1a2038',
+        paper: systemColors.paperGray,
+        default: systemColors.darkSlate,
       },
       text: textDark,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
   red: {
     palette: {
       type: 'dark',
       primary: {
-        main: '#dd3333',
-        contrastText: '#ffffff',
+        main: systemColors.redDark,
+        contrastText: systemColors.white,
       },
       secondary: {
-        main: '#000000',
-        contrastText: textLight.primary,
+        main: systemColors.black,
+        contrastText: systemColors.textPrimaryLight,
       },
       error: errorColor,
       text: textLight,
+      custom: systemColors,
+      tagColors: tagColors,
     },
   },
 };

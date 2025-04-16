@@ -2,23 +2,25 @@ import React from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
-const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id }) => {
+const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id, isSingleStar, showRate }) => {
 
-  const sizing = size==='small'?{width: 17, height: 17}:{width: 24, height: 24}
+  const sizing = size === 'small' ? { width: 17, height: 17 } : { width: 24, height: 24 }
   // Function to generate the stars with partial filling
   const renderStars = () => {
     const stars = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < isSingleStar ? 1 : 5; i++) {
       let fillPercentage = 0;
 
-      if (rating >= i + 1) {
+      if (isSingleStar) {
+        fillPercentage = 100;
+      } else if (rating >= i + 1) {
         fillPercentage = 100; // Fully filled star
-      } else if(rating-i > 0) {
+      } else if (rating - i > 0) {
         fillPercentage = Math.ceil((rating - i) * 100).toFixed(2); // Partial fill
       } else {
         fillPercentage = 0
       }
-  
+
       stars.push(
         <Box
           key={i}
@@ -35,7 +37,7 @@ const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id }) => {
               position: 'absolute',
               width: '100%',
               height: '100%',
-              fill: 'url(#grad' + i + id +')',
+              fill: 'url(#grad' + i + id + ')',
             }}
           >
             <defs>
@@ -59,23 +61,24 @@ const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id }) => {
         </Box>
       );
     }
-    console.log(id)
+
     return stars;
   };
 
   return (
-    <Grid container alignItems="center" sx={{mt: size==='samll'?'0.5em':'0em'}}>
+    <Grid container alignItems="center" sx={{ mt: size === 'samll' ? '0.5em' : '0em' }}>
       <Grid item>
         <Box display="flex" alignItems="center">
           {renderStars()}
         </Box>
       </Grid>
       <Grid item sx={{ ml: 1 }}>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary" sx={{fontWeight: showRate ? '600' : ''}}>
           {
-            specOff ? 
-              `${reviewCount!==undefined?reviewCount===1?reviewCount+' review':reviewCount+' reviews':'0 reviews'}` : 
-              reviewCount!==undefined?`(${reviewCount})`:''
+            showRate ?
+              (specOff ?
+                `${reviewCount !== undefined ? reviewCount === 1 ? reviewCount + ' review' : reviewCount + ' reviews' : '0 reviews'}` :
+                reviewCount !== undefined ? `(${reviewCount})` : '') : rating
           }
         </Typography>
       </Grid>
