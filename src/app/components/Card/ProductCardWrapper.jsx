@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   Card,
   CardMedia,
@@ -163,9 +163,9 @@ const ProductCard = React.memo(({ product }) => {
         {/* Price and Discount */}
         <Stack direction="row" alignItems="center" spacing={1} mt={1} >
           <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: "1rem", color: theme.palette.custom.trendingRed }}>
-            {formatToLKR(isDiscounted ? product.price : product.originalPrice)}
+            {formatToLKR(product?.isDiscounted ? product.price : product.originalPrice)}
           </Typography>
-          {isDiscounted && (<><Typography variant="subtitle2" color="textSecondary" sx={{ fontSize: "0.8rem", textDecoration: 'line-through' }}>
+          {product?.isDiscounted && (<><Typography variant="subtitle2" color="textSecondary" sx={{ fontSize: "0.8rem", textDecoration: 'line-through' }}>
             {formatToLKR(product.originalPrice)}
           </Typography>
             <Box
@@ -185,7 +185,7 @@ const ProductCard = React.memo(({ product }) => {
         </Stack>
 
         {/* Benefits */}
-        {isFreehipping && (<Stack spacing={1}>
+        {product?.isFreeShipping && (<Stack spacing={1}>
           <Stack direction="row" alignItems="center" sx={{ color: theme.palette.custom.shippingGreen, fontSize: '14px', fontWeight: 'medium' }}>
             <LocalShipping sx={{ fontSize: 16, mr: 1 }} />
             <Typography sx={{ fontSize: '14px' }}>Free Shipping</Typography>
@@ -209,7 +209,7 @@ const ProductCard = React.memo(({ product }) => {
 // Default export with sample product data
 const ProductCardWrapper = () => {
   const product = {
-    title: 'Original AF1 Shoelaces',
+    title: 'Original AF1 Shoelaces Original AF1 Shoelaces Original AF1 Shoelaces Original AF1 Shoelaces',
     price: 4500,
     originalPrice: 5900,
     discount: 58,
@@ -217,7 +217,7 @@ const ProductCardWrapper = () => {
     reviews: 100,
     sold: 10000,
     image: 'https://ae01.alicdn.com/kf/Sd6500c9aaf3b4c1e82ded8560810a46dR.jpg',
-    isFreehipping: false,
+    isFreeShipping: false,
     isDiscounted: true
   };
 
