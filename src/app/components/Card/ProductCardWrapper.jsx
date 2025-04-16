@@ -8,7 +8,7 @@ import {
   Stack,
   useTheme,
 } from '@mui/material';
-import { LocalShipping, CheckCircle } from '@mui/icons-material';
+import { LocalShipping } from '@mui/icons-material';
 import { ReviewStatsCard } from '..';
 import { useFormatter } from 'app/hooks/useFormatter';
 
