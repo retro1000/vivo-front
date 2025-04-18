@@ -49,29 +49,13 @@ export default function SwiperSliderHeroAuto({ slides }) {
             }}
           >
             <Box>
-              <Typography variant="h6" gutterBottom>
-                {slide?.title}
-              </Typography>
-              {/* <Button
-                variant="text"
-                onClick={slide?.fun}
+              <Button
                 sx={{
-                  color: slide?.btnClr || "white",
-                  textTransform: "none", // Prevent uppercase text
-                  textDecoration: "underline", // Add underline
-                  fontSize: "1.3rem", // Match font size (approximate)
-                  fontWeight: 600, // Regular weight
-                  "&:hover": {
-                    textDecoration: "underline", // Keep underline on hover
-                    backgroundColor: "transparent", // No background on hover
-                  },
+                  color: "transparent",
+                  background: "transparent",
                 }}
-                endIcon={
-                  <ArrowForwardIcon sx={{ color: slide?.btnClr || "white" }} />
-                }
               >
-                {slide?.act || "Shop Now"}
-              </Button> */}
+              </Button>
             </Box>
           </Box>
         </SwiperSlide>

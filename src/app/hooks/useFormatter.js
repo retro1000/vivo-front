@@ -27,6 +27,27 @@ const useFormatter = () => {
         }).format(number);
     }
 
+    // Utility function to format sold count
+    const formatSoldCount = (number) => {
+
+        if (isNaN(number) || number <= 0) number = Math.ceil(Math.random() * (5000 - 30 + 1) + 30); // Return original if not a valid number
+
+        if (number >= 1000000) {
+            // Format as X.XM+ (e.g., 1,500,000 -> 1.5M+)
+            const millions = (number / 1000000).toFixed(1);
+            return `${millions}M+ sold`;
+        } else if (number >= 1000) {
+            // Format as Xk+ (e.g., 10,000 -> 10k+)
+            const thousands = Math.floor(number / 1000);
+            return `${thousands}K+ sold`;
+        } else if(number <= 100) {
+            // Keep as is (e.g., 500 -> 500+)
+            return '100 sold';
+        }else {
+            return `${number} sold`;
+        }
+    };
+
     const DefaultWordFormat = (word) => {
         return (word.charAt(0) + word.slice(1).toLowerCase()).replace(/_/g, ' ')
     }
@@ -62,7 +83,7 @@ const useFormatter = () => {
         }
     }
   
-    return { DefaultWordFormat2, PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
+    return { formatSoldCount, DefaultWordFormat2, PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
   }
   
   export {useFormatter}
