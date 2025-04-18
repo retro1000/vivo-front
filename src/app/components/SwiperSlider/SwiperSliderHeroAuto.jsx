@@ -9,7 +9,7 @@ import "swiper/css/effect-fade";
 // import required modules
 import { EffectFade, Autoplay, Pagination } from "swiper/modules";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
 export default function SwiperSliderHeroAuto({ slides }) {
   return (
     <Swiper
@@ -40,9 +40,9 @@ export default function SwiperSliderHeroAuto({ slides }) {
               backgroundPosition: "center",
               minHeight: "50dvh",
               display: "flex",
-              alignItems: "end",
-              justifyContent: "left",
-              alignContent: "left",
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
               width: "100%",
               cursor: "pointer",
               borderRadius: 1,

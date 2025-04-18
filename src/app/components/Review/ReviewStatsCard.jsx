@@ -15,12 +15,17 @@ const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id, isSingleStar=
       if (isSingleStar) {
         fillPercentage = 100;
       } else if (rating >= i + 1) {
+      if (isSingleStar) {
+        fillPercentage = 100;
+      } else if (rating >= i + 1) {
         fillPercentage = 100; // Fully filled star
+      } else if (rating - i > 0) {
       } else if (rating - i > 0) {
         fillPercentage = Math.ceil((rating - i) * 100).toFixed(2); // Partial fill
       } else {
         fillPercentage = 0
       }
+
 
       stars.push(
         <Box
@@ -38,6 +43,7 @@ const ReviewStatsCard = ({ specOff, size, rating, reviewCount, id, isSingleStar=
               position: 'absolute',
               width: '100%',
               height: '100%',
+              fill: 'url(#grad' + i + id + ')',
               fill: 'url(#grad' + i + id + ')',
             }}
           >

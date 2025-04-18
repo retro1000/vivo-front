@@ -848,8 +848,8 @@ const HomePage = () => {
                 color: "white",
                 act: "Shop Now",
                 fun: () => navigate("/product/filter-product"),
-                img: '/assets/images/2148943302.jpg',
-                // img: "https://img.lazcdn.com/us/domino/37594c7a-a390-4ba9-9f64-caf6611965ee_LK-1976-688.jpg_2200x2200q80.jpg_.webp",
+                // img: '/assets/images/2148943302.jpg',
+                img: "https://img.lazcdn.com/us/domino/37594c7a-a390-4ba9-9f64-caf6611965ee_LK-1976-688.jpg_2200x2200q80.jpg_.webp",
                 btnClr: "blue",
               },
               {
