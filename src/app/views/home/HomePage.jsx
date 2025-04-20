@@ -37,6 +37,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
 import FeaturedCategory from "./component/FeaturedCategory";
+import PopularProductsHeading from "./component/PopularProductsHeading";
 
 const styles = {
   paddingTop: 0, // Applies to all breakpoints
@@ -62,113 +63,355 @@ const styles = {
 // Sample category data with root, L1, and L2 levels
 const initialHomePageDetails = {
   categories: {
-    hoveredCategory: "",
-    data: [
+    "hoveredCategory": "",
+    "data": [
       {
-        root: "Women's Fashion",
-        icon: "ShoppingBag",
-        l1: [
+        "root": "Women's Fashion",
+        "icon": "ShoppingBag",
+        "l1": [
           {
-            name: "Clothing",
-            l2: [
+            "name": "Clothing",
+            "l2": [
               {
-                name: "Dresses",
-                image:
-                  "https://images.unsplash.com/photo-1567400359062-18a92a5b3a7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Dresses",
+                "image": "https://images.unsplash.com/photo-1567400359062-18a92a5b3a7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Blouses & Shirts",
-                image:
-                  "https://images.unsplash.com/photo-1598032895397-b947244972c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Tops & Blouses",
+                "image": "https://images.unsplash.com/photo-1598032895397-b947244972c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Pants",
-                image:
-                  "https://images.unsplash.com/photo-1594055303358-4bb61568a7ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Jeans & Pants",
+                "image": "https://images.unsplash.com/photo-1594055303358-4bb61568a7ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
-            ],
+              {
+                "name": "Jackets & Coats",
+                "image": "https://images.unsplash.com/photo-1544027995-7e9d14f706e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
           },
           {
-            name: "Shoes",
-            l2: [
+            "name": "Footwear",
+            "l2": [
               {
-                name: "Sneakers",
-                image:
-                  "https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Sneakers",
+                "image": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Heels",
-                image:
-                  "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Heels",
+                "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
-            ],
+              {
+                "name": "Boots",
+                "image": "https://images.unsplash.com/photo-1542838686-37da4a9fd857?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
           },
-        ],
+          {
+            "name": "Accessories",
+            "l2": [
+              {
+                "name": "Handbags",
+                "image": "https://images.unsplash.com/photo-1584917865442-1e6d1977f3c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Jewelry",
+                "image": "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
       },
       {
-        root: "Men's Fashion",
-        icon: "Man",
-        l1: [
+        "root": "Men's Fashion",
+        "icon": "Man",
+        "l1": [
           {
-            name: "Clothing",
-            l2: [
+            "name": "Clothing",
+            "l2": [
               {
-                name: "Shirts",
-                image:
-                  "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Shirts",
+                "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Pants",
-                image:
-                  "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Jeans & Pants",
+                "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
-            ],
+              {
+                "name": "Jackets & Coats",
+                "image": "https://images.unsplash.com/photo-1601331692324-7ca2a8e7e639?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
           },
-        ],
+          {
+            "name": "Footwear",
+            "l2": [
+              {
+                "name": "Sneakers",
+                "image": "https://images.unsplash.com/photo-1605408499391-6368c6ef261b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Formal Shoes",
+                "image": "https://images.unsplash.com/photo-1614252369475-6c7a3c8b2f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Accessories",
+            "l2": [
+              {
+                "name": "Watches",
+                "image": "https://images.unsplash.com/photo-1524592094714-0f7a5f3c5d4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Belts",
+                "image": "https://images.unsplash.com/photo-1594560913035-776c547240c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
       },
       {
-        root: "Electronics",
-        icon: "PhoneAndroid",
-        l1: [
+        "root": "Electronics",
+        "icon": "PhoneAndroid",
+        "l1": [
           {
-            name: "Phones",
-            l2: [
+            "name": "Mobile Devices",
+            "l2": [
               {
-                name: "Smartphones",
-                image:
-                  "https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Smartphones",
+                "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Accessories",
-                image:
-                  "https://images.unsplash.com/photo-1600087629990-c4b322830dd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Tablets",
+                "image": "https://images.unsplash.com/photo-1544244015-9c72fd9f8a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
-            ],
+              {
+                "name": "Accessories",
+                "image": "https://images.unsplash.com/photo-1600087629990-c4b322830dd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
           },
-        ],
+          {
+            "name": "Computers",
+            "l2": [
+              {
+                "name": "Laptops",
+                "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a0a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Desktops",
+                "image": "https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Audio",
+            "l2": [
+              {
+                "name": "Headphones",
+                "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Speakers",
+                "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
       },
       {
-        root: "Home & Living",
-        icon: "Home",
-        l1: [
+        "root": "Home & Living",
+        "icon": "Home",
+        "l1": [
           {
-            name: "Furniture",
-            l2: [
+            "name": "Furniture",
+            "l2": [
               {
-                name: "Sofas",
-                image:
-                  "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Sofas",
+                "image": "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
               {
-                name: "Beds",
-                image:
-                  "https://images.unsplash.com/photo-1572297837169-8737183476ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "name": "Beds",
+                "image": "https://images.unsplash.com/photo-1572297837169-8737183476ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               },
-            ],
+              {
+                "name": "Dining Tables",
+                "image": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
           },
-        ],
+          {
+            "name": "Decor",
+            "l2": [
+              {
+                "name": "Wall Art",
+                "image": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Rugs",
+                "image": "https://images.unsplash.com/photo-1600585153490-76fb20a0f2b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Kitchen",
+            "l2": [
+              {
+                "name": "Cookware",
+                "image": "https://images.unsplash.com/photo-1586996292898-71db4779a2d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Appliances",
+                "image": "https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
       },
-    ],
+      {
+        "root": "Beauty & Personal Care",
+        "icon": "Face",
+        "l1": [
+          {
+            "name": "Skincare",
+            "l2": [
+              {
+                "name": "Cleansers",
+                "image": "https://images.unsplash.com/photo-1576698457478-cbe1722a71ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Moisturizers",
+                "image": "https://images.unsplash.com/photo-1556227709-3e7a84571025?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Makeup",
+            "l2": [
+              {
+                "name": "Foundation",
+                "image": "https://images.unsplash.com/photo-1598252976410-0f26d3f3c663?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Lipstick",
+                "image": "https://images.unsplash.com/photo-1586495777744-3d1b5f6b7a5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Haircare",
+            "l2": [
+              {
+                "name": "Shampoos",
+                "image": "https://images.unsplash.com/photo-1608247575618-1b0e1e76e8cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Conditioners",
+                "image": "https://images.unsplash.com/photo-1608247575618-1b0e1forests & Conditioners",
+                "image": "https://images.unsplash.com/photo-1608247575618-1b0e1e76e8cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "root": "Sports & Outdoors",
+        "icon": "SportsSoccer",
+        "l1": [
+          {
+            "name": "Fitness Equipment",
+            "l2": [
+              {
+                "name": "Treadmills",
+                "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Dumbbells",
+                "image": "https://images.unsplash.com/photo-1593078167535-73a28e65df48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Outdoor Gear",
+            "l2": [
+              {
+                "name": "Camping Tents",
+                "image": "https://images.unsplash.com/photo-1504851149312-7a075b459cc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Backpacks",
+                "image": "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "root": "Kids & Toys",
+        "icon": "Toys",
+        "l1": [
+          {
+            "name": "Toys",
+            "l2": [
+              {
+                "name": "Building Blocks",
+                "image": "https://images.unsplash.com/photo-1587654780291-39c940c35165?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Dolls",
+                "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Clothing",
+            "l2": [
+              {
+                "name": "Kids Dresses",
+                "image": "https://images.unsplash.com/photo-1597227775224-9e47e1574d20?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Kids Shoes",
+                "image": "https://images.unsplash.com/photo-1596394517322-69a66b80eaca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "root": "Books & Stationery",
+        "icon": "Book",
+        "l1": [
+          {
+            "name": "Books",
+            "l2": [
+              {
+                "name": "Fiction",
+                "image": "https://images.unsplash.com/photo-1544716278-ca5e3f4bced0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Non-Fiction",
+                "image": "https://images.unsplash.com/photo-1589998059171-9b2f91d765bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          },
+          {
+            "name": "Stationery",
+            "l2": [
+              {
+                "name": "Notebooks",
+                "image": "https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                "name": "Pens",
+                "image": "https://images.unsplash.com/photo-1455884983656-66bb1e8d5522?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   banners: {
     topBanners: [
@@ -778,88 +1021,88 @@ const HomePage = () => {
       const requets = [
         apiNonAuth.get(
           services.product_service +
-            url_elements.seperator +
-            endpoints.categories +
-            url_elements.parameter_start +
-            url_parameters.status +
-            url_elements.parameter_equal +
-            status.active.code,
+          url_elements.seperator +
+          endpoints.categories +
+          url_elements.parameter_start +
+          url_parameters.status +
+          url_elements.parameter_equal +
+          status.active.code,
           {
             customData: {
               retry: true,
               silentError: true,
               silentResponse: false,
-              responseCallback: (response) => {},
+              responseCallback: (response) => { },
             },
           }
         ),
         apiNonAuth.get(
           services.product_service +
-            url_elements.seperator +
-            endpoints.banners +
-            url_elements.parameter_start +
-            url_parameters.status +
-            url_elements.parameter_equal +
-            status.active.code +
-            url_elements.parameter_and +
-            url_parameters.type +
-            url_elements.parameter_equal +
-            Object.values(positions)
-              ?.map((p) => p.code)
-              ?.join(url_elements.comma),
-          {
-            customData: {
-              retry: true,
-              silentError: true,
-              silentResponse: false,
-              responseCallback: (response) => {},
-            },
-          }
-        ),
-        apiNonAuth.get(
-          services.product_service +
-            url_elements.seperator +
-            endpoints.products +
-            url_elements.parameter_start +
-            url_parameters.type +
-            url_elements.parameter_equal +
-            Object.values(homepage_product_display_types)
-              ?.map((p) => p.code)
-              ?.filter(
-                (p) => p !== homepage_product_display_types?.forYou?.code
-              )
-              ?.join(url_elements.comma),
+          url_elements.seperator +
+          endpoints.banners +
+          url_elements.parameter_start +
+          url_parameters.status +
+          url_elements.parameter_equal +
+          status.active.code +
           url_elements.parameter_and +
-            url_parameters.size +
-            url_elements.parameter_equal +
-            30 +
-            url_elements.parameter_and +
-            url_parameters.offset +
-            url_elements.parameter_equal +
-            0,
+          url_parameters.type +
+          url_elements.parameter_equal +
+          Object.values(positions)
+            ?.map((p) => p.code)
+            ?.join(url_elements.comma),
           {
             customData: {
               retry: true,
               silentError: true,
               silentResponse: false,
-              responseCallback: (response) => {},
+              responseCallback: (response) => { },
+            },
+          }
+        ),
+        apiNonAuth.get(
+          services.product_service +
+          url_elements.seperator +
+          endpoints.products +
+          url_elements.parameter_start +
+          url_parameters.type +
+          url_elements.parameter_equal +
+          Object.values(homepage_product_display_types)
+            ?.map((p) => p.code)
+            ?.filter(
+              (p) => p !== homepage_product_display_types?.forYou?.code
+            )
+            ?.join(url_elements.comma),
+          url_elements.parameter_and +
+          url_parameters.size +
+          url_elements.parameter_equal +
+          30 +
+          url_elements.parameter_and +
+          url_parameters.offset +
+          url_elements.parameter_equal +
+          0,
+          {
+            customData: {
+              retry: true,
+              silentError: true,
+              silentResponse: false,
+              responseCallback: (response) => { },
             },
           }
         ),
         api.get(
           services.product_service +
-            url_elements.seperator +
-            endpoints.products +
-            url_elements.parameter_start +
-            url_parameters.type +
-            url_elements.parameter_equal +
-            homepage_product_display_types?.forYou?.code,
+          url_elements.seperator +
+          endpoints.products +
+          url_elements.parameter_start +
+          url_parameters.type +
+          url_elements.parameter_equal +
+          homepage_product_display_types?.forYou?.code,
           {
             customData: {
               retry: true,
               silentError: true,
               silentResponse: false,
-              responseCallback: (response) => {},
+              responseCallback: (response) => { },
             },
           }
         ),
@@ -870,7 +1113,7 @@ const HomePage = () => {
 
     try {
       fetchData();
-    } catch (error) {}
+    } catch (error) { }
   }, []);
 
   // Handle mouse entering a category
@@ -1087,7 +1330,9 @@ const HomePage = () => {
           newArrivalsProducts={initialHomePageDetails?.newArrivals}
         />
         <FeaturedCategory />
-        <ProductSlider title={"Popular Products"}>
+
+        <PopularProductsHeading isLoaded={true} />
+        <ProductSlider >
           {initialHomePageDetails?.popularProducts?.map((product, index) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -1155,6 +1400,29 @@ const HomePage = () => {
       </Box>
       <LetsPaintHero />
       <Footer />
+
+      <style jsx>{`
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.4); }
+      100% { transform: translateY(-20px) scale(0.6); }
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.15); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.15); }
+      60% { transform: scale(1); }
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+      `}</style>
     </>
   );
 };

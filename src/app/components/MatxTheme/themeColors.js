@@ -44,6 +44,7 @@ const systemColors = {
   lightPurple: "#c4b5fd",
   lightPink: "#f9a8d4",
   palePurple: "#d8b4fe",
+  palePurpleLight: "rgba(216, 180, 254, 0.3)",
 
   // Text Colors (Light Theme)
   textPrimaryLight: "rgba(52, 49, 76, 1)",

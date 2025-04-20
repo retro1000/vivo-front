@@ -12,7 +12,7 @@ const ProductSlider = ({ title, children }) => {
 
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1em', height: 'max-content' }}>
-            <Typography variant={'h4'} textAlign={'center'} width={'100%'} sx={{ fontWeight: "bold", fontStyle: "italic" }}>POPULAR PRODUCTS</Typography>
+            {/* <Typography variant={'h4'} textAlign={'center'} width={'100%'} sx={{ fontWeight: "bold", fontStyle: "italic" }}>POPULAR PRODUCTS</Typography> */}
             <GlobalStyles
                 styles={{
                     ".swiper-button-next, .swiper-button-prev": {
