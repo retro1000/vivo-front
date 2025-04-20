@@ -53,5 +53,6 @@ export { default as MenuList } from "./Menu/MenuList";
 export { default as ProductGrid } from "./ProductGrid";
 export { default as FeaturedCategoryCard } from "./Card/FeaturedCategoryCard";
 export { default as ProductCardWrapper } from "./Card/ProductCardWrapper";
+export { default as TodaysDealsCard } from "./Card/TodaysDealsCard";
 export { default as RuleGenerator } from "./RuleEngine/RuleGenerator";
 

@@ -11,11 +11,25 @@ import {
 import { LocalShipping } from '@mui/icons-material';
 import { ReviewStatsCard } from '..';
 import { useFormatter } from 'app/hooks/useFormatter';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 // Memoized ProductCard to prevent unnecessary re-renders
 const ProductCard = React.memo(({ product }) => {
   const theme = useTheme();
   const { formatToLKR, formatSoldCount } = useFormatter();
+
+  const [isDiscountAnimating, setIsDiscountAnimating] = useState(false);
+
+  const [soldCount, setSoldCount] = useState(null);
+  // Trigger discount animation periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsDiscountAnimating(true);
+      setTimeout(() => setIsDiscountAnimating(false), 2000);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Card
@@ -28,7 +42,7 @@ const ProductCard = React.memo(({ product }) => {
       }}
     >
       {/* Badges */}
-      <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 10 }}>
+      {/* <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 10 }}>
         <Stack direction="row" spacing={1}>
           <Box
             sx={{
@@ -69,10 +83,10 @@ const ProductCard = React.memo(({ product }) => {
             Hot Shoelaces
           </Box>
         </Stack>
-      </Box>
+      </Box> */}
 
       {/* Limited Time Offer Badge */}
-      <Box sx={{ position: 'absolute', top: 48, left: 12, zIndex: 10 }}>
+      {/* <Box sx={{ position: 'absolute', top: 48, left: 12, zIndex: 10 }}>
         <Box
           sx={{
             backgroundColor: theme.palette.custom.amberYellow, // #eab308
@@ -88,7 +102,31 @@ const ProductCard = React.memo(({ product }) => {
         >
           Limited Offer
         </Box>
-      </Box>
+      </Box> */}
+
+      {product.isDiscounted && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 12,
+            right: 10,
+            background: theme.palette.custom.trendingRed,
+            color: 'white',
+            fontWeight: 'bold',
+            py: .4,
+            px: .5,
+            fontSize: '12px',
+            borderRadius: 2,
+            zIndex: 10,
+            transition: 'transform 0.3s',
+            transform: isDiscountAnimating
+              ? 'scale(1.15) rotate(12deg)'
+              : 'scale(1) rotate(0deg)'
+          }}
+        >
+          {`${product.discount}% OFF`}
+        </Box>
+      )}
 
       {/* Product Image */}
       <Box
@@ -97,7 +135,37 @@ const ProductCard = React.memo(({ product }) => {
           // p: 3,
         }}
       >
-        <Box sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme.palette.custom.white }}>
+        <Box
+          sx={{
+            width: "100%",
+            aspectRatio: "1 / 1",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            // borderTopLeftRadius: "8px",
+            // borderTopRightRadius: "8px",
+            borderRadius: 2,
+            backgroundColor: theme.palette.custom.white,
+            overflow: "hidden",
+            position: "relative",
+            background: "rgba(226, 225, 225, 0.6)",
+          }}
+        >
+          <img
+            src={product.image}
+            alt={product.title}
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "100%",
+              // objectFit: "cover",
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+          />
+        </Box>
+        {/* <Box sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme.palette.custom.white }}>
           <CardMedia
             component="img"
             image={product.image}
@@ -109,7 +177,7 @@ const ProductCard = React.memo(({ product }) => {
               objectFit: 'cover',
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
 
       {/* Product Info */}
@@ -136,52 +204,39 @@ const ProductCard = React.memo(({ product }) => {
         </Typography>
 
         {/* Rating */}
-        <Stack direction="row" alignItems="center" display={'flex'} gap={1} justifyContent={'flex-start'}>
+        <Stack direction="row" alignItems="center" display={'flex'} gap={1} justifyContent={'flex-start'} mt={1}>
           <ReviewStatsCard
             size={"small"}
             reviewCount={product.reviews}
             rating={product.rating}
             id={product.id}
-            isSingleStar={true}
+            isSingleStar={false}
+            showRate={true}
           ></ReviewStatsCard>
           <Box
             sx={{
-              backgroundColor: theme.palette.custom.lightBlue, // #eff6ff
+              backgroundColor: theme.palette.custom.lightBlue, //rgb(216, 229, 247)
               color: theme.palette.custom.primaryBlue, // #2563eb
               fontSize: '12px',
-              ml: -4,
+              // ml: -4,
               fontWeight: 'medium',
-              px: 2,
-              py: 0.5,
+              px: 1,
+              py: 0.2,
               borderRadius: '9999px',
             }}
           >
-            {formatSoldCount(product.sold)}
+            {soldCount === null ? (() => { const tmpSoldCount = formatSoldCount(product.sold); setSoldCount(tmpSoldCount); return tmpSoldCount })() : soldCount}
           </Box>
         </Stack>
 
         {/* Price and Discount */}
         <Stack direction="row" alignItems="center" spacing={1} mt={1} >
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: "1rem", color: theme.palette.custom.trendingRed }}>
+          <Typography variant="subtitle1" sx={{ fontSize: "1rem", color: theme.palette.custom.trendingRed }}>
             {formatToLKR(product?.isDiscounted ? product.price : product.originalPrice)}
           </Typography>
-          {product?.isDiscounted && (<><Typography variant="subtitle2" color="textSecondary" sx={{ fontSize: "0.8rem", textDecoration: 'line-through' }}>
+          {product?.isDiscounted && (<Typography variant="subtitle2" color="textSecondary" sx={{ fontSize: "0.8rem", textDecoration: 'line-through' }}>
             {formatToLKR(product.originalPrice)}
-          </Typography>
-            <Box
-              sx={{
-                backgroundColor: theme.palette.custom.trendingRed, // #ef4444
-                color: theme.palette.custom.white,
-                fontSize: '12px',
-                fontWeight: 'bold',
-                px: 1,
-                py: 0.5,
-                borderRadius: '9999px',
-                animation: 'pulse 1.5s infinite',
-              }}
-            >
-              {`${product.discount}% OFF`}
-            </Box></>)}
+          </Typography>)}
         </Stack>
 
         {/* Benefits */}
@@ -207,15 +262,15 @@ const ProductCard = React.memo(({ product }) => {
 });
 
 // Default export with sample product data
-const ProductCardWrapper = () => {
-  const product = {
+const ProductCardWrapper = ({ product }) => {
+  product = {
     title: 'Original AF1 Shoelaces Original AF1 Shoelaces Original AF1 Shoelaces Original AF1 Shoelaces',
     price: 4500,
     originalPrice: 5900,
     discount: 58,
     rating: 4.3,
     reviews: 100,
-    sold: 10000,
+    // sold: 10000,
     image: 'https://ae01.alicdn.com/kf/Sd6500c9aaf3b4c1e82ded8560810a46dR.jpg',
     isFreeShipping: false,
     isDiscounted: true

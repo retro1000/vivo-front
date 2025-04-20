@@ -24,8 +24,9 @@ import {
   Store,
   ContentCut,
 } from '@mui/icons-material';
-import { ProductCardWrapper } from 'app/components';
+import { ProductCardWrapper, TodaysDealsCard } from 'app/components';
 import { useTimer } from 'app/hooks/useTimer';
+import { themeColors } from 'app/components/MatxTheme/themeColors';
 
 // Static product data outside the component to prevent re-creation
 const bundleDealsData = [
@@ -189,7 +190,7 @@ const Timer = React.memo(({ initialTime, onTimeUpdate, sx, color, isPaused = fal
   return (
     <Button
       sx={{
-        bgcolor: 'white',
+        background: 'white',
         color,
         borderRadius: 'full',
         px: { xs: 1.5, sm: 2 },
@@ -477,9 +478,8 @@ const WishlistBadge = memo(({ wishlist, theme }) => {
 });
 
 // Main component
-const TodaysDeals = () => {
+const TodaysDeals = ({ TodaysDealsProducts }) => {
   const theme = useTheme();
-  const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [timers, setTimers] = useState({
     superDeals: { hours: 10, minutes: 35, seconds: 40 },
@@ -506,6 +506,14 @@ const TodaysDeals = () => {
   // Memoize coupon sales data to prevent re-computation
   const couponSalesExtended = useMemo(() => [...couponSalesData, ...couponSalesData], []);
 
+  const [animationState, setAnimationState] = useState(0);
+
+  useEffect(() => {
+    setAnimationState(0);
+    const timer = setTimeout(() => setAnimationState(1), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -517,7 +525,7 @@ const TodaysDeals = () => {
         fontFamily: theme.typography.fontFamily,
       }}
     >
-      <Typography
+      {/* <Typography
         variant="h4"
         sx={{
           fontWeight: 'bold',
@@ -536,11 +544,114 @@ const TodaysDeals = () => {
         }}
       >
         Limited-time offers on top products
-      </Typography>
+      </Typography> */}
 
-      <Grid container spacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mb: { xs: 2, sm: 3 } }} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+      <Box sx={{ textAlign: 'center', mb: 3, position: 'relative', py: .3 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: { xs: '1.8rem', sm: '2rem' },
+            fontWeight: 'bold',
+            color: theme.palette.custom.titleGray,
+            mb: .8,
+            position: 'relative',
+            height: 'max-content',
+          }}
+        >
+          {("Today's Deals").split('').map((letter, index) => (
+            <Box
+              key={index}
+              component="span"
+              sx={{
+                display: 'inline-block',
+                transition: 'all 0.3s ease',
+                transform:
+                  animationState >= 1 ? 'translateY(0)' : 'translateY(32px)',
+                opacity: animationState >= 1 ? 1 : 0,
+                transitionDelay: `${100 + index * 60}ms`,
+              }}
+            >
+              {letter === ' ' ? '\u00A0' : letter}
+            </Box>
+          ))}
+          {/* <Badge
+                animationState={animationState}
+                sx={{
+                  background: current.colors.badgeStyle.backgroundColor,
+                  color: current.colors.badgeStyle.color,
+                }}
+                rotate
+              >
+                {current.colors.badge}
+              </Badge> */}
+        </Typography>
+
+        <Box sx={{ position: 'relative', height: 'max-content', mb: 1.6 }}>
+          <Box
+            sx={{
+              height: 4,
+              background: theme.palette.custom.trendingRed,
+              borderRadius: '9999px',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              transition: 'all 0.7s ease',
+              transitionDelay: '300ms',
+              width: animationState >= 1 ? 96 : 0,
+            }}
+          />
+        </Box>
+
+        <Typography
+          sx={{
+            fontSize: '.8rem',
+            color: theme.palette.custom.darkGray,
+            transform:
+              animationState >= 1 ? 'translateY(0)' : 'translateY(32px)',
+            opacity: animationState >= 1 ? 1 : 0,
+            transition: 'all 0.7s ease',
+            transitionDelay: '500ms',
+          }}
+        >
+          Limited-time offers on top products
+        </Typography>
+
+        <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '35%',
+              top: 0,
+              color: theme.palette.custom.trendingRed,
+              fontSize: '2.25rem',
+              transition: 'all 1s ease',
+              opacity: animationState >= 1 ? 0.4 : 0,
+              animation: animationState >= 1 ? 'float1 6s ease-in-out infinite' : 'none',
+            }}
+          >
+            ★
+          </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              right: '35%',
+              bottom: 16,
+              color: theme.palette.custom.secondaryDarkOrange,
+              fontSize: '1.875rem',
+              transition: 'all 1s ease',
+              opacity: animationState >= 1 ? 0.4 : 0,
+              animation: animationState >= 1 ? 'float2 7s ease-in-out infinite' : 'none',
+            }}
+          >
+            ★
+          </Box>
+        </Box>
+      </Box>
+
+      <Grid container spacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mb: { xs: 2, sm: 3 } }} display={'flex'} justifyContent={'center'} alignItems={'flex-start'}>
         {/* Bundle Deals Card */}
-        <Grid item>
+        <TodaysDealsCard />
+        {/* <Grid item>
           <Card sx={{ borderRadius: '8px', overflow: 'hidden', boxShadow: theme.shadows[4], background: 'white' }}>
             <Box
               sx={{
@@ -589,7 +700,7 @@ const TodaysDeals = () => {
               ))}
             </Grid>
           </Card>
-        </Grid>
+        </Grid> */}
 
         {/* SuperDeals Card */}
         <Grid item>

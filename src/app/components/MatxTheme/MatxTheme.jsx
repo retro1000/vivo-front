@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { CssBaseline, GlobalStyles, ThemeProvider, createTheme } from "@mui/material";
 import useSettings from "app/hooks/useSettings";
 import { darken } from '@mui/system';
 
@@ -142,8 +142,53 @@ const MatxTheme = ({ children }) => {
     }
   })
 
+  const AnimationStyles = () => (
+    <GlobalStyles
+      styles={{
+        '@keyframes growWidth': {
+          from: { transform: 'scaleX(0)' },
+          to: { transform: 'scaleX(1)' },
+        },
+        '@keyframes revealText': {
+          '0%': { clipPath: 'inset(0 100% 0 0)' },
+          '100%': { clipPath: 'inset(0 0 0 0)' },
+        },
+        '@keyframes slideInRight': {
+          '0%': { transform: 'translateX(50px)', opacity: 0 },
+          '100%': { transform: 'translateX(0)', opacity: 1 },
+        },
+        '@keyframes sweep': {
+          '0%': { transform: 'translateX(-100%)' },
+          '50%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        '@keyframes wiggle': {
+          '0%, 100%': { transform: 'rotate(12deg)' },
+          '50%': { transform: 'rotate(0deg)' },
+        },
+        '@keyframes float1': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(-10px, -5px)' },
+        },
+        '@keyframes float2': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(10px, -8px)' },
+        },
+        '@keyframes float3': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(-5px, -12px)' },
+        },
+        '@keyframes float4': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(8px, -6px)' },
+        },
+      }}
+    />
+  );
+
   return (
     <ThemeProvider theme={customTheme}>
+      <AnimationStyles />
       <CssBaseline />
       {children}
     </ThemeProvider>

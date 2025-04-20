@@ -13,116 +13,196 @@ import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
 import SlideFilterPanel from "./component/SlideFilterPanel";
-import { containerPadding, topBarHeightNewBar } from "app/utils/constant";
+import { containerPadding, topBarHeightNewBar, url_elements } from "app/utils/constant";
 
 
 const demoData = [
   {
     id: 1,
-    name: "Dummy Paint",
-    price: "$360",
+    name: "Men's Black Leather Sneakers",
+    price: 89.99,
     rating: 4.5,
-    reviews: 95,
-    imgs: ['https://redtape.com/cdn/shop/files/RSO4033_1_8adbcbc1-9b3e-4546-ac39-f44736cbec67.jpg?v=1738330753', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/317079065_205840545164904_2299339823205142298_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeG7s0uvr7Uf3uc2RU-wPp_4jlmJEzfT3lOOWYkTN9PeU9oF-J6zWXawmuUdMnDr1hVf4jQPckYYNRGeiD-Rm0AW&_nc_ohc=ZVn6l_OOzcgQ7kNvgEwy6pQ&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=ANXzE2ugbke75qDxJMHzReH&oh=00_AYAncH1nhlpizloJTBiCk4yH1oE_I_DJt5uNY2H-Pa43tQ&oe=67590C2F', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/316951045_205840495164909_8345064233952031565_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH-CVZrOoj4XzBFwEkniBWDoEjpy5l1wiWgSOnLmXXCJeYVpqtSA-28FpafslseQyNt20c-XndwNfc5bi9nArR7&_nc_ohc=l2nU-LyVYfMQ7kNvgHWZglK&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A4c55aQLis-XP7F-ndY8aAb&oh=00_AYA-Fp5eG02WW_VHN-eghFObvWW-jeaY91561xG9geHpow&oe=675915B0', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/316959950_205840451831580_7227902396481251709_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEn8q2_h-YqxxxUIuWYmYVrlnAtDtR4HcKWcC0O1HgdwjmvYzJF7bXE2Tj_Qox11CDt3BLd4opkL8msjGJ0ZBOj&_nc_ohc=TyzrmUrSKYoQ7kNvgHbcqX3&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A5eu_RLRZe4iQTkieyj-bwF&oh=00_AYCXSgK5YbqJ6ZE7hQuZTDTvNgU9hvbR_QpO0pZ_A7cXrA&oe=675914AF', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/317084755_205840505164908_5362232490221749378_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH3hwQjS8huf7K5y4eh_E3z5TrV5UGEv0DlOtXlQYS_QHmqxqsT6Fqwj1cHraSs-SNAKY9ntc53taiMoOjRxZmW&_nc_ohc=vXXm_PsZxcUQ7kNvgHtQCZJ&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A5UlGeZJbYM3gBmTzo7dDq6&oh=00_AYB7BjhR513SILmSeVwxd-ejzkF0WLahTCVowpCtANudPA&oe=67590F68'],
-    wishList: true
+    reviews: 120,
+    imgs: [
+      'https://redtape.com/cdn/shop/files/RSO4033_1_8adbcbc1-9b3e-4546-ac39-f44736cbec67.jpg?v=1738330753',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: true,
+    isNew: true
   },
   {
     id: 2,
-    name: "Dummy Paint",
-    price: "$700",
+    name: "Women's Floral Summer Dress",
+    price: 49.99,
     rating: 4.8,
-    reviews: 325,
-    imgs: ['https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/288710953_175349728213986_5909586314590188913_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHkm1zN0neGzrTTbOViyzRObFppJaY45aZsWmklpjjlptTazpaJSWN2601Yt37b-SLr4bpg5pYdzEeEwkhrW_lC&_nc_ohc=15Wx0LpCJgwQ7kNvgE8KfIi&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A-yvgNA3mcxjPmLAU6fJh3Z&oh=00_AYAsc-_sxQJDzlzagsYWbn9qO46xujR0NM87FE2hj5VzIg&oe=67590024', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/288734183_175349638213995_1958045608063445439_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGyFfrzCCYA4LFny3xGRv4A5GOc_hlyI0zkY5z-GXIjTPukE202DAuDMR_XXSLyIwUfmrwdBeb6s9DmhtCGVTy4&_nc_ohc=IGfg6hX5oBIQ7kNvgGhIioP&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A4wsjV2S5mm_fMeNNnkMmG9&oh=00_AYDZMpYBJ2VJ1FtZNVuTZs8g1K0LfswXoKinirqtrU0xcQ&oe=6758E5E0', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/288845037_175349751547317_5254387529075225888_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEe0dRasnayYsyyCFITfr6r2xnbOCVElvTbGds4JUSW9AclGGM3q2BGiVhjCYV9wRqOEd8k_4NOih95q4bbsPKv&_nc_ohc=pvr0frurb5UQ7kNvgHcBd6B&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A9wsUdSjZxqZbGY3P-gAa92&oh=00_AYBy7pLD31bwzxIF_FSW9fWdQSLlZn49MxPvzQ9_rfAd2g&oe=67590D3E', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/288859994_175349611547331_1652431214493675204_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGUSj8TzkuGhEHsYbi9yHBeMDjs6kXRJ6cwOOzqRdEnp_N01ULj17WtpVt9tFsu9730tn02rdfTbRHeNHVXXTP9&_nc_ohc=I0gz-fCQ9U0Q7kNvgEFEMdm&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A32TLCh-ZSVUbOdsyVF5P2u&oh=00_AYCMDpRjgCIt9N3nqtA3nTi6Sxww-Re2Fi9_iddeTULIRw&oe=67590F64', 'https://z-p3-scontent.fcmb7-1.fna.fbcdn.net/v/t39.30808-6/288710953_175349728213986_5909586314590188913_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHkm1zN0neGzrTTbOViyzRObFppJaY45aZsWmklpjjlptTazpaJSWN2601Yt37b-SLr4bpg5pYdzEeEwkhrW_lC&_nc_ohc=15Wx0LpCJgwQ7kNvgE8KfIi&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb7-1.fna&_nc_gid=A-yvgNA3mcxjPmLAU6fJh3Z&oh=00_AYAsc-_sxQJDzlzagsYWbn9qO46xujR0NM87FE2hj5VzIg&oe=67590024'],
-    wishList: false
-
+    reviews: 250,
+    imgs: [
+      'https://images.unsplash.com/photo-1594633312681-3e8f1b7d7d0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1591360238969-6b63fc33748e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1618378536091-8e5b3e15fa69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false,
+    isSale: true,
+    realPrice: 69.99
   },
   {
     id: 3,
-    name: "Dummy Paint Dummy Paint Dummy Paint Dummy Paint",
-    price: "LKR 5990.00",
+    name: "Wireless Bluetooth Earbuds",
+    price: 59.99,
     rating: 4.7,
-    reviews: 145,
-    imgs: ['https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01zSbjFM1UxWGnpFCTq_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN018rtxqF1Bs2punxc8R_0-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01zSbjFM1UxWGnpFCTq_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01ZcjbMx1UxWGi1vlsb_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01yiHly81UxWGdJrkQy_3918402584-0-cib.jpg'],
+    reviews: 180,
+    imgs: [
+      'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01zSbjFM1UxWGnpFCTq_3918402584-0-cib.jpg',
+      'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN018rtxqF1Bs2punxc8R_0-0-cib.jpg',
+      'https://images.unsplash.com/photo-1590658268037-6bfcb65a9e38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1610797273219-6a93e5dc76e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
     wishList: true,
     isNew: true,
-    realPrice: 'LKR 6990.00'
-
+    isFlashSale: true,
+    endTime: '2025-04-22T18:00:00',
+    flashSaleLabel: 'HOT DEAL',
+    flashSaleCta: 'Only 50 Left! Grab Now!'
   },
   {
     id: 4,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01caTDY61UxWHEYTExP_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01PpiVhh1UxWHDjTPMF_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01nmIDyS1UxWH4FSi82_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN01JnFyNo1UxWH7KmZDq_3918402584-0-cib.jpg', 'https://www.cucoo.lk/wp-content/uploads/2023/10/O1CN013zcgkE1UxWHAWuDw8_3918402584-0-cib.jpg'],
-    wishList: false
-
+    name: "Stainless Steel Kitchen Knife Set",
+    price: 79.99,
+    rating: 4.2,
+    reviews: 90,
+    imgs: [
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1587314168485-3236d671a8d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585153490-76fb20a0f2b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false,
+    isSale: true,
+    realPrice: 99.99
   },
   {
     id: 5,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 6,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 7,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 8,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 9,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 10,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
-  }, {
-    id: 11,
-    name: "dummy paint",
-    price: "$1160",
-    rating: 4.0,
-    reviews: 35,
-    imgs: ['/assets/images/2099.jpg', '/assets/images/8735.jpg', '/assets/images/amazon-2.png', '/assets/images/demo_home_two.jpg'],
-    wishList: false
-
+    name: "Modern Ceramic Table Lamp",
+    price: 129.99,
+    rating: 4.6,
+    reviews: 210,
+    imgs: [
+      'https://images.unsplash.com/photo-1567016376408-0226a4d0c1da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1519643381402-8cd0e6650b99?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1598965612318-15b121f4f3e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: true,
+    isFlashSale: true,
+    endTime: '2025-04-21T15:00:00',
+    flashSaleLabel: 'LIMITED OFFER',
+    flashSaleCta: 'Shop Now Before It’s Gone!'
   },
-]
+  {
+    id: 6,
+    name: "Men's Slim Fit Denim Jeans",
+    price: 69.99,
+    rating: 4.3,
+    reviews: 150,
+    imgs: [
+      'https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1602293589930-45aad59ba4c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false
+  },
+  {
+    id: 7,
+    name: "4K Ultra HD Smart TV 55-Inch",
+    price: 499.99,
+    rating: 4.9,
+    reviews: 320,
+    imgs: [
+      'https://images.unsplash.com/photo-1593787817041-8c61cf58522f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1585064665488-7b5f7b7b7b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1593787817041-8c61cf58522f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false,
+    isFlashSale: true,
+    endTime: '2025-04-23T10:00:00',
+    flashSaleLabel: 'BLACK FRIDAY PREVIEW',
+    flashSaleCta: 'Limited Stock - Act Fast!'
+  },
+  {
+    id: 8,
+    name: "Luxury Memory Foam Mattress",
+    price: 799.99,
+    rating: 4.4,
+    reviews: 95,
+    imgs: [
+      'https://images.unsplash.com/photo-1566669436140-75a7e4507e51?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1572297837169-8737183476ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1616627678955-23467e795c8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1595522312557-2503f01460b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: true,
+    isFlashSale: true,
+    endTime: '2025-04-22T12:00:00',
+    flashSaleLabel: 'SLEEP SALE',
+    flashSaleCta: 'Save Big Today!'
+  },
+  {
+    id: 9,
+    name: "Portable Camping Tent",
+    price: 149.99,
+    rating: 4.1,
+    reviews: 60,
+    imgs: [
+      'https://images.unsplash.com/photo-1504280390367-5f8a8d8496c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1505854962493-343e05c4f3f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false,
+    isFlashSale: true,
+    endTime: '2025-04-21T20:00:00',
+    flashSaleLabel: 'OUTDOOR DEALS',
+    flashSaleCta: 'Gear Up Now!'
+  },
+  {
+    id: 10,
+    name: "Smart Fitness Tracker",
+    price: 39.99,
+    rating: 4.5,
+    reviews: 300,
+    imgs: [
+      'https://images.unsplash.com/photo-1576243345690-4e4a8d8496c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1557935728-e6d1ea834763?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1541535650910-9e4a8b5e28dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1590749963839-c2913e43e9b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: false,
+    isNew: true
+  },
+  {
+    id: 11,
+    name: "Wooden Dining Table Set",
+    price: 599.99,
+    rating: 4.8,
+    reviews: 140,
+    imgs: [
+      'https://images.unsplash.com/photo-1595515842373-8f7a8f12d466?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1617806118233-18cf9aeadf5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    ],
+    wishList: true,
+    isFlashSale: true,
+    endTime: '2025-04-23T16:00:00',
+    flashSaleLabel: 'HOME ESSENTIALS',
+    flashSaleCta: 'Upgrade Your Space!'
+  }
+];
 
 const filterConfig = [
   
@@ -278,11 +358,11 @@ const ProductPage = () => {
 
   const getUrlParams = () => {
     const params = {}
-    const searchParams = window.location.href.split('?')
+    const searchParams = window.location.href.split(url_elements.parameter_start)
     if(!searchParams || searchParams.length===1) return {}
-    searchParams[1].split('&')?.forEach(param => {
-      const [key, value] = param.split('=')
-      const values = value.split(',')
+    searchParams[1].split(url_elements.parameter_and)?.forEach(param => {
+      const [key, value] = param.split(url_elements.parameter_equal)
+      const values = value.split(url_elements.comma)
       if(values) params[key] = values.length===1?values[0]:values
     })
     return params

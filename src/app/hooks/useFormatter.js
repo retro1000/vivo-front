@@ -30,7 +30,7 @@ const useFormatter = () => {
     // Utility function to format sold count
     const formatSoldCount = (number) => {
 
-        if (isNaN(number) || number <= 0) number = Math.random() * (5000 - 30 + 1) + 30; // Return original if not a valid number
+        if (isNaN(number) || number <= 0) number = Math.ceil(Math.random() * (5000 - 30 + 1) + 30); // Return original if not a valid number
 
         if (number >= 1000000) {
             // Format as X.XM+ (e.g., 1,500,000 -> 1.5M+)
@@ -42,9 +42,9 @@ const useFormatter = () => {
             return `${thousands}K+ sold`;
         } else if(number <= 100) {
             // Keep as is (e.g., 500 -> 500+)
-            return '100+ sold';
+            return '100 sold';
         }else {
-            return `${number}+ sold`;
+            return `${number} sold`;
         }
     };
 
@@ -82,8 +82,9 @@ const useFormatter = () => {
                 return '-'
         }
     }
-
+  
     return { formatSoldCount, DefaultWordFormat2, PaymentMethod, CamelCaseWordFormat2, DefaultDateTimeFormat, formatToLKR, DefaultWordFormat, DefaultDateFormat, TitleCaseWordFormat, CamelCaseWordFormat }
-}
-
-export { useFormatter }
+  }
+  
+  export {useFormatter}
+  
