@@ -478,9 +478,8 @@ const WishlistBadge = memo(({ wishlist, theme }) => {
 });
 
 // Main component
-const TodaysDeals = () => {
+const TodaysDeals = ({ TodaysDealsProducts }) => {
   const theme = useTheme();
-  const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [timers, setTimers] = useState({
     superDeals: { hours: 10, minutes: 35, seconds: 40 },
@@ -547,14 +546,14 @@ const TodaysDeals = () => {
         Limited-time offers on top products
       </Typography> */}
 
-      <Box sx={{ textAlign: 'center', mb: 1.4, position: 'relative', py: .3 }}>
+      <Box sx={{ textAlign: 'center', mb: 3, position: 'relative', py: .3 }}>
         <Typography
           variant="h1"
           sx={{
             fontSize: { xs: '1.8rem', sm: '2rem' },
             fontWeight: 'bold',
             color: theme.palette.custom.titleGray,
-            mb: .5,
+            mb: .8,
             position: 'relative',
             height: 'max-content',
           }}
@@ -572,7 +571,7 @@ const TodaysDeals = () => {
                 transitionDelay: `${100 + index * 60}ms`,
               }}
             >
-              {letter}
+              {letter === ' ' ? '\u00A0' : letter}
             </Box>
           ))}
           {/* <Badge
@@ -587,7 +586,7 @@ const TodaysDeals = () => {
               </Badge> */}
         </Typography>
 
-        <Box sx={{ position: 'relative', height: 'max-content', mb: 1 }}>
+        <Box sx={{ position: 'relative', height: 'max-content', mb: 1.6 }}>
           <Box
             sx={{
               height: 4,
@@ -605,7 +604,7 @@ const TodaysDeals = () => {
 
         <Typography
           sx={{
-            fontSize: '.9rem',
+            fontSize: '.8rem',
             color: theme.palette.custom.darkGray,
             transform:
               animationState >= 1 ? 'translateY(0)' : 'translateY(32px)',
@@ -621,12 +620,12 @@ const TodaysDeals = () => {
           <Box
             sx={{
               position: 'absolute',
-              left: '25%',
+              left: '35%',
               top: 0,
               color: theme.palette.custom.trendingRed,
               fontSize: '2.25rem',
               transition: 'all 1s ease',
-              opacity: animationState >= 1 ? 0.2 : 0,
+              opacity: animationState >= 1 ? 0.4 : 0,
               animation: animationState >= 1 ? 'float1 6s ease-in-out infinite' : 'none',
             }}
           >
@@ -635,12 +634,12 @@ const TodaysDeals = () => {
           <Box
             sx={{
               position: 'absolute',
-              right: '25%',
+              right: '35%',
               bottom: 16,
-              color: theme.palette.custom.lightOrange,
+              color: theme.palette.custom.secondaryDarkOrange,
               fontSize: '1.875rem',
               transition: 'all 1s ease',
-              opacity: animationState >= 1 ? 0.2 : 0,
+              opacity: animationState >= 1 ? 0.4 : 0,
               animation: animationState >= 1 ? 'float2 7s ease-in-out infinite' : 'none',
             }}
           >

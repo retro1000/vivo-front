@@ -8,7 +8,7 @@ import "swiper/css/effect-fade";
 
 // import required modules
 import { EffectFade, Autoplay, Pagination } from "swiper/modules";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 export default function SwiperSliderHeroAuto({ slides }) {
   return (

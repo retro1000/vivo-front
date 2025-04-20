@@ -1,51 +1,61 @@
 // Centralized system colors with meaningful names
 const systemColors = {
   // Whites and Grays
-  white: '#ffffff',
-  lightGrayBackground: '#fafafa',
-  paperGray: '#222A45',
-  darkSlate: '#1a2038',
-  mutedGray: '#6b7280',
-  darkGray: '#4b5563',
-  titleGray: '#1f2937',
-  black: '#000000',
+  white: "#ffffff",
+  lightGrayBackground: "#fafafa",
+  paperGray: "#222A45",
+  darkSlate: "#1a2038",
+  mutedGray: "#6b7280",
+  darkGray: "#4b5563",
+  titleGray: "#1f2937",
+  black: "#000000",
 
   // Reds
-  trendingRed: '#ef4444',
-  errorRed: '#FF3D57',
-  redDark: '#dd3333',
-  coralRed: '#FF4F30',
+  trendingRed: "#ef4444",
+  errorRed: "#FF3D57",
+  redDark: "#dd3333",
+  coralRed: "#FF4F30",
 
   // Blues
-  primaryBlue: '#2563eb',
-  lightBlue: 'rgb(216, 229, 247)',
-  blueMedium: '#1976d2',
+  primaryBlue: "#2563eb",
+  lightBlue: "rgb(216, 229, 247)",
+  blueMedium: "#1976d2",
 
   // Purples
-  purpleLight: '#7467ef',
-  purpleMedium: '#6a75c9',
+  purpleLight: "#7467ef",
+  purpleMedium: "#6a75c9",
 
   // Yellows and Oranges
-  amberYellow: '#eab308',
-  secondaryLightOrange: '#f9a352',
-  secondaryMainOrange: '#ff9e43',
-  secondaryDarkOrange: '#ff932e',
-  yellowOrange: '#FFAF38',
+  amberYellow: "#eab308",
+  secondaryLightOrange: "#f9a352",
+  secondaryMainOrange: "#ff9e43",
+  secondaryDarkOrange: "#ff932e",
+  yellowOrange: "#FFAF38",
 
   // Greens
-  shippingGreen: '#16a34a',
+  shippingGreen: "#16a34a",
+
+  lightRed: "#fca5a5",
+  lightOrange: "#fdba74",
+  paleBlue: "#dbeafe",
+  lightBlueAccent: "#93c5fd",
+  deepPurple: "#7c3aed",
+  brightPink: "#ec4899",
+  lightPurple: "#c4b5fd",
+  lightPink: "#f9a8d4",
+  palePurple: "#d8b4fe",
 
   // Text Colors (Light Theme)
-  textPrimaryLight: 'rgba(52, 49, 76, 1)',
-  textSecondaryLight: 'rgba(52, 49, 76, 0.54)',
-  textDisabledLight: 'rgba(52, 49, 76, 0.38)',
-  textHintLight: 'rgba(52, 49, 76, 0.38)',
+  textPrimaryLight: "rgba(52, 49, 76, 1)",
+  textSecondaryLight: "rgba(52, 49, 76, 0.54)",
+  textDisabledLight: "rgba(52, 49, 76, 0.38)",
+  textHintLight: "rgba(52, 49, 76, 0.38)",
 
   // Text Colors (Dark Theme)
-  textPrimaryDark: '#fff',
-  textSecondaryDark: 'rgba(255, 255, 255, 0.7)',
-  textDisabledDark: 'rgba(255, 255, 255, 0.64)',
-  textHintDark: 'rgba(255, 255, 255, 0.64)',
+  textPrimaryDark: "#fff",
+  textSecondaryDark: "rgba(255, 255, 255, 0.7)",
+  textDisabledDark: "rgba(255, 255, 255, 0.64)",
+  textHintDark: "rgba(255, 255, 255, 0.64)",
 };
 
 // Define tag colors using systemColors
@@ -62,15 +72,15 @@ const tagColors = {
     backgroundColor: systemColors.primaryBlue,
     color: systemColors.white,
   },
-  'Limited Stock': {
+  "Limited Stock": {
     backgroundColor: systemColors.amberYellow,
     color: systemColors.white,
   },
-  'Best Seller': {
+  "Best Seller": {
     backgroundColor: systemColors.purpleLight,
     color: systemColors.white,
   },
-  'Out of Stock': {
+  "Out of Stock": {
     backgroundColor: systemColors.mutedGray,
     color: systemColors.white,
   },
@@ -78,7 +88,7 @@ const tagColors = {
     backgroundColor: systemColors.shippingGreen,
     color: systemColors.white,
   },
-  'Pre-Order': {
+  "Pre-Order": {
     backgroundColor: systemColors.purpleMedium,
     color: systemColors.white,
   },
@@ -86,7 +96,7 @@ const tagColors = {
     backgroundColor: systemColors.coralRed,
     color: systemColors.white,
   },
-  'Hot Deal': {
+  "Hot Deal": {
     backgroundColor: systemColors.secondaryMainOrange,
     color: systemColors.white,
   },
@@ -122,7 +132,7 @@ const errorColor = {
 export const themeColors = {
   whitePurple: {
     palette: {
-      type: 'light',
+      type: "light",
       primary: {
         main: systemColors.white,
         contrastText: systemColors.textPrimaryLight,
@@ -143,7 +153,7 @@ export const themeColors = {
   },
   whiteBlue: {
     palette: {
-      type: 'light',
+      type: "light",
       primary: {
         main: systemColors.white,
         contrastText: systemColors.textPrimaryLight,
@@ -163,7 +173,7 @@ export const themeColors = {
   },
   slateDark1: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.paperGray,
         contrastText: systemColors.white,
@@ -184,7 +194,7 @@ export const themeColors = {
   },
   slateDark2: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.darkSlate,
         contrastText: systemColors.white,
@@ -205,7 +215,7 @@ export const themeColors = {
   },
   purple1: {
     palette: {
-      type: 'light',
+      type: "light",
       primary: {
         main: systemColors.purpleLight,
         contrastText: systemColors.white,
@@ -223,7 +233,7 @@ export const themeColors = {
   },
   purple2: {
     palette: {
-      type: 'light',
+      type: "light",
       primary: {
         main: systemColors.purpleMedium,
         contrastText: systemColors.white,
@@ -244,7 +254,7 @@ export const themeColors = {
   },
   purpleDark1: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.purpleLight,
         contrastText: systemColors.white,
@@ -265,7 +275,7 @@ export const themeColors = {
   },
   purpleDark2: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.purpleMedium,
         contrastText: systemColors.white,
@@ -286,7 +296,7 @@ export const themeColors = {
   },
   blue: {
     palette: {
-      type: 'light',
+      type: "light",
       primary: {
         main: systemColors.blueMedium,
         contrastText: systemColors.white,
@@ -307,7 +317,7 @@ export const themeColors = {
   },
   blueDark: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.blueMedium,
         contrastText: systemColors.white,
@@ -328,7 +338,7 @@ export const themeColors = {
   },
   red: {
     palette: {
-      type: 'dark',
+      type: "dark",
       primary: {
         main: systemColors.redDark,
         contrastText: systemColors.white,
@@ -346,29 +356,29 @@ export const themeColors = {
 };
 
 export const themeShadows = [
-  'none',
-  '0px 2px 1px -1px rgba(0, 0, 0, 0.06),0px 1px 1px 0px rgba(0, 0, 0, 0.042),0px 1px 3px 0px rgba(0, 0, 0, 0.036)',
-  '0px 3px 1px -2px rgba(0, 0, 0, 0.06),0px 2px 2px 0px rgba(0, 0, 0, 0.042),0px 1px 5px 0px rgba(0, 0, 0, 0.036)',
-  '0px 3px 3px -2px rgba(0, 0, 0, 0.06),0px 3px 4px 0px rgba(0, 0, 0, 0.042),0px 1px 8px 0px rgba(0, 0, 0, 0.036)',
-  '0px 2px 4px -1px rgba(0, 0, 0, 0.06),0px 4px 5px 0px rgba(0, 0, 0, 0.042),0px 1px 10px 0px rgba(0, 0, 0, 0.036)',
-  '0px 3px 5px -1px rgba(0, 0, 0, 0.06),0px 5px 8px 0px rgba(0, 0, 0, 0.042),0px 1px 14px 0px rgba(0, 0, 0, 0.036)',
-  '0px 3px 5px -1px rgba(0, 0, 0, 0.06),0px 6px 10px 0px rgba(0, 0, 0, 0.042),0px 1px 18px 0px rgba(0, 0, 0, 0.036)',
-  '0px 4px 5px -2px rgba(0, 0, 0, 0.06),0px 7px 10px 1px rgba(0, 0, 0, 0.042),0px 2px 16px 1px rgba(0, 0, 0, 0.036)',
-  '0px 5px 5px -3px rgba(0, 0, 0, 0.06),0px 8px 10px 1px rgba(0, 0, 0, 0.042),0px 3px 14px 2px rgba(0, 0, 0, 0.036)',
-  '0px 5px 6px -3px rgba(0, 0, 0, 0.06),0px 9px 12px 1px rgba(0, 0, 0, 0.042),0px 3px 16px 2px rgba(0, 0, 0, 0.036)',
-  '0px 6px 6px -3px rgba(0, 0, 0, 0.06),0px 10px 14px 1px rgba(0, 0, 0, 0.042),0px 4px 18px 3px rgba(0, 0, 0, 0.036)',
-  '0px 6px 7px -4px rgba(0, 0, 0, 0.06),0px 11px 15px 1px rgba(0, 0, 0, 0.042),0px 4px 20px 3px rgba(0, 0, 0, 0.036)',
-  '0px 7px 8px -4px rgba(0, 0, 0, 0.06),0px 12px 17px 2px rgba(0, 0, 0, 0.042),0px 5px 22px 4px rgba(0, 0, 0, 0.036)',
-  '0px 7px 8px -4px rgba(0, 0, 0, 0.06),0px 13px 19px 2px rgba(0, 0, 0, 0.042),0px 5px 24px 4px rgba(0, 0, 0, 0.036)',
-  '0px 7px 9px -4px rgba(0, 0, 0, 0.06),0px 14px 21px 2px rgba(0, 0, 0, 0.042),0px 5px 26px 4px rgba(0, 0, 0, 0.036)',
-  '0px 8px 9px -5px rgba(0, 0, 0, 0.06),0px 15px 22px 2px rgba(0, 0, 0, 0.042),0px 6px 28px 5px rgba(0, 0, 0, 0.036)',
-  '0px 8px 10px -5px rgba(0, 0, 0, 0.06),0px 16px 24px 2px rgba(0, 0, 0, 0.042),0px 6px 30px 5px rgba(0, 0, 0, 0.036)',
-  '0px 8px 11px -5px rgba(0, 0, 0, 0.06),0px 17px 26px 2px rgba(0, 0, 0, 0.042),0px 6px 32px 5px rgba(0, 0, 0, 0.036)',
-  '0px 9px 11px -5px rgba(0, 0, 0, 0.06),0px 18px 28px 2px rgba(0, 0, 0, 0.042),0px 7px 34px 6px rgba(0, 0, 0, 0.036)',
-  '0px 9px 12px -6px rgba(0, 0, 0, 0.06),0px 19px 29px 2px rgba(0, 0, 0, 0.042),0px 7px 36px 6px rgba(0, 0, 0, 0.036)',
-  '0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)',
-  '0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)',
-  '0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)',
-  '0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)',
-  '0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)',
+  "none",
+  "0px 2px 1px -1px rgba(0, 0, 0, 0.06),0px 1px 1px 0px rgba(0, 0, 0, 0.042),0px 1px 3px 0px rgba(0, 0, 0, 0.036)",
+  "0px 3px 1px -2px rgba(0, 0, 0, 0.06),0px 2px 2px 0px rgba(0, 0, 0, 0.042),0px 1px 5px 0px rgba(0, 0, 0, 0.036)",
+  "0px 3px 3px -2px rgba(0, 0, 0, 0.06),0px 3px 4px 0px rgba(0, 0, 0, 0.042),0px 1px 8px 0px rgba(0, 0, 0, 0.036)",
+  "0px 2px 4px -1px rgba(0, 0, 0, 0.06),0px 4px 5px 0px rgba(0, 0, 0, 0.042),0px 1px 10px 0px rgba(0, 0, 0, 0.036)",
+  "0px 3px 5px -1px rgba(0, 0, 0, 0.06),0px 5px 8px 0px rgba(0, 0, 0, 0.042),0px 1px 14px 0px rgba(0, 0, 0, 0.036)",
+  "0px 3px 5px -1px rgba(0, 0, 0, 0.06),0px 6px 10px 0px rgba(0, 0, 0, 0.042),0px 1px 18px 0px rgba(0, 0, 0, 0.036)",
+  "0px 4px 5px -2px rgba(0, 0, 0, 0.06),0px 7px 10px 1px rgba(0, 0, 0, 0.042),0px 2px 16px 1px rgba(0, 0, 0, 0.036)",
+  "0px 5px 5px -3px rgba(0, 0, 0, 0.06),0px 8px 10px 1px rgba(0, 0, 0, 0.042),0px 3px 14px 2px rgba(0, 0, 0, 0.036)",
+  "0px 5px 6px -3px rgba(0, 0, 0, 0.06),0px 9px 12px 1px rgba(0, 0, 0, 0.042),0px 3px 16px 2px rgba(0, 0, 0, 0.036)",
+  "0px 6px 6px -3px rgba(0, 0, 0, 0.06),0px 10px 14px 1px rgba(0, 0, 0, 0.042),0px 4px 18px 3px rgba(0, 0, 0, 0.036)",
+  "0px 6px 7px -4px rgba(0, 0, 0, 0.06),0px 11px 15px 1px rgba(0, 0, 0, 0.042),0px 4px 20px 3px rgba(0, 0, 0, 0.036)",
+  "0px 7px 8px -4px rgba(0, 0, 0, 0.06),0px 12px 17px 2px rgba(0, 0, 0, 0.042),0px 5px 22px 4px rgba(0, 0, 0, 0.036)",
+  "0px 7px 8px -4px rgba(0, 0, 0, 0.06),0px 13px 19px 2px rgba(0, 0, 0, 0.042),0px 5px 24px 4px rgba(0, 0, 0, 0.036)",
+  "0px 7px 9px -4px rgba(0, 0, 0, 0.06),0px 14px 21px 2px rgba(0, 0, 0, 0.042),0px 5px 26px 4px rgba(0, 0, 0, 0.036)",
+  "0px 8px 9px -5px rgba(0, 0, 0, 0.06),0px 15px 22px 2px rgba(0, 0, 0, 0.042),0px 6px 28px 5px rgba(0, 0, 0, 0.036)",
+  "0px 8px 10px -5px rgba(0, 0, 0, 0.06),0px 16px 24px 2px rgba(0, 0, 0, 0.042),0px 6px 30px 5px rgba(0, 0, 0, 0.036)",
+  "0px 8px 11px -5px rgba(0, 0, 0, 0.06),0px 17px 26px 2px rgba(0, 0, 0, 0.042),0px 6px 32px 5px rgba(0, 0, 0, 0.036)",
+  "0px 9px 11px -5px rgba(0, 0, 0, 0.06),0px 18px 28px 2px rgba(0, 0, 0, 0.042),0px 7px 34px 6px rgba(0, 0, 0, 0.036)",
+  "0px 9px 12px -6px rgba(0, 0, 0, 0.06),0px 19px 29px 2px rgba(0, 0, 0, 0.042),0px 7px 36px 6px rgba(0, 0, 0, 0.036)",
+  "0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)",
+  "0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)",
+  "0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)",
+  "0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)",
+  "0px 10px 13px -6px rgba(0, 0, 0, 0.06),0px 20px 31px 3px rgba(0, 0, 0, 0.042),0px 8px 38px 7px rgba(0, 0, 0, 0.036)",
 ];

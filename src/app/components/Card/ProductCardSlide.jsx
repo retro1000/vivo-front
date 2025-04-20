@@ -284,7 +284,7 @@ const ProductCardSlide = ({ product, removeWishList, responsiveCardProps }) => {
               rating={product.rating}
               id={product.id}
               isSingleStar={false}
-              showRate
+              showRate={true}
             />
             <Box
               sx={{

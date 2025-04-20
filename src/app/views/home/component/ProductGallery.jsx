@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import TodaysDeals from "./TodaysDeals";
+import NewArrivals from "./NewArrivals";
 
 const product = {
   new: {
@@ -120,7 +121,7 @@ const product = {
   },
 };
 
-export default function ProductGallery() {
+export default function ProductGallery({ TodaysDealsProducts, newArrivalsProducts, everydayEditsProducts }) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const [products, setProducts] = useState(product);
@@ -204,12 +205,9 @@ export default function ProductGallery() {
       ) : (
         <>
           {selectedTab === 0 && <TodaysDeals />}
-          {selectedTab === 1 && (
-            <ProductGrid
-              products={products.new?.values}
-              sx={{ justifyContent: 'center', alignItems: 'center', mt: 4 }}
-            />
-          )}
+          {selectedTab === 1 && 
+            <NewArrivals newArrivalProducts={[]}/>
+          }
           {selectedTab === 2 && (
             <ProductGrid
               products={products.edits?.values}

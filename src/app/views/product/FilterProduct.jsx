@@ -13,7 +13,7 @@ import FilterIcon from '@mui/icons-material/Tune'
 import { themeColors } from "app/components/MatxTheme/themeColors";
 import { useRef } from "react";
 import SlideFilterPanel from "./component/SlideFilterPanel";
-import { containerPadding, topBarHeightNewBar } from "app/utils/constant";
+import { containerPadding, topBarHeightNewBar, url_elements } from "app/utils/constant";
 
 
 const demoData = [
@@ -358,11 +358,11 @@ const ProductPage = () => {
 
   const getUrlParams = () => {
     const params = {}
-    const searchParams = window.location.href.split('?')
+    const searchParams = window.location.href.split(url_elements.parameter_start)
     if(!searchParams || searchParams.length===1) return {}
-    searchParams[1].split('&')?.forEach(param => {
-      const [key, value] = param.split('=')
-      const values = value.split(',')
+    searchParams[1].split(url_elements.parameter_and)?.forEach(param => {
+      const [key, value] = param.split(url_elements.parameter_equal)
+      const values = value.split(url_elements.comma)
       if(values) params[key] = values.length===1?values[0]:values
     })
     return params
