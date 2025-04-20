@@ -488,7 +488,7 @@ const ProductPage = () => {
           }
           {/* Products section */}
           <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexDirection={'column'} pl={0} pr={0} pt={3} pb={3} width={'100%'}>
-            <ProductGrid products={state.filteredProducts}/>
+            {/* <ProductGrid products={state.filteredProducts}/> */}
           </Box>
         </Grid>
       </Container>

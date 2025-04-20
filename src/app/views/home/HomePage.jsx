@@ -26,6 +26,9 @@ import ProductGallery from "./component/ProductGallery";
 import { scrollBarThin } from "app/utils/constant";
 import * as Icons from "@mui/icons-material"; // Import all Material-UI icons dynamically
 import { useRef } from "react";
+import { useEffect } from "react";
+import { useAxios } from "app/hooks/useAxios";
+import { endpoints, homepage_product_types, position_types, query_parameters, services, status, url_query_param_and, url_query_param_comma, url_query_param_equal, url_query_param_start, url_separator } from "app/constants";
 
 const styles = {
   paddingTop: 0, // Applies to all breakpoints
@@ -372,6 +375,32 @@ const categories = [
 const HomePage = () => {
   const navigate = useNavigate();
 
+  const { api, apiNonAuth } = useAxios();
+
+  const homePageDetails = {
+    banners: {
+      topBanners: [],
+      middleBanners: []
+    },
+    categoryDetails: {
+      hoveredCategory: '',
+      data: []
+    },
+    popularProducts: [],
+    moreToLoveProducts: {
+      size: 30,
+      offset: 0,
+      data: []
+    },
+    forYouProducts: [],
+    productTabDetails: {
+      todaysDeals: [],
+      new: [],
+      dailyPicks: [],
+    },
+
+  }
+
   const [showProducts, setShowProducts] = useState([
     {
       id: 1,
@@ -619,6 +648,55 @@ const HomePage = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const sidebarRef = useRef(null); // Ref to track the sidebar element
   const popoverRef = useRef(null); // Ref to track the popover element
+
+  // useEffect(() => {
+  //   try {
+
+  //     const fetchData = () => {
+  //       const non_guest_user_homepage_product_types = Object.values(homepage_product_types).filter(val => val.code !== homepage_product_types.forYou.code).map(val => val.code).join(',');
+  //       // Define requests with identifiers
+  //       const requests = [
+  //         apiNonAuth.get(
+  //           `${services.setup}${url_separator}${endpoints.banners}${url_query_param_start}${query_parameters.type.paramName}${url_query_param_equal}${position_types.topMiddle.code}`,
+  //           {
+  //             customData: {
+  //               retry: true,
+  //               silentError: true,
+  //               silentResponse: false,
+  //               responseCallback: (response) => { }
+  //             }
+  //           }
+  //         ),
+  //         apiNonAuth.get(`${services.product}${url_separator}${endpoints.categories}${url_query_param_start}${query_parameters.status.paramName}${url_query_param_equal}${status.active.code}`),
+  //         apiNonAuth.get(`${services.product}${url_separator}${endpoints.products}${url_query_param_start}${query_parameters.type.paramName}${url_query_param_equal}${non_guest_user_homepage_product_types}${url_query_param_comma}${url_query_param_and}${query_parameters.offset.paramName}${url_query_param_equal}${homePageDetails.moreToLoveProducts.offset}${url_query_param_and}${query_parameters.size.paramName}${url_query_param_equal}${homePageDetails.moreToLoveProducts.size}`),
+  //         api.get(`${services.product}${url_separator}${endpoints.products}${url_query_param_start}${query_parameters.type.paramName}${url_query_param_equal}${homepage_product_types.forYou.code}`),
+  //       ];
+
+  //       // Send requests concurrently using Promise.all
+  //       const responses = Promise.all(
+  //         requests.map(({ promise }) => promise)
+  //       );
+
+  //       responses.forEach((response, index) => {
+  //         switch (index) {
+  //           case 0:
+  //           case 1:
+  //           case 2:
+  //           case 3:
+  //         }
+  //       });
+  //     }
+
+  //     fetchData();
+
+  //   } catch (err) {
+  //     // setError('Failed to fetch data');
+  //     console.error(err);
+  //   } finally {
+  //     // setLoading(false);
+  //   }
+
+  // }, []);
 
   // Handle mouse entering a category
   const handleCategoryHover = (category) => {

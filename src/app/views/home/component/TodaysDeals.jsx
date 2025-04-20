@@ -538,7 +538,7 @@ const TodaysDeals = () => {
         Limited-time offers on top products
       </Typography>
 
-      <Grid container spacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mb: { xs: 2, sm: 3 } }}>
+      <Grid container spacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mb: { xs: 2, sm: 3 } }} display={'flex'} justifyContent={'center'} alignItems={'center'}>
         {/* Bundle Deals Card */}
         <Grid item>
           <Card sx={{ borderRadius: '8px', overflow: 'hidden', boxShadow: theme.shadows[4], background: 'white' }}>
