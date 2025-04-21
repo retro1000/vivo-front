@@ -38,6 +38,7 @@ import { useEffect } from "react";
 import { useAxios } from "app/hooks/useAxios";
 import FeaturedCategory from "./component/FeaturedCategory";
 import PopularProductsHeading from "./component/PopularProductsHeading";
+import MoreToLoveHeading from "./component/MoreToLoveHeading";
 
 const styles = {
   paddingTop: 0, // Applies to all breakpoints
@@ -1349,20 +1350,13 @@ const HomePage = () => {
             slides={initialHomePageDetails?.banners?.middleBanners}
           />
         </Box>
+        <MoreToLoveHeading />
         <Box
           display={"flex"}
           flexDirection={"column"}
           gap="1em"
           alignItems={"center"}
         >
-          <Typography
-            variant={"h4"}
-            textAlign={"center"}
-            width={"100%"}
-            sx={{ fontWeight: "bold", fontStyle: "italic" }}
-          >
-            MORE TO LOVE
-          </Typography>
           {/* <ProductGrid
             products={showProducts}
             sx={{ justifyContent: "center", alignItems: "center", mt: 4 }}
