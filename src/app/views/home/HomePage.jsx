@@ -39,6 +39,7 @@ import { useAxios } from "app/hooks/useAxios";
 import FeaturedCategory from "./component/FeaturedCategory";
 import PopularProductsHeading from "./component/PopularProductsHeading";
 import MoreToLoveHeading from "./component/MoreToLoveHeading";
+import { useTheme } from "@emotion/react";
 
 const styles = {
   paddingTop: 0, // Applies to all breakpoints
@@ -715,6 +716,7 @@ const initialHomePageDetails = {
 const HomePage = () => {
   const navigate = useNavigate();
   const { api, apiNonAuth } = useAxios();
+  const theme = useTheme();
 
   const [showProducts, setShowProducts] = useState([
     {
@@ -1033,7 +1035,7 @@ const HomePage = () => {
               retry: true,
               silentError: true,
               silentResponse: false,
-              responseCallback: (response) => { },
+              responseCallback: (response) => {},
             },
           }
         ),
@@ -1125,14 +1127,15 @@ const HomePage = () => {
   // Handle mouse leaving the sidebar
   const handleMouseLeaveSidebar = (event) => {
     const relatedTarget = event.relatedTarget; // The element the mouse is moving to
-    const popoverElement = popoverRef.current;
+    // const popoverElement = popoverRef.current;
+    const sidebarElement = sidebarRef.current;
 
     // Check if the mouse is moving to the popover or its children
     if (
-      popoverElement &&
+      sidebarElement &&
       relatedTarget &&
-      (relatedTarget === popoverElement ||
-        popoverElement.contains(relatedTarget))
+      (relatedTarget === sidebarElement ||
+        sidebarElement.contains(relatedTarget))
     ) {
       return; // Don't close the popover if moving to the popover
     }
@@ -1143,14 +1146,16 @@ const HomePage = () => {
   // Handle mouse leaving the popover
   const handleMouseLeavePopover = (event) => {
     const relatedTarget = event.relatedTarget; // The element the mouse is moving to
-    const sidebarElement = sidebarRef.current;
+    // const sidebarElement = sidebarRef.current;
+    const popoverElement = popoverRef.current;
+
 
     // Check if the mouse is moving back to the sidebar or its children
     if (
-      sidebarElement &&
+      popoverElement &&
       relatedTarget &&
-      (relatedTarget === sidebarElement ||
-        sidebarElement.contains(relatedTarget))
+      (relatedTarget === popoverElement ||
+        popoverElement.contains(relatedTarget))
     ) {
       return; // Don't close the popover if moving back to the sidebar
     }
@@ -1203,13 +1208,13 @@ const HomePage = () => {
                           cursor: "pointer",
                         },
                         height: "max-content",
-                        pb: 0.2,
-                        pt: 0.2,
+                        pb: 0.4,
+                        pt: 0.4,
                         transition: "background-color 0s ease",
                       }}
                     >
                       <ListItemIcon>
-                        <IconComponent sx={{ color: "grey.600" }} />
+                        <IconComponent sx={{ color: theme.palette.custom.mutedGray, fontSize: '1.3rem' }} />
                       </ListItemIcon>
                       <ListItemText
                         sx={{ width: "90%", ml: -2.8 }}
